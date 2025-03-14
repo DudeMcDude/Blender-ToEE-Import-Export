@@ -296,7 +296,7 @@ def _write_ska(context, filepath,
     """
     print("\n*** Exporting SKA ***")
     # Time the export
-    time1 = time.clock()
+    time1 = time.perf_counter()
     # Blender.Window.WaitCursor(1)
     
     if global_matrix is None:
@@ -343,7 +343,7 @@ def _write_ska(context, filepath,
 
     # Debugging only: report the exporting time:
     # Blender.Window.WaitCursor(0)
-    print("SKA export time: %.2f" % (time.clock() - time1))
+    print("SKA export time: %.2f" % (time.perf_counter() - time1))
     return
 
 def blender_save_ska(operator, context, filepath="", use_selection=True, global_matrix=None,):

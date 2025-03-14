@@ -125,6 +125,11 @@ def register():
     # Register and add to the file selector
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export_ska)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export_skm)
+    # if "bpy" in locals():
+    from . import export_ska
+    import importlib
+    # if "export_ska" in locals():
+    #     importlib.reload(export_ska)
 
 
 

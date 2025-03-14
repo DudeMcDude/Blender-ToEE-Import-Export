@@ -261,7 +261,7 @@ class SkaBone(object):
 class SkaAnimKeyframe:
     __slots__ = "frame", "bone_data"
     frame: int
-    bone_data: dict
+    bone_data: dict # SkaAnimFileKeyframeBoneData
 
     def __init__(self, frame_):
         self.frame = frame_
@@ -288,21 +288,85 @@ class SkaAnimFileKeyframeBoneData:
         self.translation_frame = loc_fr
         return
     
+class DataStateInterpolation:
+    __slots__ = "frame", "next_frame", "state", "next_state", "state_interp", "interp_f", "N"
+    def __init__(self, def_val ):
+        self.frame = 0
+        self.next_frame = 0
+        self.interp_f = 0 # 1/time_delta really; the interpolation factor is derived as (cur_frame - frame) / (next_frame - frame). ToEE precalculates this, probably for runtime
+        self.state = def_val
+        self.next_state = def_val
+        self.state_interp = def_val
+        self.N = len(def_val)
+        return
 
-class SkaAnimKeyframeBoneData(object):
-    __slots__ = "bone_id", "flags", "frame", "scale_next_frame", "scale", "rotation_next_frame", "rotation", "translation_next_frame", "translation"
+    def reset(self, new_state, factor = 1.):
+        assert len(new_state ) == self.N, "length mismatch: N (%d) != len(new_state) (=%d)" % (self.N, len(new_state))
+        
+        self.state = [factor * new_state[i] for i in range(0,self.N)]
+        self.next_state = self.state
+        return
 
-    def __init__(self):
+    def advance_next(self, cur_frame, new_state, new_next_frame, factor = 1.):
+        assert len(new_state ) == self.N, "length mismatch: N (%d) != len(new_state) (=%d)" % (self.N, len(new_state))
+        self.frame = cur_frame
+        self.next_frame = new_next_frame
+        self.state = self.next_state
+
+        self.next_state = [factor * new_state[i] for i in range(0, self.N)]
+        self.interp_f = 0.0
+        
+        if self.next_frame > cur_frame:
+            self.interp_f = 1.0 / (self.next_frame - cur_frame)
+        
+        return
+
+    def interpolate(self, cur_frame):
+        
+        if cur_frame <= self.frame:
+            self.state_interp = self.state
+        elif cur_frame >= self.next_frame:
+            self.state_interp = self.next_state
+        else:
+            f = (cur_frame - self.frame) * self.interp_f
+            self.state_interp = [(1.0-f)*self.state[i] + f * self.next_state[i] for i in range(0,self.N)]
+        return self.state_interp
+
+    def interpolate_slerp(self, cur_frame):
+        # TODO actual slerp...
+        if cur_frame <= self.frame:
+            self.state_interp = self.state
+        elif cur_frame >= self.next_frame:
+            self.state_interp = self.next_state
+        else:
+            f = (cur_frame - self.frame) * self.interp_f
+            self.state_interp = [(1.0-f)*self.state[i] + f * self.next_state[i] for i in range(0,self.N)]
+        return self.state_interp
+        
+                    
+class SkaAnimKeyframeBoneState(object):
+    __slots__ = "bone_id", "flags", "frame", \
+        "scale_state", "rotation_state", "translation_state" 
+
+    def __init__(self, scale = None, rot = None, trans = None):
         self.bone_id = -1
         self.flags = 0
         self.frame = -1
-        self.scale_next_frame = -1
-        self.rotation_next_frame = -1
-        self.translation_next_frame = -1
-        self.scale = [1, 1, 1]
-        self.rotation = [0.0,0,0.0, 1.0]  # X,Y,Z, scalar
-        self.translation = [0, 0, 0]
-
+        if scale:
+            self.scale_state = DataStateInterpolation( scale)
+        else:
+            self.scale_state = DataStateInterpolation( [1.,1.,1.])
+        
+        if rot:
+            self.rotation_state = DataStateInterpolation( rot ) # X,Y,Z, scalar
+        else:
+            self.rotation_state = DataStateInterpolation( [0.,0.,0.,1.]) # X,Y,Z, scalar
+        
+        if trans:
+            self.translation_state = DataStateInterpolation( trans )
+        else:
+            self.translation_state = DataStateInterpolation( [0.,0.,0.])
+        
     def has_scale_data(self):
         if self.frame < 0:
             return True
@@ -661,13 +725,13 @@ class SkaFile:
 
     def read(self, file):
 
-        time1 = time.clock()
+        time1 = time.perf_counter()
 
         self._fileraw = file.read()
         self.get_bone_data()
         self.get_variation_data()
         self.read_animation_data()
-        print(" done in %.2f sec." % (time.clock() - time1))
+        print(" done in %.2f sec." % (time.perf_counter() - time1))
 
     def get_bone_data(self):
         count = struct.unpack('<i', self._fileraw[0:4])[0]
@@ -894,7 +958,7 @@ class SkaFile:
                     break
             if not found and skm_bd.parent_id >= 0:
                 print('ho there!')
-                ska_to_skm_bone_mapping[ska_idx]
+                # ska_to_skm_bone_mapping[ska_idx]
 
 
         for ska_idx, ska_bd in enumerate(ska_data.bone_data):

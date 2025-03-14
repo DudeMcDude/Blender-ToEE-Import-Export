@@ -7,7 +7,7 @@ import mathutils
 from mathutils import Vector, Quaternion
 
 from SKA_Export.ska import SkaAnimStream
-from .ska import SkmFile, SkaFile, MdfFile
+from .ska import SkmFile, SkaFile, MdfFile, SkaAnimKeyframeBoneState, SkaAnimFileKeyframeBoneData
 from bpy_extras.wm_utils.progress_report import ProgressReport
 from bpy_extras import node_shader_utils
 
@@ -21,6 +21,8 @@ object_matrix = {}
 global ToEE_data_dir
 ToEE_data_dir = ""  # ToEE data dir. Extracted from the filename, assuming it is located inside the data/art folder, and its textures are all present there.
 
+def blender_quaternion_from_ska(q):
+    return Quaternion( [q[3], q[0], q[1], q[2] ])
 
 def load_material_image(mat_wrap, image, texture, scale, offset, extension, mapto):
     
@@ -302,7 +304,8 @@ class RestBoneState:
         return self.rot.inverted() @ rot
 
     def get_rel_loc(self, loc):
-        return loc - self.loc
+        # return loc - self.loc
+        return self.rot.inverted() @ (loc - self.loc)
 
     def apply_to_posebone(self, posebone, loc=None, rot=None, sca=None):
         
@@ -351,20 +354,28 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         
         rest_world = mathutils.Matrix(skm_bone.world_inverse_matrix).inverted()
         if ska_bone.parent_id == -1:
+            if skm_bone.parent_id != -1:
+                print('Oh boy')
             # rest_world = mathutils.Matrix(skm_data.bone_data[0].world_inverse_matrix) @ rest_world
             # rest_world = mathutils.Matrix(skm_data.bone_data[0].world_inverse_matrix)
             pass
         elif ska_bone.parent_id != -1:
+            if skm_bone.parent_id == -1:
+                print('Oh boy')
             rest_world = mathutils.Matrix(skm_data.bone_data[skm_bone.parent_id].world_inverse_matrix) @ rest_world
+            
         rest_loc, rest_rot, rest_sca = rest_world.decompose()
         bone_rest_state[ska_bone_id] = RestBoneState(rest_loc, rest_rot, rest_sca)
 
     anim_count = len(ska_data.animation_data)
-    anim_count = 10  # DEBUG
+    # print('!!!!!!!!!!!!!\n     DEBUG:   anim_count = 10  \n!!!!!!!!!!!!!\n'); anim_count = 1
+    twm = mathutils.Euler( (0,-2.3561945,0) ).to_matrix() @ mathutils.Matrix.Scale( -1, 3, (-1,0,0))# debug: ToEE World Mat
+    twm = mathutils.Matrix.to_4x4(twm)
     rig.animation_data_create()
     bpy.ops.object.mode_set(mode='POSE')
     bpy.ops.poselib.pose_add(frame=0, name = 'T Pose')
     
+    # Apply rest pose
     for ska_idx, ska_bd in enumerate(ska_data.bone_data):
         skm_bone_id = ska_to_skm_bone_mapping[ska_idx]
         if skm_bone_id == -1:
@@ -383,10 +394,14 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
     progress.enter_substeps(anim_count, "Generating animation F-Curves (%d)..." % anim_count)
     for i in range(0, anim_count):
         progress.step(i)
+        # bpy.ops.poselib.apply_pose(pose_index = 0)
         ad = ska_data.animation_data[i]
+        
         anim_header = ad.header
         action_name = str(anim_header.name)
         print(action_name)
+        if action_name != 'unarmed_unarmed_rattack': # DEBUG
+            continue
         action = bpy.data.actions.new(action_name)
         action.use_fake_user = True
         rig.animation_data.action = action
@@ -414,12 +429,13 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
 
             for bone_idx, keyframes in stream.scale_channels.items():
                 for frame, scaling in keyframes:
-                    if scaling[0] < 1.0 or scaling[0] > 1.05:
-                        print('Non-unity scaling:', bone_idx, ska_data.bone_data[bone_idx].name,frame, scaling)
+                    bone_name = ska_data.bone_data[bone_idx].name
+                    if (scaling[0] < 1.0 or scaling[0] > 1.05) and not '_ref' in bone_name.name:
+                        print('Non-unity scaling:', bone_idx, bone_name,frame, scaling)
                 pass
 
             raw_frames = stream.raw_frames
-            
+            # stream.initial_state
             for bone_idx, keyframes in stream.rotation_channels.items():
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
                 skm_bone = skm_data.bone_data[skm_bone_idx]
@@ -436,11 +452,11 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 curve_z = action.fcurves.new(prop, index=3, action_group=group)
                 for frame, rotation in keyframes:
                     # Transform rotation to be relative to rest pose
-                    # if skm_bone.parent_id != -1:
                     rotation = Quaternion(rotation)
-                    rotation = rest_pose.get_rel_rot(rotation)
-                    if rotation[0] < 0: # fixes quaternion interpolation issues
-                        rotation = -rotation
+                    if True: # if skm_bone.parent_id != -1:
+                        rotation = rest_pose.get_rel_rot(rotation)
+                    # if rotation[0] < 0: # fixes quaternion interpolation issues in Blender (doesn't have SLERP!!)
+                        # rotation = -rotation
 
                     kf = curve_w.keyframe_points.insert(1 + frame, rotation.w, options={'FAST'})
                     kf.interpolation = 'LINEAR'
@@ -456,10 +472,16 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 curve_y.update()
                 curve_z.update()
 
-            for bone_idx, keyframes in stream.location_channels.items():
+            x_curves = dict()
+            y_curves = dict()
+            z_curves = dict()
+            #to keep track of instantaneous rotation (with SLERP)
+            cur_bone_state = dict() # type: Dict[int, SkaAnimKeyframeBoneState]
+            
+
+            for bone_idx , bone_data in enumerate(ska_data.bone_data):
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
                 skm_bone = skm_data.bone_data[skm_bone_idx]
-                # rest_pose = bone_rest_state[skm_bone_idx]
                 rest_pose = bone_rest_state[bone_idx]
 
                 posebone = rig.pose.bones[skm_bone_idx]
@@ -468,22 +490,119 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 curve_x = action.fcurves.new(prop, index=0, action_group=group)
                 curve_y = action.fcurves.new(prop, index=1, action_group=group)
                 curve_z = action.fcurves.new(prop, index=2, action_group=group)
-                for frame, location in keyframes:
+                x_curves[bone_idx] = curve_x
+                y_curves[bone_idx] = curve_y
+                z_curves[bone_idx] = curve_z
+
+                bs = SkaAnimKeyframeBoneState(bone_data.scale, bone_data.rotation, bone_data.translation)
+                bs.frame = 0
+                
+                cur_bone_state[bone_idx] = bs
+
+            scale_factor = stream.scale_factor
+            rot_factor = 1 / 32767.0
+            trans_factor = stream.location_factor
+
+            for bone_idx, bone_data in stream.initial_state.bone_data.items():
+                bs = cur_bone_state[bone_idx]
+
+                bs.scale_state.reset(bone_data.scale, scale_factor)
+                bs.rotation_state.reset(bone_data.rotation, rot_factor)
+                bs.translation_state.reset(bone_data.translation, trans_factor)
+                
+            for frame_data in raw_frames:
+                frame_num = frame_data.frame
+                
+                bd = frame_data.bone_data
+                
+                # get data from keyframes
+                for bone_idx, kf in bd.items():
+                    bs = cur_bone_state[bone_idx]
+
+                    if kf.scale:
+                        bs.scale_state.advance_next(frame_num, kf.scale, kf.scale_frame, scale_factor)
+                    
+                    if kf.rotation:
+                        bs.rotation_state.advance_next(frame_num, kf.rotation, kf.rotation_frame, rot_factor)
+                    
+                    if kf.translation:
+                        bs.translation_state.advance_next(frame_num, kf.translation, kf.translation_frame, trans_factor)
+                        
+                
+                # interpolate as necessary
+                for bone_idx, bs in cur_bone_state.items():
+                    bs: SkaAnimKeyframeBoneState
+                    bs.scale_state.interpolate(frame_num)
+                    bs.rotation_state.interpolate_slerp(frame_num)
+                    bs.translation_state.interpolate(frame_num)
+                
+                # NOW finally apply location keyframe, transformed for Blender's liking    
+                for bone_idx, kf in bd.items():
+                    if not kf.translation:
+                        continue
+                    bs: SkaAnimKeyframeBoneState
+                    bs = cur_bone_state[bone_idx]
+                    kf: SkaAnimFileKeyframeBoneData
+                    skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+                    skm_bone = skm_data.bone_data[skm_bone_idx]
+                    rest_pose = bone_rest_state[bone_idx]
+
+                    posebone = rig.pose.bones[skm_bone_idx]
+                    
+                    curve_x = x_curves[bone_idx]
+                    curve_y = y_curves[bone_idx]
+                    curve_z = z_curves[bone_idx]
+
                     # Transform location to be relative to rest pose
                     # if skm_bone.parent_id != -1:
-                    location = Vector(location)
-                    location = rest_pose.get_rel_loc(location)
-                    
-                    kf = curve_x.keyframe_points.insert(1 + frame, location.x, options={'FAST'})
-                    kf.interpolation = 'LINEAR'
-                    kf = curve_y.keyframe_points.insert(1 + frame, location.y, options={'FAST'})
-                    kf.interpolation = 'LINEAR'
-                    kf = curve_z.keyframe_points.insert(1 + frame, location.z, options={'FAST'})
-                    kf.interpolation = 'LINEAR'
+                    location = Vector(bs.translation_state.state_interp)
+                    # q = blender_quaternion_from_ska(bs.rotation_state.state_interp)
+                    # rot_mat = q.to_matrix()
 
-                curve_x.update()
-                curve_y.update()
-                curve_z.update()
+                    location_rel = rest_pose.get_rel_loc(location)
+                    
+                    kfp = curve_x.keyframe_points.insert(1 + frame_num, location_rel.x, options={'FAST'})
+                    kfp.interpolation = 'LINEAR'
+                    kfp = curve_y.keyframe_points.insert(1 + frame_num, location_rel.y, options={'FAST'})
+                    kfp.interpolation = 'LINEAR'
+                    kfp = curve_z.keyframe_points.insert(1 + frame_num, location_rel.z, options={'FAST'})
+                    kfp.interpolation = 'LINEAR'
+
+                    curve_x.update()
+                    curve_y.update()
+                    curve_z.update()
+
+
+            # for bone_idx, keyframes in stream.location_channels.items():
+            #     continue
+            #     skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+            #     skm_bone = skm_data.bone_data[skm_bone_idx]
+            #     rest_pose = bone_rest_state[bone_idx]
+
+            #     posebone = rig.pose.bones[skm_bone_idx]
+            #     prop = posebone.path_from_id("location")
+            #     group = get_curve_group(skm_bone_idx)
+                
+            #     curve_x = x_curves[bone_idx]
+            #     curve_y = y_curves[bone_idx]
+            #     curve_z = z_curves[bone_idx]
+            #     for frame, location in keyframes:
+            #         # Transform location to be relative to rest pose
+            #         # if skm_bone.parent_id != -1:
+            #         location = Vector(location)
+            #         location = rest_pose.get_rel_loc(location)
+                    
+                    
+            #         kf = curve_x.keyframe_points.insert(1 + frame, location.x, options={'FAST'})
+            #         kf.interpolation = 'LINEAR'
+            #         kf = curve_y.keyframe_points.insert(1 + frame, location.y, options={'FAST'})
+            #         kf.interpolation = 'LINEAR'
+            #         kf = curve_z.keyframe_points.insert(1 + frame, location.z, options={'FAST'})
+            #         kf.interpolation = 'LINEAR'
+
+            #     curve_x.update()
+            #     curve_y.update()
+            #     curve_z.update()
     progress.leave_substeps("Finished")
     return
 
@@ -508,7 +627,7 @@ def get_skm_filepath(ska_filepath):
 
 def load_skm(filepath, context, IMAGE_SEARCH=True):
     global SCN, ToEE_data_dir, progress
-    time1 = time.clock()  # for timing the import duration
+    time1 = time.perf_counter()  # for timing the import duration
     with ProgressReport(context.window_manager) as progress:
 
         print("importing SKA: %r..." % (filepath), end="")
@@ -554,7 +673,7 @@ def load_skm(filepath, context, IMAGE_SEARCH=True):
         object_dictionary.clear()
         object_matrix.clear()
         
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
     return
 
 
@@ -570,7 +689,7 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
     # XXX
     # 	if BPyMessages.Error_NoFile(filepath):
     # 		return
-    time1 = time.clock()  # for timing the import duration
+    time1 = time.perf_counter()  # for timing the import duration
     # progress = ProgressReport(context.window_manager)
     with ProgressReport(context.window_manager) as progress:
         
@@ -607,6 +726,8 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
             print('Opened file: ', ska_filepath)
             if APPLY_ANIMATIONS:
                 ska_data.read(file)
+            else:
+                print(f"Skipping ska_data.read() due to APPLY_ANIMATIONS = {APPLY_ANIMATIONS}")
 
         # fixme, make unglobal, clear in case
         object_dictionary.clear()
@@ -644,10 +765,12 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
         for ob in importedObjects:
             ob.select_set(True)
 
-        progress.enter_substeps(1, "Converting SKA to Blender animations...")
         if APPLY_ANIMATIONS:
+            progress.enter_substeps(1, "Converting SKA to Blender animations...")
             ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, USE_LOCAL_LOCATION,
                         APPLY_ANIMATIONS)
+        else:
+            print(f'Skipping SKA to Blender anim conversion due to APPLY_ANIMATIONS = {APPLY_ANIMATIONS}')
         
         # fixme, make unglobal
         object_dictionary.clear()
@@ -657,7 +780,7 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
         view_layer.update()
         
     # Select all new objects.
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
 
 
 def blender_load_ska(operator, context, filepath="",
