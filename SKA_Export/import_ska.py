@@ -19,6 +19,7 @@ object_dictionary = {}
 object_matrix = {}
 # rig_dictionary = {}
 global ToEE_data_dir
+SLERP_BAKE_ANGLE = 0.35  # rad (~20 deg); nlerp error above this becomes visible
 ToEE_data_dir = ""  # ToEE data dir. Extracted from the filename, assuming it is located inside the data/art folder, and its textures are all present there.
 
 
@@ -196,7 +197,7 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         bpy.ops.object.mode_set(mode='EDIT')  # set to Edit Mode so bones can be added
         bone_dump = open(os.path.join(ToEE_data_dir, "bone_dump.txt"), 'w')
 
-        fh = open("D:/bones.txt", "wt")
+        fh = open(os.path.join(ToEE_data_dir, "bones.txt"), "wt")
 
         vertex_groups = dict()
 
@@ -207,8 +208,6 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
 
             wi = mathutils.Matrix(bd.world_inverse_matrix)
             world = wi.inverted_safe()
-            if bd.parent_id != -1:
-                bone.parent = barm.edit_bones[bd.parent_id]
 
             bone.head = Vector([0, 0, 0])
             bone.tail = Vector([0, 0, 5])
@@ -225,6 +224,10 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
             vg = obj.vertex_groups.new(name = bone_name)  # Create matching vertex groups
             vertex_groups[bone_id] = vg
 
+        # set parents after all bones exist (SKA parent may come later in SKM order)
+        for bone_id, bd in enumerate(skm_data.bone_data):
+            if bd.parent_id != -1:
+                barm.edit_bones[bone_id].parent = barm.edit_bones[bd.parent_id]
         fh.close()
         bone_dump.close()
         bpy.ops.object.mode_set(mode='OBJECT')  # do an implicit update
@@ -302,7 +305,7 @@ class RestBoneState:
         return self.rot.inverted() @ rot
 
     def get_rel_loc(self, loc):
-        return loc - self.loc
+        return self.rot.inverted() @ (loc - self.loc)  # basis loc is in the bone rest frame (cf. dirty branch)
 
     def apply_to_posebone(self, posebone, loc=None, rot=None, sca=None):
         
@@ -360,10 +363,12 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         bone_rest_state[ska_bone_id] = RestBoneState(rest_loc, rest_rot, rest_sca)
 
     anim_count = len(ska_data.animation_data)
-    anim_count = 10  # DEBUG
+    # anim_count = 10  # DEBUG (upstream limited import to 10 anims)
+    # SKA keys are in engine frames; most anims play at 30 fps (turns/walks are rotation/distance driven)
+    bpy.context.scene.render.fps = 30
     rig.animation_data_create()
     bpy.ops.object.mode_set(mode='POSE')
-    bpy.ops.poselib.pose_add(frame=0, name = 'T Pose')
+    # poselib.pose_add removed in Blender 3.0 (T Pose marker dropped)
     
     for ska_idx, ska_bd in enumerate(ska_data.bone_data):
         skm_bone_id = ska_to_skm_bone_mapping[ska_idx]
@@ -371,18 +376,18 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
             print(f'SKA bone {ska_idx} not present in SKM')
             continue  # Skip bone not present in SKM
 
-        posebone = rig.pose.bones[skm_bone_id]
+        posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_id].name)]
 
         rest_state = bone_rest_state[ska_idx]
 
         posebone.scale = mathutils.Vector(ska_bd.scale)
         rest_state.apply_to_posebone(posebone, loc=Vector(ska_bd.translation), rot=Quaternion(ska_bd.rotation_quaternion) )
     
-    bpy.ops.poselib.pose_add(frame=1, name = 'Rest Pose')
+    # poselib removed in Blender 3.0 (Rest Pose marker dropped)
     
     progress.enter_substeps(anim_count, "Generating animation F-Curves (%d)..." % anim_count)
     for i in range(0, anim_count):
-        progress.step(i)
+        progress.step()
         ad = ska_data.animation_data[i]
         anim_header = ad.header
         action_name = str(anim_header.name)
@@ -418,6 +423,12 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                         print('Non-unity scaling:', bone_idx, ska_data.bone_data[bone_idx].name,frame, scaling)
                 pass
 
+            # Bones the stream never keys keep the skeleton's initial state in the engine
+            # (AnimPlayerStream::Initialize). Blender would instead keep a stale pose from the
+            # previously evaluated action, so give them a constant key.
+            for _bi, _bd in enumerate(ska_data.bone_data):
+                stream.rotation_channels.setdefault(_bi, [(0, list(_bd.rotation_quaternion))])
+                stream.location_channels.setdefault(_bi, [(0, list(_bd.translation))])
             raw_frames = stream.raw_frames
             
             for bone_idx, keyframes in stream.rotation_channels.items():
@@ -427,20 +438,36 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 # rest_pose = bone_rest_state[skm_bone_idx]
                 rest_pose = bone_rest_state[bone_idx]
 
-                posebone = rig.pose.bones[skm_bone_idx]
+                posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_idx].name)]
                 prop = posebone.path_from_id("rotation_quaternion")
                 group = get_curve_group(skm_bone_idx)
                 curve_w = action.fcurves.new(prop, index=0, action_group=group)
                 curve_x = action.fcurves.new(prop, index=1, action_group=group)
                 curve_y = action.fcurves.new(prop, index=2, action_group=group)
                 curve_z = action.fcurves.new(prop, index=3, action_group=group)
+                prev_rot = None
+                prev_frame = None
                 for frame, rotation in keyframes:
                     # Transform rotation to be relative to rest pose
                     # if skm_bone.parent_id != -1:
                     rotation = Quaternion(rotation)
                     rotation = rest_pose.get_rel_rot(rotation)
-                    if rotation[0] < 0: # fixes quaternion interpolation issues
+                    # Keep consecutive keys on the same hemisphere (engine slerp takes the shortest arc;
+                    # flipping on w<0 made Blender's component-wise lerp swing through ~180 deg)
+                    if prev_rot is not None and prev_rot.dot(rotation) < 0:
                         rotation = -rotation
+                    # The engine slerps between keys; Blender lerps the components. For large
+                    # spans (e.g. the ~170 deg root turn in *_rturn) add slerp-sampled keys at
+                    # every integer frame so the curves follow the engine's great arc.
+                    if prev_rot is not None and prev_frame is not None and frame - prev_frame > 1 \
+                            and prev_rot.rotation_difference(rotation).angle > SLERP_BAKE_ANGLE:
+                        for _f in range(prev_frame + 1, frame):
+                            _q = prev_rot.slerp(rotation, (_f - prev_frame) / (frame - prev_frame))
+                            if _q.dot(prev_rot) < 0: _q = -_q
+                            for _c, _v in ((curve_w, _q.w), (curve_x, _q.x), (curve_y, _q.y), (curve_z, _q.z)):
+                                _c.keyframe_points.insert(1 + _f, _v, options={'FAST'}).interpolation = 'LINEAR'
+                    prev_rot = rotation
+                    prev_frame = frame
 
                     kf = curve_w.keyframe_points.insert(1 + frame, rotation.w, options={'FAST'})
                     kf.interpolation = 'LINEAR'
@@ -462,7 +489,7 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 # rest_pose = bone_rest_state[skm_bone_idx]
                 rest_pose = bone_rest_state[bone_idx]
 
-                posebone = rig.pose.bones[skm_bone_idx]
+                posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_idx].name)]
                 prop = posebone.path_from_id("location")
                 group = get_curve_group(skm_bone_idx)
                 curve_x = action.fcurves.new(prop, index=0, action_group=group)
@@ -502,13 +529,16 @@ def get_ToEE_data_dir(filepath):
 
 def get_skm_filepath(ska_filepath):
     import re
-    skm_filepath = re.split(".ska", ska_filepath, flags=re.IGNORECASE)[0] + '.SKM'
-    return skm_filepath
+    base = re.split(r"\.ska$", ska_filepath, flags=re.IGNORECASE)[0]
+    for ext in ('.SKM', '.skm', '.Skm'):
+        if os.path.exists(base + ext):
+            return base + ext
+    return base + '.SKM'
 
 
 def load_skm(filepath, context, IMAGE_SEARCH=True):
     global SCN, ToEE_data_dir, progress
-    time1 = time.clock()  # for timing the import duration
+    time1 = time.perf_counter()  # for timing the import duration
     with ProgressReport(context.window_manager) as progress:
 
         print("importing SKA: %r..." % (filepath), end="")
@@ -554,7 +584,7 @@ def load_skm(filepath, context, IMAGE_SEARCH=True):
         object_dictionary.clear()
         object_matrix.clear()
         
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
     return
 
 
@@ -570,7 +600,7 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
     # XXX
     # 	if BPyMessages.Error_NoFile(filepath):
     # 		return
-    time1 = time.clock()  # for timing the import duration
+    time1 = time.perf_counter()  # for timing the import duration
     # progress = ProgressReport(context.window_manager)
     with ProgressReport(context.window_manager) as progress:
         
@@ -620,6 +650,20 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
 
         importedObjects = []  # Fill this list with objects
         progress.enter_substeps(3, "Converting SKM to Blender model...")
+        # The engine animates the SKA skeleton: a bone's keyframes are local to its SKA parent
+        # (aas_animated_model.cpp: W_i = W_parent(ska) * T * S_p^-1 * R * S). Some models have a
+        # different SKM hierarchy (e.g. Ice Lizard thighs/tail: SKM parent Pelvis, SKA parent Spine),
+        # so build the rig with the SKA parents and keep the SKM parent for reference/export.
+        if APPLY_ANIMATIONS and ska_data.bone_data:
+            _skm_idx = {str(b.name).lower(): i for i, b in enumerate(skm_data.bone_data)}
+            for _b in skm_data.bone_data:
+                _b.skm_parent_id = _b.parent_id
+                _sb = next((x for x in ska_data.bone_data if str(x.name).lower() == str(_b.name).lower()), None)
+                if _sb is not None and _sb.parent_id >= 0:
+                    _pn = str(ska_data.bone_data[_sb.parent_id].name).lower()
+                    if _pn in _skm_idx and _skm_idx[_pn] != _b.parent_id:
+                        print('Reparenting %s: SKM parent %d -> SKA parent %d' % (_b.name, _b.parent_id, _skm_idx[_pn]))
+                        _b.parent_id = _skm_idx[_pn]
         skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH)
         
         # In Blender 2.80 API new objects mast be linked not to the scene, but to the scene collections:
@@ -657,7 +701,7 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
         view_layer.update()
         
     # Select all new objects.
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
 
 
 def blender_load_ska(operator, context, filepath="",
