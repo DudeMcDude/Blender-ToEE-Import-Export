@@ -196,7 +196,7 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         bpy.ops.object.mode_set(mode='EDIT')  # set to Edit Mode so bones can be added
         bone_dump = open(os.path.join(ToEE_data_dir, "bone_dump.txt"), 'w')
 
-        fh = open("D:/bones.txt", "wt")
+        fh = open(os.path.join(ToEE_data_dir, "bones.txt"), "wt")
 
         vertex_groups = dict()
 
@@ -360,10 +360,10 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         bone_rest_state[ska_bone_id] = RestBoneState(rest_loc, rest_rot, rest_sca)
 
     anim_count = len(ska_data.animation_data)
-    anim_count = 10  # DEBUG
+    # anim_count = 10  # DEBUG (upstream limited import to 10 anims)
     rig.animation_data_create()
     bpy.ops.object.mode_set(mode='POSE')
-    bpy.ops.poselib.pose_add(frame=0, name = 'T Pose')
+    # poselib.pose_add removed in Blender 3.0 (T Pose marker dropped)
     
     for ska_idx, ska_bd in enumerate(ska_data.bone_data):
         skm_bone_id = ska_to_skm_bone_mapping[ska_idx]
@@ -378,11 +378,11 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         posebone.scale = mathutils.Vector(ska_bd.scale)
         rest_state.apply_to_posebone(posebone, loc=Vector(ska_bd.translation), rot=Quaternion(ska_bd.rotation_quaternion) )
     
-    bpy.ops.poselib.pose_add(frame=1, name = 'Rest Pose')
+    # poselib removed in Blender 3.0 (Rest Pose marker dropped)
     
     progress.enter_substeps(anim_count, "Generating animation F-Curves (%d)..." % anim_count)
     for i in range(0, anim_count):
-        progress.step(i)
+        progress.step()
         ad = ska_data.animation_data[i]
         anim_header = ad.header
         action_name = str(anim_header.name)
@@ -502,13 +502,16 @@ def get_ToEE_data_dir(filepath):
 
 def get_skm_filepath(ska_filepath):
     import re
-    skm_filepath = re.split(".ska", ska_filepath, flags=re.IGNORECASE)[0] + '.SKM'
-    return skm_filepath
+    base = re.split(r"\.ska$", ska_filepath, flags=re.IGNORECASE)[0]
+    for ext in ('.SKM', '.skm', '.Skm'):
+        if os.path.exists(base + ext):
+            return base + ext
+    return base + '.SKM'
 
 
 def load_skm(filepath, context, IMAGE_SEARCH=True):
     global SCN, ToEE_data_dir, progress
-    time1 = time.clock()  # for timing the import duration
+    time1 = time.perf_counter()  # for timing the import duration
     with ProgressReport(context.window_manager) as progress:
 
         print("importing SKA: %r..." % (filepath), end="")
@@ -554,7 +557,7 @@ def load_skm(filepath, context, IMAGE_SEARCH=True):
         object_dictionary.clear()
         object_matrix.clear()
         
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
     return
 
 
@@ -570,7 +573,7 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
     # XXX
     # 	if BPyMessages.Error_NoFile(filepath):
     # 		return
-    time1 = time.clock()  # for timing the import duration
+    time1 = time.perf_counter()  # for timing the import duration
     # progress = ProgressReport(context.window_manager)
     with ProgressReport(context.window_manager) as progress:
         
@@ -657,7 +660,7 @@ def load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=10.0,
         view_layer.update()
         
     # Select all new objects.
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
 
 
 def blender_load_ska(operator, context, filepath="",

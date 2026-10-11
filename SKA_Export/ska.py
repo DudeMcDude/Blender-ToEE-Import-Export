@@ -661,13 +661,13 @@ class SkaFile:
 
     def read(self, file):
 
-        time1 = time.clock()
+        time1 = time.perf_counter()
 
         self._fileraw = file.read()
         self.get_bone_data()
         self.get_variation_data()
         self.read_animation_data()
-        print(" done in %.2f sec." % (time.clock() - time1))
+        print(" done in %.2f sec." % (time.perf_counter() - time1))
 
     def get_bone_data(self):
         count = struct.unpack('<i', self._fileraw[0:4])[0]
