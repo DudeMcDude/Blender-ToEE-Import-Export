@@ -5,7 +5,7 @@ sys.path.insert(0, addon_dir)
 addon_utils.enable('SKA_Export')
 A = os.path.join(os.environ.get('TOEE_DATA', 'data'), 'art/meshes/Monsters/Icelizard/icelizard.ska')
 bpy.ops.wm.read_factory_settings(use_empty=True); addon_utils.enable('SKA_Export')
-getattr(bpy.ops, 'import').ska_file(filepath=A)
+getattr(bpy.ops, 'import').ska_file(filepath=A, toee_axis_conversion=False)  # compare in ToEE space
 mesh = bpy.data.objects['ToEE Model']; rig = bpy.data.objects['ToEE Rig']
 print('DUMP mesh mw', [list(r) for r in mesh.matrix_world], 'rig mw', [list(r) for r in rig.matrix_world], 'parent', mesh.parent, [m.type for m in mesh.modifiers], 'fps', bpy.context.scene.render.fps)
 sys.path.insert(0, os.path.dirname(__file__)); sys.path.insert(0, os.path.join(addon_dir, 'SKA_Export'))

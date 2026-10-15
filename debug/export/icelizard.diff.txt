@@ -1,0 +1,40 @@
+122 bones, offset:  40
+2 materials, offset:  12240
+1405 vertices, offset:  12496
+1448 faces, offset:  124896
+122 bones, offset:  24
+ done in 0.06 sec.
+122 bones, offset:  40
+2 materials, offset:  12240
+1405 vertices, offset:  12496
+1448 faces, offset:  124896
+122 bones, offset:  24
+ done in 0.08 sec.
+file header (bones,off,var,off,anims,off): orig {'size': 493290, 'header': (122, 24, 0, 12224, 24, 12224)}  new {'size': 496728, 'header': (122, 24, 0, 12224, 24, 12224)}
+bones: 122 vs 122, differing records: []
+streams: 17 vs 17
+unarmed_unarmed_rturn          hdr True ev True recs(keys,init) (1490, 81) -> (1508, 81)  lf 0.014275->0.014275  vert 0.0573 bone 0.0579
+unarmed_unarmed_lturn          hdr True ev True recs(keys,init) (1467, 81) -> (1509, 81)  lf 0.014275->0.014275  vert 0.0349 bone 0.0355
+unarmed_unarmed_rattack        hdr True ev True recs(keys,init) (1944, 86) -> (1950, 86)  lf 0.014454->0.014454  vert 0.0259 bone 0.0251
+unarmed_unarmed_lattack        hdr True ev True recs(keys,init) (1944, 86) -> (1950, 86)  lf 0.014454->0.014454  vert 0.0259 bone 0.0251
+unarmed_unarmed_walk           hdr True ev True recs(keys,init) (1655, 87) -> (1696, 87)  lf 0.014263->0.014263  vert 0.0478 bone 0.0478
+unarmed_unarmed_run            hdr True ev True recs(keys,init) (1655, 87) -> (1696, 87)  lf 0.014263->0.014263  vert 0.0478 bone 0.0478
+unarmed_unarmed_idle           hdr True ev True recs(keys,init) (1442, 79) -> (1451, 79)  lf 0.014275->0.014275  vert 0.0401 bone 0.0404
+unarmed_unarmed_fhit           hdr True ev True recs(keys,init) (1913, 85) -> (1929, 85)  lf 0.013597->0.013597  vert 0.0548 bone 0.0550
+unarmed_unarmed_lhit           hdr True ev True recs(keys,init) (1913, 85) -> (1929, 85)  lf 0.013597->0.013597  vert 0.0548 bone 0.0550
+unarmed_unarmed_rhit           hdr True ev True recs(keys,init) (1913, 85) -> (1929, 85)  lf 0.013597->0.013597  vert 0.0548 bone 0.0550
+unarmed_unarmed_bhit           hdr True ev True recs(keys,init) (1913, 85) -> (1929, 85)  lf 0.013597->0.013597  vert 0.0548 bone 0.0550
+unarmed_unarmed_fidget         hdr True ev True recs(keys,init) (9956, 83) -> (10072, 83)  lf 0.014595->0.014595  vert 0.0630 bone 0.0638
+unarmed_unarmed_panic          hdr True ev True recs(keys,init) (2026, 82) -> (2034, 82)  lf 0.014983->0.014983  vert 0.0237 bone 0.0241
+unarmed_unarmed_combatidle     hdr True ev True recs(keys,init) (1442, 79) -> (1451, 79)  lf 0.014275->0.014275  vert 0.0401 bone 0.0404
+unarmed_unarmed_combatfidget   hdr True ev True recs(keys,init) (1442, 79) -> (1451, 79)  lf 0.014275->0.014275  vert 0.0401 bone 0.0404
+abjuration_casting             hdr True ev True recs(keys,init) (3746, 88) -> (3760, 88)  lf 0.015255->0.015255  vert 0.0402 bone 0.0408
+abjuration_conjuring           hdr True ev True recs(keys,init) (0, 8) -> (0, 8)  lf 0.000709->0.000709  vert 0.0000 bone 0.0000
+falldown                       hdr True ev True recs(keys,init) (1455, 81) -> (1464, 81)  lf 0.013597->0.013597  vert 0.0341 bone 0.0340
+prone_idle                     hdr True ev True recs(keys,init) (28, 68) -> (28, 68)  lf 0.002357->0.002357  vert 0.0022 bone 0.0022
+prone_fidget                   hdr True ev True recs(keys,init) (286, 73) -> (287, 73)  lf 0.002357->0.002357  vert 0.0144 bone 0.0144
+getup                          hdr True ev True recs(keys,init) (3494, 87) -> (3555, 87)  lf 0.013597->0.013597  vert 0.0350 bone 0.0353
+death                          hdr True ev True recs(keys,init) (4291, 88) -> (4308, 88)  lf 0.013597->0.013597  vert 0.0437 bone 0.0444
+dead_idle                      hdr True ev True recs(keys,init) (0, 82) -> (0, 82)  lf 0.002357->0.002357  vert 0.0021 bone 0.0021
+dead_fidget                    hdr True ev True recs(keys,init) (51, 82) -> (51, 82)  lf 0.002357->0.002357  vert 0.0021 bone 0.0021
+MAX vertex err 0.0630, bone origin err 0.0638

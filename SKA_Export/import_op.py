@@ -66,6 +66,17 @@ class ImportSKA(bpy.types.Operator, ImportHelper):
             description="Ignores all keyframes (only uses the stuff in SKA bone)",
             default=True,
             )
+    toee_axis_conversion: BoolProperty(
+            name="ToEE -> Blender axes",
+            description="Show the model in Blender convention (Z up, facing -Y, metres) via the rig "
+                        "object transform; the ToEE data inside the rig is unchanged",
+            default=True,
+            )
+    toee_scale: FloatProperty(
+            name="Unit scale",
+            description="Metres per ToEE unit (1 unit ~ 1 inch)",
+            default=0.0254, min=1e-6, max=1000.0,
+            )
     def execute(self, context):
         from . import import_ska
 
@@ -103,6 +114,17 @@ class ImportSKM(bpy.types.Operator, ImportHelper):
             description="Search subdirectories for any associated images "
                         "(Warning, may be slow)",
             default=True,
+            )
+    toee_axis_conversion: BoolProperty(
+            name="ToEE -> Blender axes",
+            description="Show the model in Blender convention (Z up, facing -Y, metres) via the rig "
+                        "object transform; the ToEE data inside the rig is unchanged",
+            default=True,
+            )
+    toee_scale: FloatProperty(
+            name="Unit scale",
+            description="Metres per ToEE unit (1 unit ~ 1 inch)",
+            default=0.0254, min=1e-6, max=1000.0,
             )
     def execute(self, context):
         from . import import_ska
@@ -186,4 +208,4 @@ def register():
 def unregister():
 #     print('Unregistering GITHUB/SKA_Import/import_op.py!')
     bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_ska)
-    bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_skm)
+    bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_skm)

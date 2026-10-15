@@ -145,6 +145,10 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
                 bmat = MATDICT[mat_name] = bpy.data.materials.new(mat_name)
                 img = None
             bmesh.materials.append(bmat)
+        # keep the exact SKM material list (incl. non-.mdf placeholders like CHEST/BOOTS) for export
+        bmesh["toee_materials"] = [mm.id.name for mm in skm_data.material_data]
+        # vanilla files have junk after the NUL in the 128-byte name field; keep it for byte-exact export
+        bmesh["toee_materials_raw"] = [bytes(getattr(mm.id, 'raw', None) or b'').hex() for mm in skm_data.material_data]
 
         # Get UV coordinates for each polygon's vertices
         print("Setting UVs")
@@ -168,6 +172,18 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         # Finish up
         bmesh.validate()
         bmesh.update()
+        # preserve the SKM vertex normals instead of letting Blender/exporter recompute them
+        try:
+            if hasattr(bmesh, 'use_auto_smooth'):  # Blender < 4.1
+                bmesh.use_auto_smooth = True
+            bmesh.normals_split_custom_set_from_vertices(
+                [Vector(vtx.normal[0:3]).normalized() for vtx in skm_data.vertex_data])
+        except Exception as e:
+            print(" WARNING! could not set custom normals: %s" % e)
+        # exact SKM normals (custom normals are stored compressed); used on export while the
+        # custom normal still matches, i.e. the normal was not edited
+        attr = bmesh.attributes.new("toee_skm_normal", 'FLOAT_VECTOR', 'POINT')
+        attr.data.foreach_set("vector", [t for vtx in skm_data.vertex_data for t in vtx.normal[0:3]])
 
         # Create new object from mesh
         ob = bpy.data.objects.new(contextObName, bmesh)
@@ -231,6 +247,17 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         fh.close()
         bone_dump.close()
         bpy.ops.object.mode_set(mode='OBJECT')  # do an implicit update
+        # Remember original SKM bone data so the exporter can write it back verbatim
+        # unless the bone was edited (detected via the stored rest matrix).
+        for bone_id, bd in enumerate(skm_data.bone_data):
+            b = barm.bones[str(bd.name)]  # bones are re-sorted by hierarchy after edit mode
+            b["toee_skm_index"] = bone_id
+            b["toee_skm_flags"] = int(bd.flags)
+            pid = getattr(bd, 'skm_parent_id', bd.parent_id)
+            b["toee_skm_parent"] = str(skm_data.bone_data[pid].name) if pid >= 0 else ""
+            b["toee_skm_world_inverse"] = [float(x) for row in bd.world_inverse for x in row]
+            b["toee_rest_matrix"] = [x for row in b.matrix_local for x in row]
+            b["toee_rest_parent"] = b.parent.name if b.parent else ""
         # parent obj with rig, using Armaturre type parenting so Bones will deform vertices
         obj.parent = rig
         obj.parent_type = 'ARMATURE'
@@ -362,6 +389,22 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         rest_loc, rest_rot, rest_sca = rest_world.decompose()
         bone_rest_state[ska_bone_id] = RestBoneState(rest_loc, rest_rot, rest_sca)
 
+    # Metadata for SKA export (export_ska.py): the full SKA skeleton table (incl. bones missing
+    # from the SKM), and per bone the exact rest state used to convert keys to pose space.
+    import json
+    rig["toee_ska_bones"] = json.dumps([dict(name=str(b.name), parent=b.parent_id, flags=b.flags,
+                                              scale=list(b.scale), rotation=list(b.rotation),
+                                              translation=list(b.translation)) for b in ska_data.bone_data])
+    for ska_bone_id, skm_bone_id in ska_to_skm_bone_mapping.items():
+        if skm_bone_id < 0 or ska_bone_id not in bone_rest_state:
+            continue
+        rs = bone_rest_state[ska_bone_id]
+        bb = barm.bones.get(str(skm_data.bone_data[skm_bone_id].name))
+        if bb is not None:
+            bb["toee_ska_index"] = ska_bone_id
+            bb["toee_rest_loc"] = list(rs.loc)
+            bb["toee_rest_rot"] = list(rs.rot)  # w, x, y, z
+
     anim_count = len(ska_data.animation_data)
     # anim_count = 10  # DEBUG (upstream limited import to 10 anims)
     # SKA keys are in engine frames; most anims play at 30 fps (turns/walks are rotation/distance driven)
@@ -394,6 +437,17 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         print(action_name)
         action = bpy.data.actions.new(action_name)
         action.use_fake_user = True
+        # Header data for SKA export
+        action["toee_index"] = i
+        action["toee_drive_type"] = anim_header.drive_type
+        action["toee_loopable"] = anim_header.loopable
+        if anim_header.stream_headers:
+            _sh = anim_header.stream_headers[0]
+            action["toee_frame_count"] = _sh.frame_count
+            action["toee_variation_id"] = _sh.variation_id
+            action["toee_frame_rate"] = _sh.frame_rate
+            action["toee_dps"] = _sh.dps
+        action["toee_events"] = json.dumps([[e.frame_id, str(e.type), str(e.action)] for e in ad.events])
         rig.animation_data.action = action
         stream_count = anim_header.stream_count
         if stream_count <= 0:
@@ -417,11 +471,24 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         for j in range(0, stream_count):
             stream = ad.streams[j]  # type: SkaAnimStream
 
+            # Scale keys: kept as pose-bone scale F-Curves (engine scale value) when they ever leave
+            # unity, e.g. the human HandL_ref/HandR_ref scale animations, so SKA export keeps them.
+            # Note: Blender's scale inheritance differs from the engine's parent-scale compensation.
             for bone_idx, keyframes in stream.scale_channels.items():
+                if all(max(abs(c - 1.0) for c in sc) < 1e-4 for _, sc in keyframes):
+                    continue
+                skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+                if skm_bone_idx < 0:
+                    continue
+                posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_idx].name)]
+                prop = posebone.path_from_id("scale")
+                group = get_curve_group(skm_bone_idx)
+                curves = [action.fcurves.new(prop, index=k, action_group=group) for k in range(3)]
                 for frame, scaling in keyframes:
-                    if scaling[0] < 1.0 or scaling[0] > 1.05:
-                        print('Non-unity scaling:', bone_idx, ska_data.bone_data[bone_idx].name,frame, scaling)
-                pass
+                    for k in range(3):
+                        curves[k].keyframe_points.insert(1 + frame, scaling[k], options={'FAST'}).interpolation = 'LINEAR'
+                for c in curves:
+                    c.update()
 
             # Bones the stream never keys keep the skeleton's initial state in the engine
             # (AnimPlayerStream::Initialize). Blender would instead keep a stale pose from the
@@ -513,6 +580,29 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 curve_z.update()
     progress.leave_substeps("Finished")
     return
+
+# ToEE model space: +Y up, model faces +Z, character's left at +X, right-handed, 1 unit ~ 1 inch
+# (PC_Human_Male is 71.8 units tall). Blender: +Z up, front faces -Y. The mapping is a pure
+# rotation of +90 deg about X (ToEE (x,y,z) -> Blender (x,-z,y), det +1, no mirroring) plus a
+# uniform scale. It is applied as the rig object's transform only: mesh, bones, rest poses,
+# bone rolls and keys stay in ToEE model space inside the rig, so the exporter (which works in
+# rig-local space) round-trips bit-for-bit regardless of this setting.
+TOEE_UNIT_METERS = 0.0254
+
+
+def toee_to_blender_matrix(scale=TOEE_UNIT_METERS):
+    return mathutils.Matrix.Rotation(math.radians(90.0), 4, 'X') @ mathutils.Matrix.Scale(scale, 4)
+
+
+def apply_axis_conversion(rig, scale=TOEE_UNIT_METERS):
+    rig.matrix_world = toee_to_blender_matrix(scale)
+    rig["toee_axis_conversion"] = scale
+
+
+def _new_rig(before):
+    new = [o for o in bpy.data.objects if o.name not in before and o.type == 'ARMATURE']
+    return new[-1] if new else None
+
 
 def get_ToEE_data_dir(filepath):
     '''
@@ -712,7 +802,10 @@ def blender_load_ska(operator, context, filepath="",
          use_local_location=True,
          apply_animations=True,
          global_matrix=None,
+         toee_axis_conversion=True,
+         toee_scale=TOEE_UNIT_METERS,
          ):
+    _before = set(o.name for o in bpy.data.objects)
     load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=constrain_size,
              IMAGE_SEARCH=use_image_search,
              APPLY_MATRIX=use_apply_transform,
@@ -721,7 +814,9 @@ def blender_load_ska(operator, context, filepath="",
              APPLY_ANIMATIONS=apply_animations,
              global_matrix=global_matrix,
              )
-
+    _rig = _new_rig(_before)
+    if toee_axis_conversion and _rig is not None:
+        apply_axis_conversion(_rig, toee_scale)
     return {'FINISHED'}
 
 def blender_load_skm(operator, context, filepath="",
@@ -732,6 +827,12 @@ def blender_load_skm(operator, context, filepath="",
          use_local_location=True,
          apply_animations=True,
          global_matrix=None,
+         toee_axis_conversion=True,
+         toee_scale=TOEE_UNIT_METERS,
          ):
+    _before = set(o.name for o in bpy.data.objects)
     load_skm(filepath, context, IMAGE_SEARCH=use_image_search)
-    return {'FINISHED'}
+    _rig = _new_rig(_before)
+    if toee_axis_conversion and _rig is not None:
+        apply_axis_conversion(_rig, toee_scale)
+    return {'FINISHED'}
