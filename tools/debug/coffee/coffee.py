@@ -25,6 +25,8 @@ def mesh_min_z():
     dg = bpy.context.evaluated_depsgraph_get(); ev = mesh.evaluated_get(dg)
     return min((ev.matrix_world @ v.co).z for v in ev.data.vertices)
 
+EXAG = float(os.environ.get('EXAG', '2.0'))  # motion exaggeration so the sip reads at game zoom
+HEADLIFT = float(os.environ.get('HEADLIFT', str(20 * EXAG)))
 ROLL_F = 31          # falldown frames
 LOOP_F = 120         # prone_idle loop frames
 NLOOP = 2
@@ -60,7 +62,7 @@ def key_target(p, f):  # set target at rest-world point p (pose must be at rest)
     tgt.matrix_world = Matrix.Translation(p); bpy.context.view_layer.update()
     tgt.keyframe_insert('location', frame=f)
 mouth = Vector([float(x) for x in os.environ.get('MOUTH', '0.2,-0.38,4.15').split(',')])   # in front of the lower jaw, after the head nods down
-rest_hand = hand0 + Vector((-0.3, -0.5, 0.15))   # claw resting on the chest
+rest_hand = hand0 + Vector((-0.6, -1.0, -0.4)) * EXAG   # claw resting on the chest
 # loop timing (frames within loop)
 LIFT0, LIFT1, SIP0, SIP1, LOW0, LOW1 = 18, 46, 52, 76, 84, 112
 key_target(hand0, 1); key_target(rest_hand, ROLL_F)
@@ -119,15 +121,15 @@ def setpose(f):
     for wn, sg in (('wing_arm_L', 1), ('wing_arm_R', -1)):
         P[wn].rotation_quaternion = qrot(wn, (1, 0, 0), -70 * r) @ qrot(wn, (0, 1, 0), sg * 12 * r)
     # head/neck nod towards the mug, jaw, tail sway
-    nod = jaw = tilt = 0.0
+    nod = jaw = tilt = lift = 0.0
     if t is not None:
         lift = smooth((t - LIFT0) / (LIFT1 - LIFT0)) - smooth((t - LOW0) / (LOW1 - LOW0))
         sip = smooth((t - SIP0) / 8) - smooth((t - SIP1 + 8) / 8)
-        nod = 14 * lift + 6 * sip
+        nod = (14 * lift + 6 * sip) * EXAG
         jaw = 10 * smooth((t - LIFT1 + 10) / 10) - 10 * smooth((t - LOW0) / 8) + 4 * sip * math.sin(math.pi * (t - SIP0) / 6) ** 2
-        tilt = 25 * sip
+        tilt = 25 * sip * EXAG
     nod += 12 * r  # look along the ground towards the claw
-    P['Bip01 Neck'].rotation_quaternion = qrot('Bip01 Neck', (1, 0, 0), -0.4 * nod) @ qrot('Bip01 Neck', (0, 0, 1), 8 * r)
+    P['Bip01 Neck'].rotation_quaternion = qrot('Bip01 Neck', (1, 0, 0), -0.4 * nod) @ qrot('Bip01 Neck', (0, 0, 1), 8 * r + HEADLIFT * lift)  # lift the head off the floor (world up once rolled)
     P['Bip01 Head'].rotation_quaternion = qrot('Bip01 Head', (1, 0, 0), -0.6 * nod) @ qrot('Bip01 Head', (0, 1, 0), -10 * r)
     P['Bip01 Ponytail1'].rotation_quaternion = qrot('Bip01 Ponytail1', (1, 0, 0), max(0.0, jaw))
     P['Bip01 L Finger0'].rotation_quaternion = qrot('Bip01 L Finger0', (1, 0, 0), 15 * r)

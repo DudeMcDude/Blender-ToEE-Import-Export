@@ -30,19 +30,19 @@ def tick():
 		S['liz'] = liz
 		game.scroll_to(liz)
 		log("spawned %s at (%d,%d) base_mesh=%d" % (liz, x + 3, y - 3, liz.obj_get_int(obj_f_base_mesh)))
-	if MODE == 'idle':  # replaced idle/fidget slots: just stand there and keep the camera on it
-		if t > 30 and t % 8 == 0 and S['liz'] != None:
+	if MODE == 'idle':  # replaced idle/fidget slots: just stand there; camera settles, then stays put
+		if 30 < t <= 40 and t % 4 == 0 and S['liz'] != None:
 			game.scroll_to(S['liz'])
 		rot = os.getenv('SKAVIEW_ROT', '')
-		if S['liz'] != None and t > 30 and rot == 'cycle' and (t - 31) % 12 == 0:
-			S['liz'].rotation = ((t - 31) / 12) * 0.785398
-			log("ROT %d" % ((t - 31) / 12))
-		elif S['liz'] != None and t > 30 and rot not in ('', 'cycle'):
+		if S['liz'] != None and t > 30 and rot == 'cycle' and (t - 31) % int(os.getenv('SKAVIEW_ROT_TICKS', '12')) == 0:
+			S['liz'].rotation = ((t - 31) / int(os.getenv('SKAVIEW_ROT_TICKS', '12'))) * 0.785398
+			log("ROT %d" % ((t - 31) / int(os.getenv('SKAVIEW_ROT_TICKS', '12'))))
+		elif S['liz'] != None and t == 38 and rot not in ('', 'cycle'):  # once, after the spawn turn finished; setting it restarts the anim
 			S['liz'].rotation = float(rot)
 		if t == 36:
 			log("IDLE")
 			log("ATTACK 2")
-		if t == 140:
+		if t == int(os.getenv('SKAVIEW_END', '140')):
 			log("DONE")
 		return
 	if MODE == 'falldown':
