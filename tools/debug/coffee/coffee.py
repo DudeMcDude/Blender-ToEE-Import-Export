@@ -29,7 +29,7 @@ ROLL_F = 31          # falldown frames
 LOOP_F = 120         # prone_idle loop frames
 NLOOP = 2
 TOTAL = ROLL_F + LOOP_F * NLOOP
-ground = mesh_min_z()
+ground = 0.0  # ToEE ground plane (model origin); the rest pose itself hovers well above it
 pivot = rig.matrix_world @ rig.data.bones['Bip01'].head_local
 
 def body_pose(r):
@@ -175,7 +175,7 @@ for n in ('falldown', 'prone_idle'):
 fall = make_action('falldown', 1, ROLL_F, pf)
 loop = make_action('prone_idle', ROLL_F, LOOP_F + 1, pp)   # first == last frame -> seamless loop
 full = make_action('coffee_preview', 1, TOTAL, {})
-full.use_fake_user = True
+fall.use_fake_user = loop.use_fake_user = full.use_fake_user = True  # keep them in the .blend
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, 'coffee.blend'))
 # export the SKA (preview action is not part of the export)
 bpy.data.actions.remove(full)
@@ -183,3 +183,47 @@ rig.animation_data.action = loop
 bpy.context.view_layer.objects.active = rig
 bpy.ops.export.ska_file(filepath=os.path.join(OUT, 'icelizard.ska'))
 print('EXPORTED')
+# in-game variant: the sip loop also in the idle/fidget slots, so a plain spawned (standing,
+# non-hostile) lizard plays it. Falldown + Unconscious in ToEE goes to death/dead_idle instead.
+for slot in ('unarmed_unarmed_idle', 'unarmed_unarmed_fidget', 'unarmed_unarmed_combatidle', 'unarmed_unarmed_combatfidget'):
+    old = bpy.data.actions[slot]; props = {k: old[k] for k in old.keys()}
+    bpy.data.actions.remove(old)
+    new = loop.copy(); new.name = slot
+    for k in list(new.keys()): del new[k]
+    for k, v in props.items(): new[k] = v
+    new["toee_frame_count"] = loop["toee_frame_count"]; new["toee_loopable"] = 1
+bpy.ops.export.ska_file(filepath=os.path.join(OUT, 'idle', 'icelizard.ska'))
+print('EXPORTED_IDLE')
+# ...and the mug baked into the model (SKM), skinned 100% to the left hand, own brown material.
+# Bind space = rest pose, where the mug sits upright in the claw as placed above.
+rig.animation_data.action = None
+for pb in rig.pose.bones: pb.rotation_quaternion = (1, 0, 0, 0); pb.location = (0, 0, 0)
+mug.animation_data_clear(); mug.delta_rotation_euler = (0, 0, 0); bpy.context.view_layer.update()
+MUG_SCALE = float(os.environ.get('MUG_SCALE', '2.5'))  # cartoon-sized so it reads at game zoom
+MUG_MDF = 'art/meshes/Monsters/Icelizard/coffee_mug.mdf'
+mat = bpy.data.materials.new(MUG_MDF); mesh.data.materials.append(mat); mi = len(mesh.data.materials) - 1
+st = list(mesh.data.get('toee_materials', [])); st.append(MUG_MDF); mesh.data['toee_materials'] = st
+raws = list(mesh.data.get('toee_materials_raw', []))
+if raws: raws.append(''); mesh.data['toee_materials_raw'] = raws
+parts = []
+for o in (mug, coffee):
+    me = o.data.copy(); me.transform(mesh.matrix_world.inverted() @ mug.matrix_world @ Matrix.Scale(MUG_SCALE, 4) @ mug.matrix_world.inverted() @ o.matrix_world)
+    p = bpy.data.objects.new('part', me); sc.collection.objects.link(p); p.matrix_world = mesh.matrix_world; parts.append(p)  # join keeps world -> data stays mesh-local
+n0 = len(mesh.data.vertices)
+bpy.ops.object.select_all(action='DESELECT')
+for p in parts: p.select_set(True)
+mesh.select_set(True); bpy.context.view_layer.objects.active = mesh; bpy.ops.object.join()
+import bmesh as _bm
+bm = _bm.new(); bm.from_mesh(mesh.data)
+new = [f for f in bm.faces if all(v.index >= n0 for v in f.verts)]
+_bm.ops.triangulate(bm, faces=new)
+for f in bm.faces:
+    if all(v.index >= n0 for v in f.verts): f.material_index = mi
+bm.to_mesh(mesh.data); bm.free()
+vg = mesh.vertex_groups['Bip01 L Hand']; vg.add(list(range(n0, len(mesh.data.vertices))), 1.0, 'REPLACE')
+bpy.context.view_layer.objects.active = rig; rig.select_set(True)
+bpy.ops.export.ska_file(filepath=os.path.join(OUT, 'idle', 'icelizard.ska'), write_skm=True)
+import struct as _st  # 16x16 uncompressed 32-bit TGA, red (BGR) so the mug reads at game zoom
+open(os.path.join(OUT, 'idle', 'coffee_mug.tga'), 'wb').write(_st.pack('<BBBHHBHHHHBB', 0, 0, 2, 0, 0, 0, 0, 0, 16, 16, 32, 8) + bytes((30, 40, 210, 255)) * 256)
+open(os.path.join(OUT, 'idle', 'coffee_mug.mdf'), 'w').write('General\n\nColor 255 255 255 255\n\nTexture 0 "art/meshes/Monsters/icelizard/coffee_mug.tga"\nUVType 0 Mesh\nBlendType 0 Modulate\n')
+print('EXPORTED_MUG', len(mesh.data.vertices) - n0)

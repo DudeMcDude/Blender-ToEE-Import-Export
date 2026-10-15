@@ -115,7 +115,9 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
         if raw is not None and raw.domain == 'POINT' and raw.data_type == 'FLOAT_VECTOR':
             for i, d in enumerate(raw.data):
                 v = d.vector
-                if vnorm[i] is None or v.length < 1e-8 or v.normalized().dot(vnorm[i].normalized()) > 0.9995:
+                if v.length < 1e-8:
+                    continue  # no stored normal (vertex added after import, e.g. joined geometry)
+                if vnorm[i] is None or v.normalized().dot(vnorm[i].normalized()) > 0.9995:
                     vnorm[i] = v.copy()  # unchanged since import -> exact original value
         # Create vertices
         for vtx in bmesh.vertices:

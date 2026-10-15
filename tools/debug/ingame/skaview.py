@@ -20,7 +20,7 @@ def tick():
 	if t == 30:
 		x, y = location_to_axis(l.location)
 		liz = game.obj_create(14109, location_from_axis(x + 3, y - 3))
-		if MODE != 'falldown':
+		if MODE not in ('falldown', 'idle'):
 			liz.npc_flag_set(ONF_KOS_OVERRIDE)
 		else:
 			liz.npc_flag_unset(ONF_KOS)
@@ -29,7 +29,22 @@ def tick():
 		liz.turn_towards(l)
 		S['liz'] = liz
 		game.scroll_to(liz)
-		log("spawned %s at (%d,%d)" % (liz, x + 3, y - 3))
+		log("spawned %s at (%d,%d) base_mesh=%d" % (liz, x + 3, y - 3, liz.obj_get_int(obj_f_base_mesh)))
+	if MODE == 'idle':  # replaced idle/fidget slots: just stand there and keep the camera on it
+		if t > 30 and t % 8 == 0 and S['liz'] != None:
+			game.scroll_to(S['liz'])
+		rot = os.getenv('SKAVIEW_ROT', '')
+		if S['liz'] != None and t > 30 and rot == 'cycle' and (t - 31) % 12 == 0:
+			S['liz'].rotation = ((t - 31) / 12) * 0.785398
+			log("ROT %d" % ((t - 31) / 12))
+		elif S['liz'] != None and t > 30 and rot not in ('', 'cycle'):
+			S['liz'].rotation = float(rot)
+		if t == 36:
+			log("IDLE")
+			log("ATTACK 2")
+		if t == 140:
+			log("DONE")
+		return
 	if MODE == 'falldown':
 		if t > 44 and t % 8 == 0 and S['liz'] != None:
 			game.scroll_to(S['liz'])
