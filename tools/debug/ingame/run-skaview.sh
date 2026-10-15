@@ -2,14 +2,15 @@
 # SKA-EXPORT check: run dist-cloth with SlotAuto, spawn an Ice Lizard, record its attacks with ffmpeg.
 # Usage: run-skaview.sh <tag> [ska file to install as art/meshes/Monsters/Icelizard/icelizard.ska,
 #        or a directory whose files (ska/skm/mdf/tga) all go into art/meshes/Monsters/Icelizard/]
+# SKAVIEW_PROTO=<proto id> (default 14109 ice lizard), SKAVIEW_ART=<art dir to pack into> (default art/meshes/Monsters/Icelizard)
 # SKAVIEW_MODE=attack (default) | falldown | idle (plain standing NPC -> idle/fidget slots)
 export DISPLAY=${DISPLAY_SKA:-:47} PATH=/usr/local/bin:/usr/bin:/bin:$PATH
 TAG=${1:-run}; SKA=$2
-O=/workspace/tp-build/dist-cloth/tpdata/overrides/skatest; D=$O/art/meshes/Monsters/Icelizard
+O=/workspace/tp-build/dist-cloth/tpdata/overrides/skatest; ART=${SKAVIEW_ART:-art/meshes/Monsters/Icelizard}
 L="/home/box/.wine-toee-ska/drive_c/users/box/Saved Games/TemplePlus/TemplePlus.log"
 OUT=/workspace/tp-runs/skaview-$TAG; mkdir -p $OUT
 WINEPREFIX=/home/box/.wine-toee-ska wineserver -k 2>/dev/null; sleep 1; rm -f "$L"
-Z=/home/box/games/ToEE-ska/zzskatest.dat; rm -rf $O $Z; if [ -n "$SKA" ]; then T=$(mktemp -d); mkdir -p $T/art/meshes/Monsters/Icelizard; if [ -d "$SKA" ]; then cp "$SKA"/* $T/art/meshes/Monsters/Icelizard/; else cp "$SKA" $T/art/meshes/Monsters/Icelizard/icelizard.ska; fi; (cd $T && mkdir pk && mv art pk/ && WINEPREFIX=/home/box/.wine-toee-ska WINEDEBUG=-all wine /workspace/TemplePlus/dependencies/bin/datpack.exe zz.dat pk > /dev/null && mv zz.dat $Z); rm -rf $T; fi
+Z=/home/box/games/ToEE-ska/zzskatest.dat; rm -rf $O $Z; if [ -n "$SKA" ]; then T=$(mktemp -d); mkdir -p "$T/$ART"; if [ -d "$SKA" ]; then cp "$SKA"/* "$T/$ART/"; else cp "$SKA" "$T/$ART/icelizard.ska"; fi; (cd $T && mkdir pk && mv art pk/ && WINEPREFIX=/home/box/.wine-toee-ska WINEDEBUG=-all wine /workspace/TemplePlus/dependencies/bin/datpack.exe zz.dat pk > /dev/null && mv zz.dat $Z); rm -rf $T; fi
 export TP_TICK="skaview.tick()" TP_TICK_MS=250 TP_AUTOLOAD=SlotAuto TP_AUTOEXEC="import skaview; skaview.start()" WINEDEBUG=-all WINEDLLOVERRIDES=winedbg.exe=d
 export WINEPREFIX=/home/box/.wine-toee-ska
 cd /workspace/tp-build/dist-cloth
