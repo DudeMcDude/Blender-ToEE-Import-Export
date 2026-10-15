@@ -145,6 +145,10 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
                 bmat = MATDICT[mat_name] = bpy.data.materials.new(mat_name)
                 img = None
             bmesh.materials.append(bmat)
+        # keep the exact SKM material list (incl. non-.mdf placeholders like CHEST/BOOTS) for export
+        bmesh["toee_materials"] = [mm.id.name for mm in skm_data.material_data]
+        # vanilla files have junk after the NUL in the 128-byte name field; keep it for byte-exact export
+        bmesh["toee_materials_raw"] = [bytes(getattr(mm.id, 'raw', None) or b'').hex() for mm in skm_data.material_data]
 
         # Get UV coordinates for each polygon's vertices
         print("Setting UVs")
@@ -168,6 +172,18 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         # Finish up
         bmesh.validate()
         bmesh.update()
+        # preserve the SKM vertex normals instead of letting Blender/exporter recompute them
+        try:
+            if hasattr(bmesh, 'use_auto_smooth'):  # Blender < 4.1
+                bmesh.use_auto_smooth = True
+            bmesh.normals_split_custom_set_from_vertices(
+                [Vector(vtx.normal[0:3]).normalized() for vtx in skm_data.vertex_data])
+        except Exception as e:
+            print(" WARNING! could not set custom normals: %s" % e)
+        # exact SKM normals (custom normals are stored compressed); used on export while the
+        # custom normal still matches, i.e. the normal was not edited
+        attr = bmesh.attributes.new("toee_skm_normal", 'FLOAT_VECTOR', 'POINT')
+        attr.data.foreach_set("vector", [t for vtx in skm_data.vertex_data for t in vtx.normal[0:3]])
 
         # Create new object from mesh
         ob = bpy.data.objects.new(contextObName, bmesh)
@@ -231,6 +247,17 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         fh.close()
         bone_dump.close()
         bpy.ops.object.mode_set(mode='OBJECT')  # do an implicit update
+        # Remember original SKM bone data so the exporter can write it back verbatim
+        # unless the bone was edited (detected via the stored rest matrix).
+        for bone_id, bd in enumerate(skm_data.bone_data):
+            b = barm.bones[str(bd.name)]  # bones are re-sorted by hierarchy after edit mode
+            b["toee_skm_index"] = bone_id
+            b["toee_skm_flags"] = int(bd.flags)
+            pid = getattr(bd, 'skm_parent_id', bd.parent_id)
+            b["toee_skm_parent"] = str(skm_data.bone_data[pid].name) if pid >= 0 else ""
+            b["toee_skm_world_inverse"] = [float(x) for row in bd.world_inverse for x in row]
+            b["toee_rest_matrix"] = [x for row in b.matrix_local for x in row]
+            b["toee_rest_parent"] = b.parent.name if b.parent else ""
         # parent obj with rig, using Armaturre type parenting so Bones will deform vertices
         obj.parent = rig
         obj.parent_type = 'ARMATURE'

@@ -99,11 +99,30 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
 
         print("%d vertices, %d faces" % (vertex_count, face_count))
 
+        # Vertex normals: use the custom split normals (set from the SKM at import) when present,
+        # so the original normals are written back instead of recomputed ones.
+        vnorm = [None] * vertex_count
+        if getattr(bmesh, 'has_custom_normals', False):
+            if hasattr(bmesh, 'corner_normals'):  # Blender 4.1+
+                cn = [c.vector for c in bmesh.corner_normals]
+            else:
+                bmesh.calc_normals_split()
+                cn = [l.normal for l in bmesh.loops]
+            for li, l in enumerate(bmesh.loops):
+                if vnorm[l.vertex_index] is None:
+                    vnorm[l.vertex_index] = cn[li].copy()
+        raw = bmesh.attributes.get("toee_skm_normal")
+        if raw is not None and raw.domain == 'POINT' and raw.data_type == 'FLOAT_VECTOR':
+            for i, d in enumerate(raw.data):
+                v = d.vector
+                if vnorm[i] is None or v.length < 1e-8 or v.normalized().dot(vnorm[i].normalized()) > 0.9995:
+                    vnorm[i] = v.copy()  # unchanged since import -> exact original value
         # Create vertices
         for vtx in bmesh.vertices:
             skm_vtx = SkmVertex()
             skm_vtx.pos = vtx.co.to_tuple() + (0.0,)
-            skm_vtx.normal = vtx.normal.to_tuple() + (0.0,)
+            n = vnorm[vtx.index] if vnorm[vtx.index] is not None else vtx.normal
+            skm_vtx.normal = tuple(n) + (0.0,)
             skm_data.vertex_data.append(skm_vtx)
         assert len(skm_data.vertex_data) == vertex_count
 
@@ -135,52 +154,63 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
         
     def rig_to_skm_bones(skm_data):
         '''
-        Converts rig/armature objects to SKM Bones
+        Converts rig/armature bones to SKM bones. Bones imported from an SKM keep their original
+        index, SKM parent and world-inverse matrix unless they were edited (rest matrix or parent
+        changed since import); new/edited bones get values computed from the rest pose.
         '''
-        # Bones
         print("Getting bones")
         obj = bpy.data.objects[contextObName]
-        barm = bpy.data.armatures[armatureName]
         rig = bpy.data.objects[rigObName]
-        
-        bpy.context.view_layer.objects.active = rig
-        rig.select_set(True)
-        bpy.ops.object.mode_set(mode='EDIT')  # set to Edit Mode so bones can be accessed
-
-        bone_ids = {}
-
-        for bone_id, bone in enumerate(barm.edit_bones):
-            bone_name = bone.name
-            bone_ids[bone_name] = bone_id
-
-            skm_bone = SkmBone(Name = bone_name)
-
-            if bone.parent is None:
-                skm_bone.parent_id = -1
-            else:
-                skm_bone.parent_id = bone_ids[bone.parent.name]
-
-            world = bone.matrix
-            wi = world.inverted_safe()
-            skm_bone.world_inverse = matrix4_to_3x4_array(wi)
-
-            skm_data.bone_data.append(skm_bone)
-        
-        # Exit edit mode
-        if bpy.ops.object.mode_set.poll():
+        barm = rig.data
+        if bpy.ops.object.mode_set.poll() and rig.mode != 'OBJECT':
             bpy.ops.object.mode_set(mode='OBJECT')
-        
+
+        def orig_index(b):
+            return b.get("toee_skm_index", 1 << 30)
+        bones = sorted(barm.bones, key=lambda b: orig_index(b))  # stable: new bones keep Blender order
+        bone_ids = {b.name: i for i, b in enumerate(bones)}
+
+        def edited(b):
+            ref = b.get("toee_rest_matrix")
+            if ref is None or b.get("toee_skm_world_inverse") is None:
+                return True
+            cur = [x for row in b.matrix_local for x in row]
+            if max(abs(x - y) for x, y in zip(cur, ref)) > 1e-4:
+                return True
+            return (b.parent.name if b.parent else "") != b.get("toee_rest_parent", "")
+
+        n_kept = 0
+        for b in bones:
+            skm_bone = SkmBone(Name=b.name)
+            skm_bone.flags = int(b.get("toee_skm_flags", 0))
+            if not edited(b):
+                n_kept += 1
+                wi = list(b["toee_skm_world_inverse"])
+                skm_bone.world_inverse = [wi[0:4], wi[4:8], wi[8:12]]
+                pn = b.get("toee_skm_parent", "")
+                skm_bone.parent_id = bone_ids.get(pn, -1) if pn else -1
+            else:
+                skm_bone.parent_id = bone_ids[b.parent.name] if b.parent else -1
+                skm_bone.world_inverse = matrix4_to_3x4_array(b.matrix_local.inverted_safe())
+            skm_data.bone_data.append(skm_bone)
+        print("SKM bones: %d kept from import, %d computed" % (n_kept, len(bones) - n_kept))
+
+        # vertex group index -> SKM bone index, by name
+        vg_to_bone = {}
+        for vg in obj.vertex_groups:
+            if vg.name in bone_ids:
+                vg_to_bone[vg.index] = bone_ids[vg.name]
         for vidx, vtx in enumerate(obj.data.vertices):
             for i, vg in enumerate(vtx.groups):
-                bone_id = vg.group
-                bone_wt = vg.weight
-                skm_data.vertex_data[vidx].attachment_bones.append(bone_id)
-                skm_data.vertex_data[vidx].attachment_weights.append(bone_wt)
+                if vg.group not in vg_to_bone:
+                    continue
+                skm_data.vertex_data[vidx].attachment_bones.append(vg_to_bone[vg.group])
+                skm_data.vertex_data[vidx].attachment_weights.append(vg.weight)
             if skm_data.vertex_data[vidx].attachment_count > 6:
                 raise Exception(f"Too many bone attachments for vertex {vidx}! Max is 6")
-        
+
         return
-    
+
     def material_to_skm_mat(mat_wrap, mdf_file_path):
         skm_mat = SkmMaterial(mdf_file_path)
         return skm_mat
@@ -188,31 +218,21 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
     ## Create materials
     progress.enter_substeps(3, "Processing data...")
     progress.step("Processing Materials and images...")
-    for mm in bpy.data.materials: #skm_data.material_data:  
-
-        material_name = mm.name
-        if not material_name.lower().endswith('mdf'):
-            print('Skipping material whose name doesn\'t end with .mdf: %r' % material_name)
-            continue
-
-        assert mm.use_nodes, "export_ska assumes use_nodes = True!"
-        contextMaterial = mm
-
-        mat_wrap = node_shader_utils.PrincipledBSDFWrapper(contextMaterial, is_readonly=False)
-        assert mat_wrap.use_nodes == True, "huh? no use_nodes in wrapper?"
-        context_mat_wrap = mat_wrap
-
-
-        
-        print("Converting material to SKM format: %s" % material_name)
-
-        skm_mat = material_to_skm_mat(mat_wrap, material_name)
-        if WRITE_MDF:
+    # Materials come from the mesh's slots (face material_index refers to them). The SKM name is
+    # taken from the list stored at import (keeps >63-char names and placeholders such as CHEST,
+    # BOOTS, HEAD, GLOVES), falling back to the Blender material name.
+    me = bpy.data.objects[contextObName].data
+    stored = list(me.get("toee_materials", []))
+    for slot_idx, mm in enumerate(me.materials):
+        material_name = stored[slot_idx] if slot_idx < len(stored) else (mm.name if mm else "")
+        skm_mat = material_to_skm_mat(None, material_name)
+        raws = list(me.get("toee_materials_raw", []))
+        if slot_idx < len(stored) and slot_idx < len(raws) and raws[slot_idx]:
+            skm_mat.id.raw = bytes.fromhex(raws[slot_idx])  # used only while the name is unchanged
+        if WRITE_MDF and mm is not None and material_name.lower().endswith('.mdf') and mm.use_nodes:
+            mat_wrap = node_shader_utils.PrincipledBSDFWrapper(mm, is_readonly=False)
             mat_to_mdf_file(mat_wrap, skm_mat.id)
-
-        MATDICT[material_name] = contextMaterial
-        WRAPDICT[contextMaterial] = context_mat_wrap
-        
+        print("SKM material %d: %s" % (slot_idx, material_name))
         skm_data.material_data.append(skm_mat)
 
 

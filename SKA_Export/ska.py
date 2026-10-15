@@ -26,7 +26,7 @@ def matrix4_to_3x4_array(mat):
     return tuple(f for v in mat[0:3] for f in v)
 
 class FixedLengthName(object):
-    __slots__ = "name", "size"
+    __slots__ = "name", "size", "raw"
 
     def __init__(self, Name="", Size=48):
         if len(Name) == 0:
@@ -34,16 +34,20 @@ class FixedLengthName(object):
         else:
             self.name = Name
         self.size = Size
+        self.raw = None  # original bytes incl. whatever follows the NUL (vanilla files have junk there)
         assert len(self.name) <= Size, "FixedLengthName: must be shorter than Size (%d)!" % Size
 
     def from_raw_data(self, rawdata):
         self.name = rawdata.split(b'\0')[0].decode()
+        self.raw = bytes(rawdata[:self.size])
 
     def get_size(self):
         return self.size
 
     def write(self, file):
-        
+        if self.raw is not None and len(self.raw) == self.size and self.raw.split(b'\0')[0] == self.name.encode():
+            file.write(self.raw)  # unchanged name: keep the original padding bytes
+            return
         b_name = bytes(self.name.encode() )
         name_len = len(b_name)
         file.write(b_name)
