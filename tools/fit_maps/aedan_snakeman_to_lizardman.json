@@ -1,0 +1,45 @@
+{
+  "_doc": "Aedan/Yawa snakeman rig (OpenGameArt, CC0; Portuguese bone names) -> ToEE Lizardman_Large (Bip01, digitigrade legs, tail left unused). Arms go from the source A-pose to the ToEE T-pose via the segment rotations; hands follow the forearm.",
+  "segments": {
+    "Spine01": [["Spine01", "Spine03"], ["Bip01 Pelvis", "Bip01 Spine1"]],
+    "Spine02": [["Spine01", "Spine03"], ["Bip01 Pelvis", "Bip01 Spine1"]],
+    "Belly":   [["Spine01", "Spine03"], ["Bip01 Pelvis", "Bip01 Spine1"]],
+    "Spine03": [["Spine03", "Spine05"], ["Bip01 Spine1", "Bip01 Spine2"]],
+    "Spine04": [["Spine03", "Spine05"], ["Bip01 Spine1", "Bip01 Spine2"]],
+    "Spine05": [["Spine05", "Spine07"], ["Bip01 Spine2", "Bip01 Neck"]],
+    "Spine06": [["Spine05", "Spine07"], ["Bip01 Spine2", "Bip01 Neck"]],
+    "Spine07": [["Spine07", "Head"], ["Bip01 Neck", "Bip01 HeadNub"]],
+    "Spine08": [["Spine07", "Head"], ["Bip01 Neck", "Bip01 HeadNub"]],
+    "Ombro.L":   [["Ombro.L", "Braço01.L"],   ["Bip01 L Clavicle", "Bip01 L UpperArm"]],
+    "Braço01.L": [["Braço01.L", "Braço02.L"], ["Bip01 L UpperArm", "Bip01 L Forearm"]],
+    "Braço02.L": [["Braço02.L", "Pulso.L"],   ["Bip01 L Forearm", "Bip01 L Hand"]],
+    "Ombro.R":   [["Ombro.R", "Braço01.R"],   ["Bip01 R Clavicle", "Bip01 R UpperArm"]],
+    "Braço01.R": [["Braço01.R", "Braço02.R"], ["Bip01 R UpperArm", "Bip01 R Forearm"]],
+    "Braço02.R": [["Braço02.R", "Pulso.R"],   ["Bip01 R Forearm", "Bip01 R Hand"]],
+    "Leg01.L": [["Leg01.L", "Leg02.L"], ["Bip01 L Thigh", "Bip01 L Calf"]],
+    "Leg02.L": [["Leg02.L", "Foot.L"],  ["Bip01 L Calf", "Bip01 L Foot"]],
+    "Leg01.R": [["Leg01.R", "Leg02.R"], ["Bip01 R Thigh", "Bip01 R Calf"]],
+    "Leg02.R": [["Leg02.R", "Foot.R"],  ["Bip01 R Calf", "Bip01 R Foot"]]
+  },
+  "translate": {
+    "Raiz": ["Spine01", "Bip01 Pelvis"], "Bacia.L": ["Spine01", "Bip01 Pelvis"], "Bacia.R": ["Spine01", "Bip01 Pelvis"],
+    "Pulso.L": {"follow": "Braço02.L"}, "Raiz.001_L.*": {"follow": "Braço02.L"},
+    "Pulso.R": {"follow": "Braço02.R"}, "Raiz.001_R.*": {"follow": "Braço02.R"},
+    "Foot.L": ["Foot.L", "Bip01 L Foot"], "Bone_L.*": ["Foot.L", "Bip01 L Foot"],
+    "Foot.R": ["Foot.R", "Bip01 R Foot"], "Bone_R.*": ["Foot.R", "Bip01 R Foot"],
+    "*": ["Head", "Bip01 Head"]
+  },
+  "weights": {
+    "Raiz": "Bip01 Pelvis", "Bacia.L": "Bip01 Pelvis", "Bacia.R": "Bip01 Pelvis",
+    "Spine01": "Bip01 Pelvis", "Spine02": "Bip01 Spine", "Belly": "Bip01 Spine",
+    "Spine03": "Bip01 Spine1", "Spine04": "Bip01 Spine1", "Spine05": "Bip01 Spine2", "Spine06": "Bip01 Spine2",
+    "Spine07": "Bip01 Neck", "Spine08": "Bip01 Neck",
+    "Ombro.L": "Bip01 L Clavicle", "Braço01.L": "Bip01 L UpperArm", "Braço02.L": "Bip01 L Forearm",
+    "Pulso.L": "Bip01 L Hand", "Raiz.001_L.*": "Bip01 L Hand",
+    "Ombro.R": "Bip01 R Clavicle", "Braço01.R": "Bip01 R UpperArm", "Braço02.R": "Bip01 R Forearm",
+    "Pulso.R": "Bip01 R Hand", "Raiz.001_R.*": "Bip01 R Hand",
+    "Leg01.L": "Bip01 L Thigh", "Leg02.L": ["Bip01 L Calf", "Bip01 L HorseLink"], "Foot.L": "Bip01 L Foot", "Bone_L.*": ["Bip01 L Foot", "Bip01 L Toe0"],
+    "Leg01.R": "Bip01 R Thigh", "Leg02.R": ["Bip01 R Calf", "Bip01 R HorseLink"], "Foot.R": "Bip01 R Foot", "Bone_R.*": ["Bip01 R Foot", "Bip01 R Toe0"],
+    "*": "Bip01 Head"
+  }
+}

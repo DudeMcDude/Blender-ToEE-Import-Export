@@ -1,0 +1,36 @@
+{
+  "_doc": "Quaternius 'Ultimate Monsters' humanoid rig -> ToEE biped (Bip01, e.g. Troll). segments: yeti joint pair -> ToEE joint pair (positions taken from bone heads; [x,y,z] = literal Blender-world point, 'Bone@floor' = that bone's head projected to z=0). translate: shift with the given joint. weights: source vertex group -> ToEE bone (null = drop, renormalised).",
+  "segments": {
+    "Hips":       [["Hips", "Abdomen"],          ["Bip01 Pelvis", "Bip01 Spine1"]],
+    "Abdomen":    [["Abdomen", "Torso"],         ["Bip01 Spine1", "Bip01 Spine2"]],
+    "Torso":      [["Torso", "Neck"],            ["Bip01 Spine2", "Bip01 Neck"]],
+    "Shoulder.L": [["Shoulder.L", "UpperArm.L"], ["Bip01 L Clavicle", "Bip01 L UpperArm"]],
+    "UpperArm.L": [["UpperArm.L", "LowerArm.L"], ["Bip01 L UpperArm", "Bip01 L Forearm"]],
+    "LowerArm.L": [["LowerArm.L", "Middle1.L"],  ["Bip01 L Forearm", "Bip01 L Hand"]],
+    "Shoulder.R": [["Shoulder.R", "UpperArm.R"], ["Bip01 R Clavicle", "Bip01 R UpperArm"]],
+    "UpperArm.R": [["UpperArm.R", "LowerArm.R"], ["Bip01 R UpperArm", "Bip01 R Forearm"]],
+    "LowerArm.R": [["LowerArm.R", "Middle1.R"],  ["Bip01 R Forearm", "Bip01 R Hand"]],
+    "UpperLeg.L": [["UpperLeg.L", "LowerLeg.L"], ["Bip01 L Thigh", "Bip01 L Calf"]],
+    "LowerLeg.L": [["LowerLeg.L", "Foot.L"],     ["Bip01 L Calf", "Bip01 L Foot@floor"]],
+    "UpperLeg.R": [["UpperLeg.R", "LowerLeg.R"], ["Bip01 R Thigh", "Bip01 R Calf"]],
+    "LowerLeg.R": [["LowerLeg.R", "Foot.R"],     ["Bip01 R Calf", "Bip01 R Foot@floor"]]
+  },
+  "translate": {
+    "Root": ["Body", "Bip01 Pelvis"], "Body": ["Body", "Bip01 Pelvis"],
+    "Neck": ["Neck", "Bip01 Neck"], "Head": ["Head", "Bip01 Head"],
+    "Foot.L": ["Foot.L", "Bip01 L Foot@floor"], "Foot.R": ["Foot.R", "Bip01 R Foot@floor"],
+    "PoleTarget.L": ["Foot.L", "Bip01 L Foot@floor"], "PoleTarget.R": ["Foot.R", "Bip01 R Foot@floor"],
+    "*.L": ["Middle1.L", "Bip01 L Hand"], "*.R": ["Middle1.R", "Bip01 R Hand"]
+  },
+  "weights": {
+    "Root": "Bip01 Pelvis", "Body": "Bip01 Pelvis", "Hips": "Bip01 Pelvis",
+    "Abdomen": "Bip01 Spine1", "Torso": "Bip01 Spine2", "Neck": "Bip01 Neck", "Head": "Bip01 Head",
+    "Shoulder.L": "Bip01 L Clavicle", "UpperArm.L": "Bip01 L UpperArm", "LowerArm.L": "Bip01 L Forearm",
+    "Shoulder.R": "Bip01 R Clavicle", "UpperArm.R": "Bip01 R UpperArm", "LowerArm.R": "Bip01 R Forearm",
+    "Thumb1.L": "Bip01 L Finger0", "Thumb2.L": "Bip01 L Finger0", "*.L": "Bip01 L Hand",
+    "Thumb1.R": "Bip01 R Finger0", "Thumb2.R": "Bip01 R Finger0", "*.R": "Bip01 R Hand",
+    "UpperLeg.L": "Bip01 L Thigh", "LowerLeg.L": "Bip01 L Calf", "Foot.L": "Bip01 L Foot",
+    "UpperLeg.R": "Bip01 R Thigh", "LowerLeg.R": "Bip01 R Calf", "Foot.R": "Bip01 R Foot",
+    "PoleTarget.L": null, "PoleTarget.R": null
+  }
+}

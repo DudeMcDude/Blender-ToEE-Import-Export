@@ -19,7 +19,7 @@ def tick():
 		log("teleport")
 	if t == 30:
 		x, y = location_to_axis(l.location)
-		liz = game.obj_create(14109, location_from_axis(x + 3, y - 3))
+		liz = game.obj_create(int(os.getenv('SKAVIEW_PROTO', '14109')), location_from_axis(x + 3, y - 3))
 		if MODE not in ('falldown', 'idle'):
 			liz.npc_flag_set(ONF_KOS_OVERRIDE)
 		else:
