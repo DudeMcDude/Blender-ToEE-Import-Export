@@ -15,7 +15,7 @@ if mode == 'engine':
     ob = bpy.data.objects.new('eng', me); sc.collection.objects.link(ob)
 else:
     addon_utils.enable('SKA_Export')
-    getattr(bpy.ops, 'import').ska_file(filepath=A+'ska')
+    getattr(bpy.ops, 'import').ska_file(filepath=A+'ska', toee_axis_conversion=False)
     rig = bpy.data.objects['ToEE Rig']; rig.animation_data.action = bpy.data.actions[anim]
     ob = bpy.data.objects['ToEE Model']
 root = bpy.data.objects.new('yup', None); sc.collection.objects.link(root); root.rotation_euler = (math.pi/2, 0, 0)
