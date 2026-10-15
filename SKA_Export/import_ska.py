@@ -362,6 +362,22 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         rest_loc, rest_rot, rest_sca = rest_world.decompose()
         bone_rest_state[ska_bone_id] = RestBoneState(rest_loc, rest_rot, rest_sca)
 
+    # Metadata for SKA export (export_ska.py): the full SKA skeleton table (incl. bones missing
+    # from the SKM), and per bone the exact rest state used to convert keys to pose space.
+    import json
+    rig["toee_ska_bones"] = json.dumps([dict(name=str(b.name), parent=b.parent_id, flags=b.flags,
+                                              scale=list(b.scale), rotation=list(b.rotation),
+                                              translation=list(b.translation)) for b in ska_data.bone_data])
+    for ska_bone_id, skm_bone_id in ska_to_skm_bone_mapping.items():
+        if skm_bone_id < 0 or ska_bone_id not in bone_rest_state:
+            continue
+        rs = bone_rest_state[ska_bone_id]
+        bb = barm.bones.get(str(skm_data.bone_data[skm_bone_id].name))
+        if bb is not None:
+            bb["toee_ska_index"] = ska_bone_id
+            bb["toee_rest_loc"] = list(rs.loc)
+            bb["toee_rest_rot"] = list(rs.rot)  # w, x, y, z
+
     anim_count = len(ska_data.animation_data)
     # anim_count = 10  # DEBUG (upstream limited import to 10 anims)
     # SKA keys are in engine frames; most anims play at 30 fps (turns/walks are rotation/distance driven)
@@ -394,6 +410,17 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         print(action_name)
         action = bpy.data.actions.new(action_name)
         action.use_fake_user = True
+        # Header data for SKA export
+        action["toee_index"] = i
+        action["toee_drive_type"] = anim_header.drive_type
+        action["toee_loopable"] = anim_header.loopable
+        if anim_header.stream_headers:
+            _sh = anim_header.stream_headers[0]
+            action["toee_frame_count"] = _sh.frame_count
+            action["toee_variation_id"] = _sh.variation_id
+            action["toee_frame_rate"] = _sh.frame_rate
+            action["toee_dps"] = _sh.dps
+        action["toee_events"] = json.dumps([[e.frame_id, str(e.type), str(e.action)] for e in ad.events])
         rig.animation_data.action = action
         stream_count = anim_header.stream_count
         if stream_count <= 0:
@@ -417,11 +444,24 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
         for j in range(0, stream_count):
             stream = ad.streams[j]  # type: SkaAnimStream
 
+            # Scale keys: kept as pose-bone scale F-Curves (engine scale value) when they ever leave
+            # unity, e.g. the human HandL_ref/HandR_ref scale animations, so SKA export keeps them.
+            # Note: Blender's scale inheritance differs from the engine's parent-scale compensation.
             for bone_idx, keyframes in stream.scale_channels.items():
+                if all(max(abs(c - 1.0) for c in sc) < 1e-4 for _, sc in keyframes):
+                    continue
+                skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+                if skm_bone_idx < 0:
+                    continue
+                posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_idx].name)]
+                prop = posebone.path_from_id("scale")
+                group = get_curve_group(skm_bone_idx)
+                curves = [action.fcurves.new(prop, index=k, action_group=group) for k in range(3)]
                 for frame, scaling in keyframes:
-                    if scaling[0] < 1.0 or scaling[0] > 1.05:
-                        print('Non-unity scaling:', bone_idx, ska_data.bone_data[bone_idx].name,frame, scaling)
-                pass
+                    for k in range(3):
+                        curves[k].keyframe_points.insert(1 + frame, scaling[k], options={'FAST'}).interpolation = 'LINEAR'
+                for c in curves:
+                    c.update()
 
             # Bones the stream never keys keep the skeleton's initial state in the engine
             # (AnimPlayerStream::Initialize). Blender would instead keep a stale pose from the
@@ -734,4 +774,4 @@ def blender_load_skm(operator, context, filepath="",
          global_matrix=None,
          ):
     load_skm(filepath, context, IMAGE_SEARCH=use_image_search)
-    return {'FINISHED'}
+    return {'FINISHED'}

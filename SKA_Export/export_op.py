@@ -38,6 +38,16 @@ class SkaExport(bpy.types.Operator, ExportHelper):
             )
     
     filepath: bpy.props.StringProperty(subtype="FILE_PATH")
+    write_skm: BoolProperty(
+            name="Also write SKM",
+            description="Write the mesh (.skm) next to the .ska (see SKM export caveats)",
+            default=False,
+            )
+    only_active_action: BoolProperty(
+            name="Active action only",
+            description="Export only the rig's active action instead of all ToEE actions",
+            default=False,
+            )
 
     @classmethod
     def poll(cls, context):
@@ -131,4 +141,4 @@ def register():
 def unregister():
     # print('Unregistering GITHUB/SKA_Import/export_op.py!')
     bpy.types.TOPBAR_MT_file_export.remove(menu_func_export_ska)
-    bpy.types.TOPBAR_MT_file_export.remove(menu_func_export_skm)
+    bpy.types.TOPBAR_MT_file_export.remove(menu_func_export_skm)

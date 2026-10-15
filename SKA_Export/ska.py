@@ -782,99 +782,50 @@ class SkaFile:
             bd.write(file)
 
     def write_animation_data(self, file, animation_data_offset):
-        # structure:
-        # SkaAnimHeader[]
-        # SkaEvent[]
-
+        """Layout (as in the vanilla files): SkaAnimHeader[count], then every animation's
+        SkaEvent[] back to back, then each distinct keyframe stream once, in order of first use.
+        eventOffset and streams[].dataOffset are relative to the start of the animation's own
+        header (aas_skeleton.h SkelAnim::GetEventData / GetStreamKeyframes). Streams shared by
+        several animations (same SkaAnimStream object) are written once."""
         count = len(self.animation_data)
-        data_start = animation_data_offset
-        
-        streams_by_start = dict()
-        streams_written = dict()
-
-        # get data headers first
         HEADER_SIZE = SkaAnimHeader.get_size()
         EVENT_SIZE = SkaEvent.get_size()
-        
-        headers_size = count * HEADER_SIZE
-        cur_event_offset = headers_size
-        events_size_total = 0
 
-        # calculate headers first
-        for i in range(0, count):
-            anim_datum = self.animation_data[i]
+        # event offsets
+        cur = count * HEADER_SIZE  # relative to animation 0's header
+        for i, anim_datum in enumerate(self.animation_data):
+            anim_datum.header.event_count = len(anim_datum.events)
+            anim_datum.header.event_offset = cur - i * HEADER_SIZE
+            cur += len(anim_datum.events) * EVENT_SIZE
 
-            # set header data offset for event data
-            # assert cur_event_offset == anim_datum.header.event_offset, "hmm"
-            anim_datum.header.event_offset = cur_event_offset
-            
-            # keep track of events to be written & current offset
-            event_count = anim_datum.header.event_count
-            assert anim_datum.header.event_count == len(anim_datum.events), "mismatch in event count!"
-            events_size = event_count * EVENT_SIZE
-            events_size_total += events_size
-            cur_event_offset += events_size - HEADER_SIZE # offset is relative to current header
+        # serialize distinct streams in order of first use
+        stream_pos = dict()  # id(stream) -> position relative to animation 0's header
+        stream_blobs = []
+        for anim_datum in self.animation_data:
+            for stream in anim_datum.streams:
+                if id(stream) in stream_pos:
+                    continue
+                bio = BytesIO()
+                stream.write(bio)
+                stream_pos[id(stream)] = cur
+                stream_blobs.append(bio.getvalue())
+                cur += len(stream_blobs[-1])
 
-        # calculate stream data
-        for i in range(0, count):
-            anim_datum = self.animation_data[i]
-                
-            for stream_header in anim_datum.header.stream_headers:
-                pass
-            
+        for i, anim_datum in enumerate(self.animation_data):
+            hdr = anim_datum.header
+            assert len(anim_datum.streams) == len(hdr.stream_headers), "stream/header count mismatch"
+            hdr.stream_count = len(hdr.stream_headers)
+            for sh, stream in zip(hdr.stream_headers, anim_datum.streams):
+                sh.data_offset = stream_pos[id(stream)] - i * HEADER_SIZE
 
-        # write the headers
-        for i in range(0, count):
-            anim_datum = self.animation_data[i]
-            anim_datum.header.write(file) # from_raw_data(self._fileraw[data_start:data_start + HEADER_SIZE])
-
-        #####################    
-        # write event data  #
-        #####################
-        # verify event data offset matches with event size total
-        assert events_size_total == cur_event_offset, "event offset mismatch"
-        for i in range(0, count):
-            anim_datum = self.animation_data[i]
-            
-            # event_offset = data_start + i * HEADER_SIZE + anim_datum.header.event_offset
-
+        for anim_datum in self.animation_data:
+            anim_datum.header.write(file)
+        for anim_datum in self.animation_data:
             for event in anim_datum.events:
                 event.write(file)
-        
-        #####################
-        # write stream data #
-        #####################
-        for stream in self.streams:
-                stream.write(file)
-
-
-        for i in range(0, count):
-            anim_datum = self.animation_data[i]
-            
-            # anim_datum.streams
-            for stream_header in anim_datum.header.stream_headers:
-
-                stream_start = data_start + stream_header.data_offset
-        #         if stream_start not in streams_by_start:
-        #             stream = SkaAnimStream(anim_datum.header.name)
-        #             io = BytesIO(self._fileraw)
-        #             io.seek(stream_start)
-        #             stream.read(io)
-        #             streams_by_start[stream_start] = stream
-        #         else:
-        #             stream = streams_by_start[stream_start]
-
-        #         stream.instances.append(SkaAnimStreamInstance(
-        #             str(anim_datum.header.name),
-        #             stream_header.frame_rate,
-        #             stream_header.dps
-        #         ))
-        #         anim_datum.streams.append(stream)
-
-        #     data_start += HEADER_SIZE
-
-        # self.streams = streams_by_start.values()
-
+        for blob in stream_blobs:
+            file.write(blob)
+        self.streams = [s for a in self.animation_data for s in a.streams]
         return
 
     def add_bone(self, new_bone):
@@ -1057,3 +1008,134 @@ class SkmFile(object):
     def add_bone(self, new_bone):
         self.bone_data.append(new_bone)
 
+
+
+########## Keyframe stream encoder (float channels -> quantized SKA stream)
+import math as _math
+
+ROT_QUANT = 32767.0
+
+
+def _q_dot(a, b):
+    return a[0]*b[0] + a[1]*b[1] + a[2]*b[2] + a[3]*b[3]
+
+
+def _q_norm(q):
+    n = _math.sqrt(_q_dot(q, q)) or 1.0
+    return tuple(c / n for c in q)
+
+
+def _q_slerp(a, b, t):
+    """DirectXMath XMQuaternionSlerp as used by the engine (aas_math.h slerpQuaternion)."""
+    c = _q_dot(a, b)
+    if c < 0:
+        b = tuple(-x for x in b); c = -c
+    if c < 1 - 1e-5:
+        om = _math.acos(min(1.0, c)); s = _math.sin(om)
+        ka, kb = _math.sin((1 - t) * om) / s, _math.sin(t * om) / s
+    else:
+        ka, kb = 1 - t, t
+    return tuple(ka*x + kb*y for x, y in zip(a, b))
+
+
+def _q_angle(a, b):
+    return 2 * _math.acos(min(1.0, abs(_q_dot(_q_norm(a), _q_norm(b)))))
+
+
+def _lerp(a, b, t):
+    return tuple((1 - t)*x + t*y for x, y in zip(a, b))
+
+
+def _vdist(a, b):
+    return max(abs(x - y) for x, y in zip(a, b))
+
+
+def reduce_keys(samples, interp, err, tol):
+    """Greedy key reduction on per-integer-frame samples. Returns the kept frame indices
+    (always includes 0 and the last frame). The engine interpolates linearly (slerp for
+    rotations) between consecutive keys of a channel, so a key is dropped when that
+    interpolation reproduces every sample in between within tol."""
+    n = len(samples)
+    if n <= 1:
+        return [0]
+    keys = [0]
+    i = 0
+    j = i + 2
+    while j < n:
+        ok = True
+        for k in range(i + 1, j):
+            v = interp(samples[i], samples[j], (k - i) / (j - i))
+            if err(v, samples[k]) > tol:
+                ok = False
+                break
+        if ok:
+            j += 1
+        else:
+            i = j - 1
+            keys.append(i)
+            j = i + 2
+    if keys[-1] != n - 1:
+        keys.append(n - 1)
+    # A trailing run of identical values does not need its end key
+    while len(keys) > 1 and err(samples[keys[-1]], samples[keys[-2]]) <= tol \
+            and all(err(samples[k], samples[keys[-2]]) <= tol for k in range(keys[-2], n)):
+        keys.pop()
+    return keys
+
+
+def encode_stream(name, bone_samples, rot_tol=1e-4, loc_tol=None, scale_tol=1e-4):
+    """Build a SkaAnimStream from dense per-frame engine-space samples.
+
+    bone_samples: {ska_bone_idx: (scales, rotations, translations)}, each a list with one
+    entry per integer frame 0..N-1; scale/translation are (x,y,z), rotation is (x,y,z,w).
+    Only bones listed are written (others keep the skeleton's initial state in the engine).
+    loc_tol defaults to the translation quantization step.
+    """
+    stream = SkaAnimStream(name)
+    all_t = [abs(c) for (_, _, ts) in bone_samples.values() for t in ts for c in t]
+    all_s = [abs(c) for (ss, _, _) in bone_samples.values() for s in ss for c in s]
+    max_t = max(all_t + [0.0]); max_s = max(all_s + [0.0])
+    stream.location_factor = (max_t / 32767.0) if max_t > 0 else 1 / 32767.0
+    stream.scale_factor = (max_s / 32767.0) if max_s > 0 else 1 / 32767.0
+    if loc_tol is None:
+        loc_tol = stream.location_factor
+    lf, sf = stream.location_factor, stream.scale_factor
+
+    def qv(v, f):
+        return tuple(max(-32768, min(32767, int(round(c / f)))) for c in v)
+
+    def qr(q):
+        return tuple(max(-32767, min(32767, int(round(c * ROT_QUANT)))) for c in q)
+
+    frame0 = SkaAnimKeyframe(-1)
+    records = dict()  # frame -> {bone: [sc, sc_fr, rot, rot_fr, loc, loc_fr]}
+    for b in sorted(bone_samples):
+        ss, rs, ts = bone_samples[b]
+        # keep rotations on one hemisphere (engine slerp takes the short arc anyway)
+        rs2 = []
+        for q in rs:
+            q = _q_norm(q)
+            if rs2 and _q_dot(rs2[-1], q) < 0:
+                q = tuple(-c for c in q)
+            elif not rs2 and q[3] < 0:
+                q = tuple(-c for c in q)
+            rs2.append(q)
+        sk = reduce_keys(ss, _lerp, _vdist, scale_tol)
+        rk = reduce_keys(rs2, _q_slerp, _q_angle, rot_tol)
+        tk = reduce_keys(ts, _lerp, _vdist, loc_tol)
+        frame0.bone_data[b] = SkaAnimFileKeyframeBoneData(-1, qv(ss[0], sf), -1, qr(rs2[0]), -1, qv(ts[0], lf), -1)
+        for slot, keys, vals, quant in ((0, sk, ss, lambda v: qv(v, sf)), (2, rk, rs2, qr), (4, tk, ts, lambda v: qv(v, lf))):
+            for k0, k1 in zip(keys, keys[1:]):
+                rec = records.setdefault(k0, dict()).setdefault(b, [None, -1, None, -1, None, -1])
+                rec[slot] = quant(vals[k1]); rec[slot + 1] = k1
+    stream.initial_state = frame0
+    stream.raw_frames = []
+    for F in sorted(records):
+        kf = SkaAnimKeyframe(F)
+        for b in sorted(records[F]):
+            sc, sc_fr, rot, rot_fr, loc, loc_fr = records[F][b]
+            ch = (4 if sc is not None else 0) | (2 if rot is not None else 0) | (1 if loc is not None else 0)
+            hdr = 1 | (ch << 1) | (b << 4)
+            kf.bone_data[b] = SkaAnimFileKeyframeBoneData(hdr, sc, sc_fr, rot, rot_fr, loc, loc_fr)
+        stream.raw_frames.append(kf)
+    return stream

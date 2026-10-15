@@ -9,7 +9,8 @@ from bpy_extras.wm_utils.progress_report import (
     ProgressReportSubstep,
 )
 
-from .ska import FixedLengthName, SkmFile, SkmBone, SkmMaterial, SkaFile, SkaBone, MdfFile, SkmVertex, SkmFace
+from .ska import FixedLengthName, SkmFile, SkmBone, SkmMaterial, SkaFile, SkaBone, MdfFile, SkmVertex, SkmFace, \
+    SkaAnim, SkaAnimHeader, SkaAnimStreamHeader, SkaEvent, encode_stream
 
 progress = None
 
@@ -253,98 +254,177 @@ def _write_skm(context, filepath,
     return
 
 
-def _write_ska(context, filepath, 
-    EXPORT_ANIMATION = False,
-    WRITE_MDF = False,
-    global_matrix = None):
-    global progress
-    from bpy_extras.io_utils import create_derived_objects, free_derived_objects
-    
+def _rig_ska_skeleton(rig):
+    """SKA skeleton table for the rig: the table saved by the importer if present (keeps the
+    original bone order, bones missing from the SKM and the initial states), else one built
+    from the Blender bones (order of rig.data.bones, initial state = rest pose)."""
+    import json
+    bones = []
+    if "toee_ska_bones" in rig.keys():
+        for d in json.loads(rig["toee_ska_bones"]):
+            b = SkaBone(d["name"], d["parent"])
+            b.flags = d.get("flags", 0)
+            b.scale = tuple(d["scale"]); b.rotation = tuple(d["rotation"]); b.translation = tuple(d["translation"])
+            bones.append(b)
+        return bones
+    names = [b.name for b in rig.data.bones]
+    for bb in rig.data.bones:
+        b = SkaBone(bb.name, names.index(bb.parent.name) if bb.parent else -1)
+        rel = bb.matrix_local if bb.parent is None else bb.parent.matrix_local.inverted() @ bb.matrix_local
+        loc, rot, sca = rel.decompose()
+        b.scale = tuple(sca); b.rotation = (rot.x, rot.y, rot.z, rot.w); b.translation = tuple(loc)
+        bones.append(b)
+    return bones
 
-    with ProgressReport(context.window_manager) as progress:
-        
-        base_name, ext = os.path.splitext(filepath)
-        context_name = [base_name, '', '', ext] # Base name, scene name, frame number, extension
 
-        depsgraph = context.evaluated_depsgraph_get()
-        scene = context.scene
+def _rest_state(rig, bone_name):
+    """(rest_loc, rest_rot) relative to the parent; inverse of import_ska.RestBoneState."""
+    bb = rig.data.bones[bone_name]
+    if "toee_rest_rot" in bb.keys():
+        return mathutils.Vector(bb["toee_rest_loc"]), mathutils.Quaternion(bb["toee_rest_rot"])
+    rel = bb.matrix_local if bb.parent is None else bb.parent.matrix_local.inverted() @ bb.matrix_local
+    loc, rot, _ = rel.decompose()
+    return loc, rot
 
-        # Exit edit mode before exporting, so current object states are exported properly.
-        if bpy.ops.object.mode_set.poll():
-            bpy.ops.object.mode_set(mode='OBJECT')
 
-        orig_frame = scene.frame_current
+def _sample_action(rig, action, ska_bones, frame_start, frame_count):
+    """Dense engine-space samples at each integer SKA frame, from the action's F-Curves.
+    Engine rotation  = rest_rot @ pose_rot,  translation = rest_rot @ pose_loc + rest_loc
+    (exact inverse of the importer). Bones without curves are left out of the stream, so the
+    engine uses the skeleton's initial state for them, as for vanilla files."""
+    curves = dict()
+    for fc in action.fcurves:
+        dp = fc.data_path
+        if not dp.startswith('pose.bones["'):
+            continue
+        bname = dp[len('pose.bones["'):dp.index('"]')]
+        prop = dp[dp.rindex('.') + 1:]
+        curves.setdefault(bname, dict())[(prop, fc.array_index)] = fc
+    by_name = {str(b.name).lower(): i for i, b in enumerate(ska_bones)}
+    out = dict()
+    for bname, cv in curves.items():
+        bi = by_name.get(bname.lower())
+        if bi is None or bname not in rig.pose.bones:
+            continue
+        pb = rig.pose.bones[bname]
+        rest_loc, rest_rot = _rest_state(rig, bname)
+        ss, rs, ts = [], [], []
+        for f in range(frame_count):
+            bf = frame_start + f
+            def ev(prop, idx, default):
+                fc = cv.get((prop, idx))
+                return fc.evaluate(bf) if fc is not None else default
+            if pb.rotation_mode == 'QUATERNION':
+                q = mathutils.Quaternion([ev('rotation_quaternion', k, (1, 0, 0, 0)[k]) for k in range(4)])
+            else:
+                q = mathutils.Euler([ev('rotation_euler', k, 0.0) for k in range(3)], pb.rotation_mode).to_quaternion()
+            q.normalize()
+            # channels without a curve take the rest pose / skeleton default, never the current
+            # (possibly stale, left over from another action) pose-bone value
+            loc = mathutils.Vector([ev('location', k, 0.0) for k in range(3)])
+            sca = [ev('scale', k, ska_bones[bi].scale[k]) for k in range(3)]
+            qe = rest_rot @ q
+            te = rest_rot @ loc + rest_loc
+            ss.append(tuple(sca)); rs.append((qe.x, qe.y, qe.z, qe.w)); ts.append(tuple(te))
+        out[bi] = (ss, rs, ts)
+    return out
 
-        # Export an animation?
-        if EXPORT_ANIMATION:
-            scene_frames = range(scene.frame_start, scene.frame_end + 1)  # Up to and including the end frame.
+
+def blender_to_ska(rig, actions, rot_tol=1e-4):
+    import json
+    ska_data = SkaFile()
+    ska_data.bone_data = _rig_ska_skeleton(rig)
+    streams_by_bytes = dict()
+    for action in actions:
+        start = int(round(action.frame_range[0]))
+        if "toee_frame_count" in action.keys():
+            start = 1  # importer convention: SKA frame f is Blender frame 1 + f
+            frame_count = int(action["toee_frame_count"])
         else:
-            scene_frames = [orig_frame]  # Dont export an animation.
-        
-        mesh = bpy.context.scene.objects['ToEE Model']
-        rig = bpy.context.scene.objects['ToEE Rig']
-        skm_data = blender_to_skm(mesh, rig, WRITE_MDF)
-        
-        
-        skm_filepath = os.path.splitext(filepath)[0] + '.skm'
-        with open(skm_filepath, 'wb') as skm_file:
-            skm_data.write(skm_file)
-    
-    
-    """Save the Blender scene animation to a ToEE format SKA file.\
-    This contains bones and keyframe animations.
-    """
+            frame_count = int(round(action.frame_range[1])) - start + 1
+        samples = _sample_action(rig, action, ska_data.bone_data, start, frame_count)
+        # Bones that never leave the skeleton's initial state need no stream entry (the importer
+        # adds constant keys for them, so drop those again).
+        for bi in list(samples):
+            sk = ska_data.bone_data[bi]
+            ss, rs, ts = samples[bi]
+            q0 = mathutils.Quaternion((sk.rotation[3], sk.rotation[0], sk.rotation[1], sk.rotation[2])).normalized()  # some Nub defaults are not unit (0,0,0,0.707)
+            if all(max(abs(a - b) for a, b in zip(s, sk.scale)) < 1e-4 and
+                   max(abs(a - b) for a, b in zip(t, sk.translation)) < 1e-3 and
+                   q0.rotation_difference(mathutils.Quaternion((r[3], r[0], r[1], r[2]))).angle < 1e-4
+                   for s, r, t in zip(ss, rs, ts)):
+                del samples[bi]
+        stream = encode_stream(action.name, samples, rot_tol=rot_tol)
+        # identical keyframe data is stored once (vanilla files share streams, e.g. walk/run)
+        from io import BytesIO
+        bio = BytesIO(); stream.write(bio)
+        stream = streams_by_bytes.setdefault(bio.getvalue(), stream)
+
+        anim = SkaAnim()
+        anim.header = SkaAnimHeader(action.name)
+        anim.header.drive_type = int(action.get("toee_drive_type", 0))
+        anim.header.loopable = int(action.get("toee_loopable", 0))
+        sh = SkaAnimStreamHeader()
+        sh.frame_count = frame_count
+        sh.variation_id = int(action.get("toee_variation_id", -1))
+        sh.frame_rate = float(action.get("toee_frame_rate", 30.0))
+        sh.dps = float(action.get("toee_dps", 0.0))
+        anim.header.stream_headers = [sh]
+        anim.header.stream_count = 1
+        anim.streams = [stream]
+        anim.events = [SkaEvent(fr, ty, ac) for fr, ty, ac in json.loads(action.get("toee_events", "[]"))]
+        anim.header.event_count = len(anim.events)
+        ska_data.animation_data.append(anim)
+    return ska_data
+
+
+def _ska_actions(rig):
+    """Actions that animate the rig's bones, in original SKA order (imported ones first)."""
+    names = set(b.name for b in rig.data.bones)
+    acts = [a for a in bpy.data.actions
+            if any(fc.data_path.startswith('pose.bones["') and fc.data_path.split('"')[1] in names for fc in a.fcurves)]
+    return sorted(acts, key=lambda a: (int(a.get("toee_index", 1 << 30)), a.name))
+
+
+def _write_ska(context, filepath, WRITE_SKM=False, WRITE_MDF=False, ONLY_ACTIVE_ACTION=False, **_):
+    global progress
     print("\n*** Exporting SKA ***")
-    # Time the export
     time1 = time.perf_counter()
-    # Blender.Window.WaitCursor(1)
-    
-    if global_matrix is None:
-        global_matrix = mathutils.Matrix()
-
-    scene = context.scene
-
-    objects = (ob for ob in scene.objects if ob.visible_get())
-
-    # for ob in objects:
-    #     # get derived objects
-    #     print("object: " + str(ob))
-    #     free, derived = create_derived_objects(scene, ob)
-        
-    #     if derived is None:
-    #         continue
-
-    #     print( "derived obj: " + str(derived) + "\n")
-        
-    #     for ob_derived, mat in derived:
-    #         if ob.type not in {'MESH', 'CURVE', 'SURFACE', 'FONT', 'META'}:
-    #             continue
-
-    #         try:
-    #             data = ob_derived.to_mesh(scene, True, 'PREVIEW')
-    #         except:
-    #             data = None
-
-    #         if data:
-    #             matrix = global_matrix @ mat
-    #             data.transform(matrix)
-    #             # todo
-    #     if free:
-    #         free_derived_objects(ob)
-
-    # # Open the file for writing:
-    # file = open(filepath, 'wb')
-
-    # # Recursively write the chunks to file:
-    # # primary.write(file)
-
-    # # Close the file:
-    # file.close()
-
-    # Debugging only: report the exporting time:
-    # Blender.Window.WaitCursor(0)
+    if bpy.ops.object.mode_set.poll():
+        bpy.ops.object.mode_set(mode='OBJECT')
+    rig = _find_rig(context)
+    if ONLY_ACTIVE_ACTION and rig.animation_data and rig.animation_data.action:
+        actions = [rig.animation_data.action]
+    else:
+        actions = _ska_actions(rig)
+    ska_data = blender_to_ska(rig, actions)
+    ska_filepath = os.path.splitext(filepath)[0] + '.ska'
+    with open(ska_filepath, 'wb') as f:
+        ska_data.write(f)
+    print("Wrote %s: %d bones, %d animations, %d streams" % (ska_filepath, len(ska_data.bone_data),
+          len(ska_data.animation_data), len(set(id(s) for s in ska_data.streams))))
+    if WRITE_SKM:
+        _write_skm(context, filepath, WRITE_MDF=WRITE_MDF)
     print("SKA export time: %.2f" % (time.perf_counter() - time1))
     return
+
+
+def _find_rig(context):
+    ob = context.object
+    if ob is not None and ob.type == 'ARMATURE':
+        return ob
+    if ob is not None and ob.parent is not None and ob.parent.type == 'ARMATURE':
+        return ob.parent
+    rig = bpy.context.scene.objects.get('ToEE Rig')
+    if rig is None:
+        raise RuntimeError("No armature selected (and no 'ToEE Rig' in the scene)")
+    return rig
+
+
+def save(operator, context, filepath="", write_skm=False, only_active_action=False, **_):
+    _write_ska(context, filepath, WRITE_SKM=write_skm, ONLY_ACTIVE_ACTION=only_active_action)
+    return {'FINISHED'}
+
 
 def blender_save_ska(operator, context, filepath="", use_selection=True, global_matrix=None,):
     _write_ska(context, filepath)

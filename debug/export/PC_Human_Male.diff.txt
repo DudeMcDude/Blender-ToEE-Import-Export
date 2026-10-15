@@ -1,0 +1,16 @@
+file header (bones,off,var,off,anims,off): orig {'size': 2564222, 'header': (91, 24, 0, 9124, 684, 9124)}  new {'size': 2538488, 'header': (91, 24, 0, 9124, 684, 9124)}
+bones: 91 vs 91, differing records: []
+streams: 275 vs 272
+unarmed_unarmed_rturn          hdr True ev True recs(keys,init) (327, 46) -> (331, 47)  lf 0.001424->0.001424  vert 0.0044 bone 0.0044
+unarmed_unarmed_lturn          hdr True ev True recs(keys,init) (335, 50) -> (346, 51)  lf 0.001424->0.001424  vert 0.0045 bone 0.0045
+unarmed_unarmed_rattack        hdr True ev True recs(keys,init) (484, 33) -> (486, 34)  lf 0.001062->0.001062  vert 0.0045 bone 0.0045
+unarmed_unarmed_lattack        hdr True ev True recs(keys,init) (297, 19) -> (293, 20)  lf 0.001046->0.001046  vert 0.0043 bone 0.0043
+unarmed_unarmed_walk           hdr True ev True recs(keys,init) (469, 44) -> (469, 45)  lf 0.001185->0.001185  vert 0.0026 bone 0.0026
+unarmed_unarmed_run            hdr True ev True recs(keys,init) (353, 44) -> (353, 45)  lf 0.001360->0.001360  vert 0.0051 bone 0.0051
+unarmed_unarmed_combatidle     hdr True ev True recs(keys,init) (765, 37) -> (698, 37)  lf 0.001075->0.001075  vert 0.0046 bone 0.0046
+unarmed_shield_bdodge          hdr True ev True recs(keys,init) (398, 42) -> (397, 43)  lf 0.001055->0.001055  vert 0.0044 bone 0.0052
+dagger_shield_bdodge           hdr True ev True recs(keys,init) (398, 42) -> (397, 43)  lf 0.001055->0.001055  vert 0.0044 bone 0.0052
+sword_shield_sneak             hdr True ev True recs(keys,init) (440, 43) -> (430, 44)  lf 0.000887->0.000887  vert 0.0047 bone 0.0047
+polearm_polearm_combatidle     hdr True ev True recs(keys,init) (340, 40) -> (333, 41)  lf 0.001075->0.001075  vert 0.0045 bone 0.0045
+death_prone_idle               hdr True ev True recs(keys,init) (98, 45) -> (95, 46)  lf 0.000823->0.000823  vert 0.0014 bone 0.0014
+MAX vertex err 0.0051, bone origin err 0.0052
