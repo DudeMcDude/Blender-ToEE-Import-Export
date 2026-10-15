@@ -2,6 +2,8 @@
 # Spawns an Ice Lizard (proto 14109) next to the leader and makes it play its attack animation every few seconds.
 from toee import *
 from utilities import location_to_axis, location_from_axis
+import os
+MODE = os.getenv('SKAVIEW_MODE', 'attack')
 S = {'t': 0, 'liz': None, 'n': 0}
 def log(s):
 	print "SKAVIEW " + s
@@ -18,11 +20,29 @@ def tick():
 	if t == 30:
 		x, y = location_to_axis(l.location)
 		liz = game.obj_create(14109, location_from_axis(x + 3, y - 3))
-		liz.npc_flag_set(ONF_KOS_OVERRIDE)
+		if MODE != 'falldown':
+			liz.npc_flag_set(ONF_KOS_OVERRIDE)
+		else:
+			liz.npc_flag_unset(ONF_KOS)
+			liz.npc_flag_set(ONF_NO_ATTACK)
+			liz.reaction_set(l, 100)
 		liz.turn_towards(l)
 		S['liz'] = liz
 		game.scroll_to(liz)
 		log("spawned %s at (%d,%d)" % (liz, x + 3, y - 3))
+	if MODE == 'falldown':
+		if t > 44 and t % 8 == 0 and S['liz'] != None:
+			game.scroll_to(S['liz'])
+		if t == 33 and S['liz'] != None:
+			game.scroll_to(S['liz'])
+			S['liz'].fall_down()
+			r = S['liz'].condition_add("Unconscious")
+			log("uncon %s" % r)
+			log("FALLDOWN")
+			log("ATTACK 2")
+		if t == 120:
+			log("DONE")
+		return
 	if t > 40 and S['liz'] != None and (t - 40) % 16 == 0 and S['n'] < 6:
 		S['n'] += 1
 		S['liz'].turn_towards(l)

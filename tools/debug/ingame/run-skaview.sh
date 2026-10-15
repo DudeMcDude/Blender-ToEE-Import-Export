@@ -15,7 +15,7 @@ wine explorer /desktop=ToEEska,1280x800 TemplePlus.exe > $OUT/wine.out 2>&1 &
 T0=$(date +%s)
 until grep -q "SKAVIEW spawned" "$L" 2>/dev/null || [ $(( $(date +%s) - T0 )) -gt 200 ]; do sleep 0.2; done; xdotool mousemove 616 515 click 1; sleep 0.3; xdotool mousemove 1200 700
 until grep -q "SKAVIEW ATTACK 2" "$L" 2>/dev/null || [ $(( $(date +%s) - T0 )) -gt 240 ]; do sleep 0.2; done
-ffmpeg -loglevel error -y -f x11grab -framerate 15 -video_size 1280x800 -i $DISPLAY -t 8 $OUT/rec.mp4
+ffmpeg -loglevel error -y -f x11grab -framerate 15 -video_size 1280x800 -i $DISPLAY -t ${REC_S:-8} $OUT/rec.mp4
 grep -q "SKAVIEW DONE" "$L" 2>/dev/null; import -window root $OUT/final.png
 WINEPREFIX=/home/box/.wine-toee-ska wineserver -k 2>/dev/null; sleep 1
 cp "$L" $OUT/TemplePlus.log
