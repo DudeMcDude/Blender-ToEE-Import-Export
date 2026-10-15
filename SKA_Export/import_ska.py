@@ -554,6 +554,29 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
     progress.leave_substeps("Finished")
     return
 
+# ToEE model space: +Y up, model faces +Z, character's left at +X, right-handed, 1 unit ~ 1 inch
+# (PC_Human_Male is 71.8 units tall). Blender: +Z up, front faces -Y. The mapping is a pure
+# rotation of +90 deg about X (ToEE (x,y,z) -> Blender (x,-z,y), det +1, no mirroring) plus a
+# uniform scale. It is applied as the rig object's transform only: mesh, bones, rest poses,
+# bone rolls and keys stay in ToEE model space inside the rig, so the exporter (which works in
+# rig-local space) round-trips bit-for-bit regardless of this setting.
+TOEE_UNIT_METERS = 0.0254
+
+
+def toee_to_blender_matrix(scale=TOEE_UNIT_METERS):
+    return mathutils.Matrix.Rotation(math.radians(90.0), 4, 'X') @ mathutils.Matrix.Scale(scale, 4)
+
+
+def apply_axis_conversion(rig, scale=TOEE_UNIT_METERS):
+    rig.matrix_world = toee_to_blender_matrix(scale)
+    rig["toee_axis_conversion"] = scale
+
+
+def _new_rig(before):
+    new = [o for o in bpy.data.objects if o.name not in before and o.type == 'ARMATURE']
+    return new[-1] if new else None
+
+
 def get_ToEE_data_dir(filepath):
     '''
     Gets the ToEE data dir, assuming filepath is of the form
@@ -752,7 +775,10 @@ def blender_load_ska(operator, context, filepath="",
          use_local_location=True,
          apply_animations=True,
          global_matrix=None,
+         toee_axis_conversion=True,
+         toee_scale=TOEE_UNIT_METERS,
          ):
+    _before = set(o.name for o in bpy.data.objects)
     load_ska_and_skm(filepath, context, IMPORT_CONSTRAIN_BOUNDS=constrain_size,
              IMAGE_SEARCH=use_image_search,
              APPLY_MATRIX=use_apply_transform,
@@ -761,7 +787,9 @@ def blender_load_ska(operator, context, filepath="",
              APPLY_ANIMATIONS=apply_animations,
              global_matrix=global_matrix,
              )
-
+    _rig = _new_rig(_before)
+    if toee_axis_conversion and _rig is not None:
+        apply_axis_conversion(_rig, toee_scale)
     return {'FINISHED'}
 
 def blender_load_skm(operator, context, filepath="",
@@ -772,6 +800,12 @@ def blender_load_skm(operator, context, filepath="",
          use_local_location=True,
          apply_animations=True,
          global_matrix=None,
+         toee_axis_conversion=True,
+         toee_scale=TOEE_UNIT_METERS,
          ):
+    _before = set(o.name for o in bpy.data.objects)
     load_skm(filepath, context, IMAGE_SEARCH=use_image_search)
+    _rig = _new_rig(_before)
+    if toee_axis_conversion and _rig is not None:
+        apply_axis_conversion(_rig, toee_scale)
     return {'FINISHED'}

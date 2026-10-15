@@ -43,6 +43,12 @@ class SkaExport(bpy.types.Operator, ExportHelper):
             description="Write the mesh (.skm) next to the .ska (see SKM export caveats)",
             default=False,
             )
+    toee_axis_conversion: BoolProperty(
+            name="Blender -> ToEE axes",
+            description="Undo the importer's ToEE->Blender root transform (the rig object transform "
+                        "is dropped; data is written in rig-local ToEE space)",
+            default=True,
+            )
     only_active_action: BoolProperty(
             name="Active action only",
             description="Export only the rig's active action instead of all ToEE actions",

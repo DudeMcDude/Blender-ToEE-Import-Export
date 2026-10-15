@@ -386,13 +386,26 @@ def _ska_actions(rig):
     return sorted(acts, key=lambda a: (int(a.get("toee_index", 1 << 30)), a.name))
 
 
-def _write_ska(context, filepath, WRITE_SKM=False, WRITE_MDF=False, ONLY_ACTIVE_ACTION=False, **_):
+def _check_axis_conversion(rig, convert):
+    """Export works in rig-local (= ToEE model) space. With conversion on, the rig object's
+    transform is the ToEE->Blender root transform set by the importer and is dropped (exact
+    inverse). With it off, the rig must sit at identity, else the result would not match
+    what is seen in Blender."""
+    if convert:
+        return
+    if any(abs(a - b) > 1e-6 for ra, rb in zip(rig.matrix_world, mathutils.Matrix.Identity(4)) for a, b in zip(ra, rb)):
+        print("WARNING: axis conversion is off but '%s' has a non-identity object transform; "
+              "it is ignored (exporting rig-local data)" % rig.name)
+
+
+def _write_ska(context, filepath, WRITE_SKM=False, WRITE_MDF=False, ONLY_ACTIVE_ACTION=False, AXIS_CONVERSION=True, **_):
     global progress
     print("\n*** Exporting SKA ***")
     time1 = time.perf_counter()
     if bpy.ops.object.mode_set.poll():
         bpy.ops.object.mode_set(mode='OBJECT')
     rig = _find_rig(context)
+    _check_axis_conversion(rig, AXIS_CONVERSION)
     if ONLY_ACTIVE_ACTION and rig.animation_data and rig.animation_data.action:
         actions = [rig.animation_data.action]
     else:
@@ -421,8 +434,9 @@ def _find_rig(context):
     return rig
 
 
-def save(operator, context, filepath="", write_skm=False, only_active_action=False, **_):
-    _write_ska(context, filepath, WRITE_SKM=write_skm, ONLY_ACTIVE_ACTION=only_active_action)
+def save(operator, context, filepath="", write_skm=False, only_active_action=False, toee_axis_conversion=True, **_):
+    _write_ska(context, filepath, WRITE_SKM=write_skm, ONLY_ACTIVE_ACTION=only_active_action,
+               AXIS_CONVERSION=toee_axis_conversion)
     return {'FINISHED'}
 
 
