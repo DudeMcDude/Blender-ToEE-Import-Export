@@ -49,6 +49,12 @@ class SkaExport(bpy.types.Operator, ExportHelper):
                         "is dropped; data is written in rig-local ToEE space)",
             default=True,
             )
+    auto_fix: BoolProperty(
+            name="Auto-fix (temporary copy)",
+            description="Triangulate non-triangle faces and limit weights to 6 per vertex (dropping zero weights, "
+                        "renormalizing) in a temporary copy; the scene's mesh is never modified",
+            default=True,
+            )
     only_active_action: BoolProperty(
             name="Active action only",
             description="Export only the rig's active action instead of all ToEE actions",
@@ -102,6 +108,12 @@ class SkmExport(bpy.types.Operator, ExportHelper):
             )
     
     filepath: bpy.props.StringProperty(subtype="FILE_PATH")
+    auto_fix: BoolProperty(
+            name="Auto-fix (temporary copy)",
+            description="Triangulate non-triangle faces and limit weights to 6 per vertex (dropping zero weights, "
+                        "renormalizing) in a temporary copy; the scene's mesh is never modified",
+            default=True,
+            )
 
     @classmethod
     def poll(cls, context):
@@ -147,4 +159,4 @@ def register():
 def unregister():
     # print('Unregistering GITHUB/SKA_Import/export_op.py!')
     bpy.types.TOPBAR_MT_file_export.remove(menu_func_export_ska)
-    bpy.types.TOPBAR_MT_file_export.remove(menu_func_export_skm)
+    bpy.types.TOPBAR_MT_file_export.remove(menu_func_export_skm)

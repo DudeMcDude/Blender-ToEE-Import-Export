@@ -21,3 +21,8 @@ Prepare rig and, with `FIT_SRC`/`FIT_TGT` set, `tools/fit_free_model.py`.
 SKA events (footsteps, sounds, particles, screen shake, hit frames) import as pose markers on each
 action and are written back on export. Edit them in *3D View > Sidebar > ToEE*. Bone scale keys import
 as scale F-Curves (bones use `inherit_scale = NONE`, as in the engine). See `docs/scale_events.md`.
+
+## Export validation
+Exports are checked first against the engine's limits (6 weights per vertex, triangles, 32767 vertices,
+1023 bones, name lengths, ...). Errors block the export. Warnings are listed in the operator report and in the
+*ToEE Export Report* text. *Auto-fix* triangulates and limits weights in a temporary copy. See `docs/export_validation.md`.

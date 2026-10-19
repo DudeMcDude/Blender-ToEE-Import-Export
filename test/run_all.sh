@@ -32,6 +32,10 @@ if [ -n "${SCALE_DATA:-}" ]; then
   "$B" -b --factory-startup --python $D/blender_export.py -- "$R" $SCALE_DATA/art/meshes/$P.SKA $O/phy_rt.ska > $O/phy_rt.log 2>&1
   python3 $D/ska_diff.py $SCALE_DATA/art/meshes/$P.SKM $SCALE_DATA/art/meshes/$P.SKA $O/phy_rt.ska | grep -E "MAX|events|False" | head -6
 fi
+echo "=== export validation (stock clean, broken fixtures)"
+VS=$M/Monsters/Icelizard/icelizard.ska; VS="$VS $M/PCs/PC_Human_Male/PC_Human_Male.ska"
+[ -n "${SCALE_DATA:-}" ] && VS="$VS $SCALE_DATA/art/meshes/Monsters/Fungus/Phycomid/Phycomid.SKA $SCALE_DATA/art/meshes/PCs/PC_Dwarf_Male/PC_Dwarf_Male.SKA"
+"$B" -b --factory-startup --python $D/validate_test.py -- "$R" $O/val $VS 2>&1 | grep -E "^VAL (stock|RESULT)|FAIL|Traceback" | cut -c1-160
 echo "=== prepare rig"
 "$B" -b --factory-startup --python $D/prepare_rig_test.py -- "$R" $O/prep > $O/prep.log 2>&1; grep -E "PREPARE|ROUNDTRIP|Traceback|Error" $O/prep.log | head -8
 if [ -n "${FIT_SRC:-}" ]; then
