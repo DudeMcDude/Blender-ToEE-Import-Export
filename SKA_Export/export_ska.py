@@ -1,7 +1,7 @@
 import struct
 import os
 import bpy
-from . import anim_compat, ska_events
+from . import anim_compat, ska_events, validate
 import mathutils    
 from bpy_extras import io_utils, node_shader_utils
 import time
@@ -72,7 +72,10 @@ def mat_to_mdf_file(mat_wrap, mdf_file_path):
     
 
 
-def blender_to_skm(mesh, rig, WRITE_MDF):
+def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False):
+    """me: mesh data to write instead of mesh.data (e.g. a temporary triangulated copy);
+    weight_fix: drop zero weights, keep the 6 largest, renormalize (validate.fix_weights)."""
+    me_src = me if me is not None else mesh.data
     skm_data = SkmFile()
 
     contextMaterial = None
@@ -93,7 +96,7 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
         '''
         Creates Mesh Object from vertex/face/material data
         '''
-        bmesh = bpy.data.meshes['ToEE Model']
+        bmesh = me_src
 
         vertex_count = len(bmesh.vertices)
         face_count   = len(bmesh.polygons)
@@ -203,12 +206,18 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
         for vg in obj.vertex_groups:
             if vg.name in bone_ids:
                 vg_to_bone[vg.index] = bone_ids[vg.name]
-        for vidx, vtx in enumerate(obj.data.vertices):
+        for vidx, vtx in enumerate(me_src.vertices):
             for i, vg in enumerate(vtx.groups):
                 if vg.group not in vg_to_bone:
                     continue
                 skm_data.vertex_data[vidx].attachment_bones.append(vg_to_bone[vg.group])
                 skm_data.vertex_data[vidx].attachment_weights.append(vg.weight)
+            if weight_fix:
+                sv = skm_data.vertex_data[vidx]
+                b2, w2 = validate.fix_weights(list(sv.attachment_bones), list(sv.attachment_weights))
+                if len(b2) != len(sv.attachment_bones):
+                    sv.attachment_bones[:] = []; sv.attachment_weights[:] = []
+                    sv.attachment_bones.extend(b2); sv.attachment_weights.extend(w2)
             if skm_data.vertex_data[vidx].attachment_count > 6:
                 raise Exception(f"Too many bone attachments for vertex {vidx}! Max is 6")
 
@@ -224,7 +233,7 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
     # Materials come from the mesh's slots (face material_index refers to them). The SKM name is
     # taken from the list stored at import (keeps >63-char names and placeholders such as CHEST,
     # BOOTS, HEAD, GLOVES), falling back to the Blender material name.
-    me = bpy.data.objects[contextObName].data
+    me = me_src
     stored = list(me.get("toee_materials", []))
     for slot_idx, mm in enumerate(me.materials):
         material_name = stored[slot_idx] if slot_idx < len(stored) else (mm.name if mm else "")
@@ -255,25 +264,48 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
 
 
 
+class ExportBlocked(Exception):
+    pass
+
+
+def _skm_objects(context):
+    rig = bpy.context.scene.objects.get('ToEE Rig')
+    mesh = bpy.context.scene.objects.get('ToEE Model')
+    if rig is None:
+        try: rig = _find_rig(context)
+        except RuntimeError: rig = None
+    return mesh, rig
+
+
+def _check_skm(context, operator, auto_fix):
+    mesh, rig = _skm_objects(context)
+    rep, plan = validate.check_skm(mesh, rig, auto_fix=auto_fix)
+    rep.publish(operator, "SKM export")
+    if rep.errors:
+        raise ExportBlocked(rep.text("SKM export"))
+    return mesh, rig, plan
+
+
 def _write_skm(context, filepath, 
     EXPORT_ANIMATION = False,
     WRITE_MDF = False,
-    global_matrix = None):
+    global_matrix = None, operator=None, auto_fix=True, checked=None):
     global progress    
 
-    with ProgressReport(context.window_manager) as progress:
-        # Exit edit mode before exporting, so current object states are exported properly.
-        if bpy.ops.object.mode_set.poll():
-            bpy.ops.object.mode_set(mode='OBJECT')
-
-        mesh = bpy.context.scene.objects['ToEE Model']
-        rig = bpy.context.scene.objects['ToEE Rig']
-        skm_data = blender_to_skm(mesh, rig, WRITE_MDF)
-        
-        
-        skm_filepath = os.path.splitext(filepath)[0] + '.skm'
-        with open(skm_filepath, 'wb') as skm_file:
-            skm_data.write(skm_file)
+    # Exit edit mode before exporting, so current object states are exported properly.
+    if bpy.ops.object.mode_set.poll():
+        bpy.ops.object.mode_set(mode='OBJECT')
+    mesh, rig, plan = checked or _check_skm(context, operator, auto_fix)
+    tmp = validate.triangulated_copy(mesh.data) if plan['triangulate'] else None
+    try:
+        with ProgressReport(context.window_manager) as progress:
+            skm_data = blender_to_skm(mesh, rig, WRITE_MDF, me=tmp, weight_fix=plan['fix_weights'])
+            skm_filepath = os.path.splitext(filepath)[0] + '.skm'
+            with open(skm_filepath, 'wb') as skm_file:
+                skm_data.write(skm_file)
+    finally:
+        if tmp is not None:
+            bpy.data.meshes.remove(tmp)
     return
 
 
@@ -421,7 +453,8 @@ def _check_axis_conversion(rig, convert):
               "it is ignored (exporting rig-local data)" % rig.name)
 
 
-def _write_ska(context, filepath, WRITE_SKM=False, WRITE_MDF=False, ONLY_ACTIVE_ACTION=False, AXIS_CONVERSION=True, **_):
+def _write_ska(context, filepath, WRITE_SKM=False, WRITE_MDF=False, ONLY_ACTIVE_ACTION=False, AXIS_CONVERSION=True,
+               operator=None, auto_fix=True, **_):
     global progress
     print("\n*** Exporting SKA ***")
     time1 = time.perf_counter()
@@ -433,6 +466,11 @@ def _write_ska(context, filepath, WRITE_SKM=False, WRITE_MDF=False, ONLY_ACTIVE_
         actions = [rig.animation_data.action]
     else:
         actions = _ska_actions(rig)
+    rep = validate.check_ska(rig, actions, anim_compat.action_fcurves, ska_events.collect_events)
+    rep.publish(operator, "SKA export")
+    if rep.errors:
+        raise ExportBlocked(rep.text("SKA export"))
+    checked = _check_skm(context, operator, auto_fix) if WRITE_SKM else None  # check both before writing
     ska_data = blender_to_ska(rig, actions)
     ska_filepath = os.path.splitext(filepath)[0] + '.ska'
     with open(ska_filepath, 'wb') as f:
@@ -440,7 +478,7 @@ def _write_ska(context, filepath, WRITE_SKM=False, WRITE_MDF=False, ONLY_ACTIVE_
     print("Wrote %s: %d bones, %d animations, %d streams" % (ska_filepath, len(ska_data.bone_data),
           len(ska_data.animation_data), len(set(id(s) for s in ska_data.streams))))
     if WRITE_SKM:
-        _write_skm(context, filepath, WRITE_MDF=WRITE_MDF)
+        _write_skm(context, filepath, WRITE_MDF=WRITE_MDF, operator=operator, checked=checked)
     print("SKA export time: %.2f" % (time.perf_counter() - time1))
     return
 
@@ -457,16 +495,23 @@ def _find_rig(context):
     return rig
 
 
-def save(operator, context, filepath="", write_skm=False, only_active_action=False, toee_axis_conversion=True, **_):
-    _write_ska(context, filepath, WRITE_SKM=write_skm, ONLY_ACTIVE_ACTION=only_active_action,
-               AXIS_CONVERSION=toee_axis_conversion)
+def save(operator, context, filepath="", write_skm=False, only_active_action=False, toee_axis_conversion=True,
+         auto_fix=True, **_):
+    try:
+        _write_ska(context, filepath, WRITE_SKM=write_skm, ONLY_ACTIVE_ACTION=only_active_action,
+                   AXIS_CONVERSION=toee_axis_conversion, operator=operator, auto_fix=auto_fix)
+    except ExportBlocked:
+        return {'CANCELLED'}
     return {'FINISHED'}
 
 
-def blender_save_ska(operator, context, filepath="", use_selection=True, global_matrix=None,):
-    _write_ska(context, filepath)
-    return {'FINISHED'}
+def blender_save_ska(operator, context, filepath="", use_selection=True, global_matrix=None, auto_fix=True, **_):
+    return save(operator, context, filepath=filepath, auto_fix=auto_fix)
 
-def blender_save_skm(operator, context, filepath="", use_selection=True, global_matrix=None,):
-    _write_skm(context, filepath)
+
+def blender_save_skm(operator, context, filepath="", use_selection=True, global_matrix=None, auto_fix=True, **_):
+    try:
+        _write_skm(context, filepath, operator=operator, auto_fix=auto_fix)
+    except ExportBlocked:
+        return {'CANCELLED'}
     return {'FINISHED'}
