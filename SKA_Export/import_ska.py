@@ -3,7 +3,7 @@ import os
 import time
 
 import bpy
-from . import anim_compat
+from . import anim_compat, ska_events
 import mathutils
 from mathutils import Vector, Quaternion
 
@@ -221,6 +221,9 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         for bone_id, bd in enumerate(skm_data.bone_data):
             bone_name = str(bd.name)
             bone = barm.edit_bones.new(bone_name)  # type: bpy.types.EditBone
+            # engine: a bone's own rotation/scale ignore the parent's scale, only its position follows it
+            # (aas_animated_model.cpp parent-scale compensation) == Blender's inherit_scale NONE
+            bone.inherit_scale = 'NONE'
             bone.select = True
 
             wi = mathutils.Matrix(bd.world_inverse_matrix)
@@ -447,7 +450,7 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
             action["toee_variation_id"] = _sh.variation_id
             action["toee_frame_rate"] = _sh.frame_rate
             action["toee_dps"] = _sh.dps
-        action["toee_events"] = json.dumps([[e.frame_id, str(e.type), str(e.action)] for e in ad.events])
+        ska_events.store_events(action, ad.events)  # pose markers + exact copy in "toee_events"
         writer = anim_compat.ActionWriter(action, rig)
         stream_count = anim_header.stream_count
         if stream_count <= 0:

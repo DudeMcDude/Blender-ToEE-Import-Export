@@ -20,6 +20,19 @@ def main(skm, a, b, only=None):
     print('bones: %d vs %d, differing records: %s' % (len(s1.bone_data), len(s2.bone_data), bd))
     print('streams: %d vs %d' % (len(set(map(id, s1.streams))), len(set(map(id, s2.streams)))))
     rows = []
+    def event_bytes(path):
+        raw = open(path, 'rb').read(); n, off = struct.unpack('<2i', raw[16:24]); out = {}
+        for i in range(n):
+            h = off + i * 236  # SkaAnimHeader size
+            name = raw[h:h + 64].split(b'\0')[0].decode(); cnt, eo = struct.unpack('<hi', raw[h + 66:h + 72])
+            out[name] = raw[h + eo:h + eo + cnt * 178] if cnt else b''
+        return out
+    eb1, eb2 = event_bytes(a), event_bytes(b)
+    ev_byte_diff = [n for n in eb1 if eb1[n] != eb2.get(n)]
+    rep['events_total'] = sum(len(v) // 178 for v in eb1.values())
+    rep['event_bytes_differ'] = ev_byte_diff
+    print('events: %d records in %d anims; byte-identical: %s%s' % (rep['events_total'], sum(1 for v in eb1.values() if v),
+          not ev_byte_diff, '' if not ev_byte_diff else ' (differ: %s)' % ev_byte_diff[:5]))
     for x in s1.animation_data:
         n = str(x.header.name)
         if only and n not in only: continue
@@ -32,7 +45,7 @@ def main(skm, a, b, only=None):
         stx, sty = x.streams[0], y.streams[0]
         def cnt(st):
             return sum(len(r.bone_data) for r in st.raw_frames), len(st.initial_state.bone_data)
-        frames = np.arange(0, sx.frame_count - 1 + 1e-9, 0.5)
+        frames = [] if os.environ.get('NOEVAL') else np.arange(0, sx.frame_count - 1 + 1e-9, 0.5)
         ve = be = 0.0
         for f in frames:
             W1 = m1.bone_mats(m1.bone_state(x, f)); W2 = m2.bone_mats(m2.bone_state(y, f))
