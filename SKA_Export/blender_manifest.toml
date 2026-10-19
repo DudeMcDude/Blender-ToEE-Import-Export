@@ -1,0 +1,20 @@
+schema_version = "1.0.0"
+
+# Blender extension manifest (Blender 4.2+). The bl_info in __init__.py keeps the folder
+# installable as a legacy add-on too (zip it or copy/link it into scripts/addons).
+id = "toee_ska_io"
+version = "0.2.0"
+name = "ToEE SKA/SKM Import-Export"
+tagline = "Temple of Elemental Evil SKA/SKM animation and model I/O"
+maintainer = "Cattletech, Pugmeister, Sitra Achara"
+type = "add-on"
+website = "https://github.com/GrognardsFromHell/Blender-ToEE-Import-Export"
+tags = ["Import-Export", "Animation"]
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
+
+[permissions]
+files = "Import/export SKA, SKM and MDF files and read their textures"
+
+[build]
+paths_exclude_pattern = ["__pycache__/", "/ska_import_export_test.py"]

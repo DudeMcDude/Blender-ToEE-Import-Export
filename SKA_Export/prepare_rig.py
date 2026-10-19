@@ -10,6 +10,7 @@ uniform scale of M, rotation/scale keys are unchanged because the basis change c
 every bone's local frame identically) and to its skinned meshes, then sets the rig transform to
 K. World-space appearance is unchanged (exactly, up to float rounding)."""
 import bpy
+from . import anim_compat
 import mathutils
 from bpy.props import BoolProperty, FloatProperty
 
@@ -56,7 +57,7 @@ def check_bones(rig):
 def _rig_actions(rig):
     names = set(b.name for b in rig.data.bones)
     return [a for a in bpy.data.actions
-            if any(fc.data_path.startswith('pose.bones["') and fc.data_path.split('"')[1] in names for fc in a.fcurves)]
+            if any(fc.data_path.startswith('pose.bones["') and fc.data_path.split('"')[1] in names for fc in anim_compat.action_fcurves(a))]
 
 
 def _skinned_meshes(rig):
@@ -121,7 +122,7 @@ def prepare_rig(rig, scale=TOEE_UNIT_METERS, add_placeholders=False, rename=True
 
     # location keys (and the current pose) are in bone-local rest frames: they only scale by f
     for act in _rig_actions(rig):
-        for fc in act.fcurves:
+        for fc in anim_compat.action_fcurves(act):
             if fc.data_path.startswith('pose.bones["') and fc.data_path.endswith('.location'):
                 for kp in fc.keyframe_points:
                     kp.co[1] *= f; kp.handle_left[1] *= f; kp.handle_right[1] *= f

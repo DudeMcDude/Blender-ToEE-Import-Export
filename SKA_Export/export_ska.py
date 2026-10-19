@@ -1,6 +1,7 @@
 import struct
 import os
 import bpy
+from . import anim_compat
 import mathutils    
 from bpy_extras import io_utils, node_shader_utils
 import time
@@ -231,7 +232,7 @@ def blender_to_skm(mesh, rig, WRITE_MDF):
         raws = list(me.get("toee_materials_raw", []))
         if slot_idx < len(stored) and slot_idx < len(raws) and raws[slot_idx]:
             skm_mat.id.raw = bytes.fromhex(raws[slot_idx])  # used only while the name is unchanged
-        if WRITE_MDF and mm is not None and material_name.lower().endswith('.mdf') and mm.use_nodes:
+        if WRITE_MDF and mm is not None and material_name.lower().endswith('.mdf') and anim_compat.material_uses_nodes(mm):
             mat_wrap = node_shader_utils.PrincipledBSDFWrapper(mm, is_readonly=False)
             mat_to_mdf_file(mat_wrap, skm_mat.id)
         print("SKM material %d: %s" % (slot_idx, material_name))
@@ -315,7 +316,7 @@ def _sample_action(rig, action, ska_bones, frame_start, frame_count):
     (exact inverse of the importer). Bones without curves are left out of the stream, so the
     engine uses the skeleton's initial state for them, as for vanilla files."""
     curves = dict()
-    for fc in action.fcurves:
+    for fc in anim_compat.action_fcurves(action):
         dp = fc.data_path
         if not dp.startswith('pose.bones["'):
             continue
@@ -404,7 +405,7 @@ def _ska_actions(rig):
     """Actions that animate the rig's bones, in original SKA order (imported ones first)."""
     names = set(b.name for b in rig.data.bones)
     acts = [a for a in bpy.data.actions
-            if any(fc.data_path.startswith('pose.bones["') and fc.data_path.split('"')[1] in names for fc in a.fcurves)]
+            if any(fc.data_path.startswith('pose.bones["') and fc.data_path.split('"')[1] in names for fc in anim_compat.action_fcurves(a))]
     return sorted(acts, key=lambda a: (int(a.get("toee_index", 1 << 30)), a.name))
 
 

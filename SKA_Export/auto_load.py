@@ -48,7 +48,8 @@ def unregister():
 #################################################
 
 def get_all_submodules(directory):
-    return list(iter_submodules(directory, directory.name))
+    # use the real package name: an extension lives under bl_ext.<repo>.<id>, not the folder name
+    return list(iter_submodules(directory, __package__ or directory.name))
 
 def iter_submodules(path, package_name):
     for name in sorted(iter_submodule_names(path)):

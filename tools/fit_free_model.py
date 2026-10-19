@@ -150,7 +150,7 @@ me.update()
 # UVs: palette cell per source material
 mats = list(src.materials); n = max(1, len(mats)); cell = 8
 def tex_of(m):
-    if m and m.use_nodes:
+    if m and m.node_tree:
         for nd in m.node_tree.nodes:
             if nd.type == 'TEX_IMAGE' and nd.image and nd.image.size[0] > 0: return nd.image
 image = next((tex_of(m) for m in mats if tex_of(m)), None)
@@ -174,7 +174,7 @@ def lin2srgb(c): return 12.92 * c if c <= 0.0031308 else 1.055 * c ** (1 / 2.4) 
 cols = []
 for m in mats:
     c = (0.7, 0.7, 0.7)
-    if m and m.use_nodes:
+    if m and m.node_tree:
         bsdf = next((nd for nd in m.node_tree.nodes if nd.type == 'BSDF_PRINCIPLED'), None)
         if bsdf: c = tuple(bsdf.inputs['Base Color'].default_value[:3])
     cols.append(tuple(int(round(255 * max(0, min(1, lin2srgb(x))))) for x in c))
