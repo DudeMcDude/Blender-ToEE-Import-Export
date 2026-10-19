@@ -34,3 +34,17 @@ print('EVT other anims unchanged', all(r2[k] == orig[k] for k in orig if k != ac
 # marker data survives action switching
 rig.animation_data.action = bpy.data.actions[0]; rig.animation_data.action = act
 print('EVT after action switch markers', len(act.pose_markers))
+# UI operators (same code path as the N-panel buttons)
+bpy.context.scene.frame_set(10); n0 = len(act.pose_markers)
+bpy.ops.toee.event_add(kind='FOOTSTEP'); bpy.ops.toee.event_add(kind='SHAKE', amplitude=15, duration=400)
+long_txt = "game.particles( 'Mon-AirElem-body35-a-rather-long-particle-system-name', anim_obj )"
+bpy.ops.toee.event_add(kind='CUSTOM', ev_type='script', text=long_txt)
+act.pose_markers.active_index = n0 + 1
+bpy.ops.toee.event_edit(ev_type='script', text='game.shake (30, 1000)', frame=12)
+act.pose_markers.active_index = n0
+bpy.ops.toee.event_remove()
+p3 = os.path.join(out, 'ui.ska'); bpy.ops.export.ska_file(filepath=p3)
+r3 = read(p3)[act.name]
+print('EVT ui ops ->', r3[-3:])
+print('EVT ui ok', (9, 'script', long_txt) in r3 and (11, 'script', 'game.shake (30, 1000)') in r3
+      and (9, 'script', 'anim_obj.footstep()') not in r3 and (9, 'script', 'game.shake (15, 400)') not in r3)

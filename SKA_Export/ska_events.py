@@ -97,3 +97,36 @@ def make_ska_events(action, SkaEvent, report=None):
         if xraw: e.action.raw = bytes.fromhex(xraw)
         evs.append(e)
     return evs
+
+
+def add_event(action, frame, ev_type, text):
+    """Add an event at Blender frame `frame`. The full text is recorded in "toee_events" too, so
+    texts longer than a marker name (63 bytes) survive export."""
+    import json as _j
+    if not action.get("toee_event_markers", 0):
+        # older import (JSON only): turn the stored events into markers first
+        store_from_json(action)
+    recs = _j.loads(action.get("toee_events", "[]"))
+    recs.append([int(frame) - 1, ev_type, text, "", ""])
+    action["toee_events"] = _j.dumps(recs)
+    m = action.pose_markers.new(marker_name(ev_type, text))
+    m.frame = int(frame)
+    action["toee_event_markers"] = 1
+    return m
+
+
+def store_from_json(action):
+    for s in _stored(action):
+        m = action.pose_markers.new(marker_name(s['type'], s['text'])); m.frame = 1 + s['frame']
+    action["toee_event_markers"] = 1
+
+
+def marker_event(action, marker):
+    """(type, full text) of a marker, using the stored full text when the name was truncated."""
+    for s in _stored(action):
+        if marker_name(s['type'], s['text']) == marker.name:
+            return s['type'], s['text']
+    n = marker.name
+    if ':' in n:
+        t, x = n.split(':', 1); return t.strip(), x.strip()
+    return n.strip(), ""
