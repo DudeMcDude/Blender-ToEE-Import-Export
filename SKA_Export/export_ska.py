@@ -1,7 +1,7 @@
 import struct
 import os
 import bpy
-from . import anim_compat
+from . import anim_compat, ska_events
 import mathutils    
 from bpy_extras import io_utils, node_shader_utils
 import time
@@ -395,7 +395,7 @@ def blender_to_ska(rig, actions, rot_tol=1e-4):
         anim.header.stream_headers = [sh]
         anim.header.stream_count = 1
         anim.streams = [stream]
-        anim.events = [SkaEvent(fr, ty, ac) for fr, ty, ac in json.loads(action.get("toee_events", "[]"))]
+        anim.events = ska_events.make_ska_events(action, SkaEvent, report=print)
         anim.header.event_count = len(anim.events)
         ska_data.animation_data.append(anim)
     return ska_data

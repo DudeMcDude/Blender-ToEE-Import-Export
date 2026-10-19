@@ -169,6 +169,8 @@ def prepare_rig(rig, scale=TOEE_UNIT_METERS, add_placeholders=False, rename=True
             ob = meshes[0]
             if bpy.data.objects.get('ToEE Model') in (None, ob): ob.name = 'ToEE Model'
             if bpy.data.meshes.get('ToEE Model') in (None, ob.data): ob.data.name = 'ToEE Model'
+    for b in rig.data.bones:
+        b.inherit_scale = 'NONE'  # engine scale semantics (see import_ska)
     rig["toee_prepared"] = 1
     rig["toee_axis_conversion"] = scale
     view.objects.active = prev_active if prev_active and prev_active.name in bpy.data.objects else rig

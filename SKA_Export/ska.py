@@ -620,7 +620,7 @@ class SkaAnimHeader(object):
         write_byte(file, self.loopable) #66
         write_short(file, self.event_count) #68
         assert self.event_offset != 0, "Uninited event_offset"
-        write_int(file, self.event_offset) # TODO
+        write_int(file, self.event_offset)  # relative to this header; set by SkaFile.write_animation_data
         write_short(file, self.stream_count)
         write_short(file, 0) # unk
         # AnimStreamHeader array
