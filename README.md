@@ -16,3 +16,8 @@ WIP, don't look :)
 `TOEE_DATA=<folder with art/meshes> test/run_all.sh <blender> <out dir>` runs the headless checks:
 SKA import vs the engine math (Ice Lizard, PC_Human_Male), SKM and SKA export round trips,
 Prepare rig and, with `FIT_SRC`/`FIT_TGT` set, `tools/fit_free_model.py`.
+
+## Animation events and scale
+SKA events (footsteps, sounds, particles, screen shake, hit frames) import as pose markers on each
+action and are written back on export. Edit them in *3D View > Sidebar > ToEE*. Bone scale keys import
+as scale F-Curves (bones use `inherit_scale = NONE`, as in the engine). See `docs/scale_events.md`.

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Headless regression run: test/run_all.sh <blender binary> <out dir>
-# Needs TOEE_DATA (folder containing art/meshes) and, for the fit test, FIT_SRC (Yawa .blend) + FIT_TGT (Lizardman_Large.SKA).
+# Needs TOEE_DATA (folder containing art/meshes); SCALE_DATA (data with Monsters/Fungus/Phycomid) for the scale test; for the fit test, FIT_SRC (Yawa .blend) + FIT_TGT (Lizardman_Large.SKA).
 set -u
 B=$1; O=$2; R=$(cd "$(dirname "$0")/.." && pwd); D=$R/tools/debug; mkdir -p "$O"; cd "$O"
 M=$TOEE_DATA/art/meshes
@@ -17,6 +17,21 @@ for case in "lizard Monsters/Icelizard/icelizard.ska Monsters/Icelizard/icelizar
   "$B" -b --factory-startup --python $D/blender_export.py -- "$R" $M/$ska $O/${n}_rt.ska > $O/$n.ska.log 2>&1; grep -iE "Traceback|Error" $O/$n.ska.log | head -5
   python3 $D/ska_diff.py $M/$skm $M/$ska $O/${n}_rt.ska | grep -E "MAX|MISSING|False" | head -8
 done
+for n in lizard human; do
+  f=$([ $n = lizard ] && echo Monsters/Icelizard/icelizard.ska || echo PCs/PC_Human_Male/PC_Human_Male.ska)
+  echo "=== $n: events (markers, edit, UI operators); event bytes after export"
+  "$B" -b --factory-startup --python $D/events_test.py -- "$R" $M/$f $O/ev_$n 2>&1 | grep -E "^EVT|Traceback|Error:" | grep -v "EVT example" | cut -c1-160
+  skm=${f%.*}; skm=$M/$skm.skm; [ -f $skm ] || skm=${skm%.skm}.SKM
+  NOEVAL=1 python3 $D/ska_diff.py $skm $M/$f $O/ev_$n/unchanged.ska | grep -E "^events"
+done
+if [ -n "${SCALE_DATA:-}" ]; then
+  P=Monsters/Fungus/Phycomid/Phycomid
+  echo "=== Phycomid (animated bone scale up to 2.74): import vs engine, SKA round trip"
+  TOEE_DATA=$SCALE_DATA TOEE_MODEL=$P.SKA:$P.SKM "$B" -b --factory-startup --python $D/blender_dump.py -- "$R" $O/phy.npy > $O/phy.log 2>&1; grep -iE "Traceback" $O/phy.log | head -3
+  TOEE_DATA=$SCALE_DATA TOEE_MODEL=$P.SKA:$P.SKM python3 $D/compare.py $O/phy.npy phy | grep -E "attack|casting|swing|OVERALL"
+  "$B" -b --factory-startup --python $D/blender_export.py -- "$R" $SCALE_DATA/art/meshes/$P.SKA $O/phy_rt.ska > $O/phy_rt.log 2>&1
+  python3 $D/ska_diff.py $SCALE_DATA/art/meshes/$P.SKM $SCALE_DATA/art/meshes/$P.SKA $O/phy_rt.ska | grep -E "MAX|events|False" | head -6
+fi
 echo "=== prepare rig"
 "$B" -b --factory-startup --python $D/prepare_rig_test.py -- "$R" $O/prep > $O/prep.log 2>&1; grep -E "PREPARE|ROUNDTRIP|Traceback|Error" $O/prep.log | head -8
 if [ -n "${FIT_SRC:-}" ]; then
