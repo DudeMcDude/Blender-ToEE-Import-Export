@@ -40,7 +40,7 @@ for b in arm.bones:
 bm.verts.index_update(); bmesh.ops.triangulate(bm, faces=bm.faces)
 me = bpy.data.meshes.new('MyMesh'); bm.to_mesh(me); me.uv_layers.new()
 mesh = bpy.data.objects.new('MyMesh', me); sc.collection.objects.link(mesh)
-mat = bpy.data.materials.new('test.mdf'); mat.use_nodes = True; me.materials.append(mat)
+mat = bpy.data.materials.new('test.mdf'); me.materials.append(mat)
 idx = 0
 for name, _ in groups:  # vertex groups deliberately NOT in bone order
     pass
@@ -64,7 +64,8 @@ for f in range(1, 22, 4):
                        ('Bip01 Head', 'X', 0.4 * math.sin(12.56 * t)), ('Bip01', 'Z', 0.5 * t)):
         rig.pose.bones[n].rotation_quaternion = Matrix.Rotation(ang, 4, ax).to_quaternion()
         rig.pose.bones[n].keyframe_insert('rotation_quaternion', frame=f)
-for fc in act.fcurves:
+from SKA_Export import anim_compat
+for fc in anim_compat.action_fcurves(act):
     for k in fc.keyframe_points: k.interpolation = 'LINEAR'
 
 

@@ -1,6 +1,7 @@
 import os, sys, numpy as np, engine_eval as E, json
-A=os.path.join(os.environ.get('TOEE_DATA', 'data'), 'art/meshes/Monsters/Icelizard/icelizard.')
-m=E.Model(A+'skm',A+'ska')
+_m=os.environ.get('TOEE_MODEL','Monsters/Icelizard/icelizard.ska').split(':')
+A=os.path.join(os.environ.get('TOEE_DATA', 'data'), 'art/meshes', _m[0])
+m=E.Model(os.path.join(os.environ.get('TOEE_DATA', 'data'), 'art/meshes', _m[1]) if len(_m)>1 else A[:-3]+'skm',A)
 res=np.load(sys.argv[1],allow_pickle=True).item(); tag=sys.argv[2]
 names=[str(b.name) for b in m.skm.bone_data]
 summary={}
@@ -20,4 +21,5 @@ for an,d in sorted(res.items()):
     order=sorted(first.items(),key=lambda x:x[1])[:5]
     summary[an]=dict(frames=d['frames'].tolist(),max=errs[:,0].tolist(),mean=errs[:,1].tolist(),first_diverging=order,worst_bones=[names[i] for i in np.argsort(-berr.max(0))[:5]])
     print('%-30s max %8.2f mean %7.2f  err@start %.2f err@end %.2f first:%s'%(an,errs[:,0].max(),errs[:,1].mean(),errs[0,1],errs[-1,1],order[:3]))
+print('OVERALL max %.4f'%max(max(v['max']) for v in summary.values()))
 json.dump(summary,open('cmp_%s.json'%tag,'w'))

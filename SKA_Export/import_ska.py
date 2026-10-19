@@ -3,10 +3,11 @@ import os
 import time
 
 import bpy
+from . import anim_compat
 import mathutils
 from mathutils import Vector, Quaternion
 
-from SKA_Export.ska import SkaAnimStream
+from .ska import SkaAnimStream
 from .ska import SkmFile, SkaFile, MdfFile
 from bpy_extras.wm_utils.progress_report import ProgressReport
 from bpy_extras import node_shader_utils
@@ -299,10 +300,9 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         material_name = mdf_path
 
         contextMaterial = bpy.data.materials.new(material_name) # material_name.rstrip()
-        contextMaterial.use_nodes = True
+        anim_compat.enable_material_nodes(contextMaterial)
 
         context_mat_wrap = node_shader_utils.PrincipledBSDFWrapper(contextMaterial, is_readonly=False)
-        context_mat_wrap.use_nodes = True
 
         print("Registering material: %s" % material_name)
         MATDICT[material_name] = contextMaterial
@@ -448,7 +448,7 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
             action["toee_frame_rate"] = _sh.frame_rate
             action["toee_dps"] = _sh.dps
         action["toee_events"] = json.dumps([[e.frame_id, str(e.type), str(e.action)] for e in ad.events])
-        rig.animation_data.action = action
+        writer = anim_compat.ActionWriter(action, rig)
         stream_count = anim_header.stream_count
         if stream_count <= 0:
             continue
@@ -461,7 +461,7 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
             if bone_idx in curve_groups:
                 return curve_groups[bone_idx].name
             bone_name = str(skm_data.bone_data[bone_idx].name)
-            group = action.groups.new(bone_name)
+            group = writer.group(bone_name)
             curve_groups[bone_idx] = group
             return group.name
 
@@ -483,7 +483,7 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_idx].name)]
                 prop = posebone.path_from_id("scale")
                 group = get_curve_group(skm_bone_idx)
-                curves = [action.fcurves.new(prop, index=k, action_group=group) for k in range(3)]
+                curves = [writer.fcurve(prop, k, group) for k in range(3)]
                 for frame, scaling in keyframes:
                     for k in range(3):
                         curves[k].keyframe_points.insert(1 + frame, scaling[k], options={'FAST'}).interpolation = 'LINEAR'
@@ -508,10 +508,10 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_idx].name)]
                 prop = posebone.path_from_id("rotation_quaternion")
                 group = get_curve_group(skm_bone_idx)
-                curve_w = action.fcurves.new(prop, index=0, action_group=group)
-                curve_x = action.fcurves.new(prop, index=1, action_group=group)
-                curve_y = action.fcurves.new(prop, index=2, action_group=group)
-                curve_z = action.fcurves.new(prop, index=3, action_group=group)
+                curve_w = writer.fcurve(prop, 0, group)
+                curve_x = writer.fcurve(prop, 1, group)
+                curve_y = writer.fcurve(prop, 2, group)
+                curve_z = writer.fcurve(prop, 3, group)
                 prev_rot = None
                 prev_frame = None
                 for frame, rotation in keyframes:
@@ -559,9 +559,9 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 posebone = rig.pose.bones[str(skm_data.bone_data[skm_bone_idx].name)]
                 prop = posebone.path_from_id("location")
                 group = get_curve_group(skm_bone_idx)
-                curve_x = action.fcurves.new(prop, index=0, action_group=group)
-                curve_y = action.fcurves.new(prop, index=1, action_group=group)
-                curve_z = action.fcurves.new(prop, index=2, action_group=group)
+                curve_x = writer.fcurve(prop, 0, group)
+                curve_y = writer.fcurve(prop, 1, group)
+                curve_z = writer.fcurve(prop, 2, group)
                 for frame, location in keyframes:
                     # Transform location to be relative to rest pose
                     # if skm_bone.parent_id != -1:
@@ -835,4 +835,4 @@ def blender_load_skm(operator, context, filepath="",
     _rig = _new_rig(_before)
     if toee_axis_conversion and _rig is not None:
         apply_axis_conversion(_rig, toee_scale)
-    return {'FINISHED'}
+    return {'FINISHED'}

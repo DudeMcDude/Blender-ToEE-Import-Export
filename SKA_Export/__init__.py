@@ -14,12 +14,12 @@
 bl_info = {
     "name" : "SKA Importer/Exporter",
     "author" : "Cattletech & Pugmeister",
-    "description" : "",
-    "blender" : (2, 90, 0),
-    "version" : (0, 0, 1),
-    "location" : "",
+    "description" : "Import/export Temple of Elemental Evil SKA animations and SKM models",
+    "blender" : (4, 2, 0),
+    "version" : (0, 2, 0),
+    "location" : "File > Import/Export",
     "warning" : "",
-    "category" : "Generic"
+    "category" : "Import-Export"
 }
 
 from . import auto_load
