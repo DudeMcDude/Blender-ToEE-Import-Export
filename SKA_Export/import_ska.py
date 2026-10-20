@@ -506,6 +506,8 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
             
             for bone_idx, keyframes in stream.rotation_channels.items():
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+                if skm_bone_idx < 0:  # SKA-only bone (e.g. fire_Snake 'IK Chain01'): -1 would index the last SKM bone
+                    continue
                 skm_bone = skm_data.bone_data[skm_bone_idx]
                 # print("Skm bone idx: %d" % skm_bone_idx)
                 # rest_pose = bone_rest_state[skm_bone_idx]
@@ -558,6 +560,8 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
 
             for bone_idx, keyframes in stream.location_channels.items():
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+                if skm_bone_idx < 0:  # SKA-only bone (e.g. fire_Snake 'IK Chain01'): -1 would index the last SKM bone
+                    continue
                 skm_bone = skm_data.bone_data[skm_bone_idx]
                 # rest_pose = bone_rest_state[skm_bone_idx]
                 rest_pose = bone_rest_state[bone_idx]
