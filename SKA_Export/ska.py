@@ -701,8 +701,21 @@ class SkaFile:
         HEADER_SIZE = SkaAnimHeader.get_size()
         EVENT_SIZE = SkaEvent.get_size()
         data_start = offset
+        self.read_errors = []
         for i in range(0, count):
+            try:
+                self._read_one_anim(i, data_start, HEADER_SIZE, EVENT_SIZE, streams_by_start)
+            except (struct.error, IndexError, ValueError) as e:
+                # a few stock files are truncated or corrupt after some animation (e.g. PC_shield_buckler.SKA
+                # is 438 bytes but claims 2 animations): keep the animations read so far
+                self.read_errors.append((i, repr(e)))
+                print("WARNING: SKA animation %d/%d unreadable (%s); keeping %d animation(s)" % (i, count, e, len(self.animation_data)))
+                break
+            data_start += HEADER_SIZE
+        self.streams = streams_by_start.values()
 
+    def _read_one_anim(self, i, data_start, HEADER_SIZE, EVENT_SIZE, streams_by_start):
+        if True:
             newDatum = SkaAnim()
             newDatum.header = SkaAnimHeader()
             newDatum.header.from_raw_data(self._fileraw[data_start:data_start + HEADER_SIZE])
@@ -736,12 +749,6 @@ class SkaFile:
                 newDatum.streams.append(stream)
 
             self.animation_data.append(newDatum)
-
-            data_start += HEADER_SIZE
-
-        self.streams = streams_by_start.values()
-
-        return
 
     def write(self, file):
         # first write the header
