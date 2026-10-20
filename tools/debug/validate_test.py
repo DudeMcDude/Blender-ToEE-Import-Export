@@ -54,7 +54,7 @@ def dup_bone(rig, mesh):
     rig.data.bones[4].name = rig.data.bones[5].name.upper() if rig.data.bones[5].name.upper() != rig.data.bones[5].name else rig.data.bones[5].name + 'x'
     if rig.data.bones[4].name.lower() != rig.data.bones[5].name.lower(): rig.data.bones[4].name = rig.data.bones[5].name.swapcase()
 def no_mat(rig, mesh): mesh.data.materials.clear(); mesh.data.pop("toee_materials", None)
-def long_mat(rig, mesh): mesh.data["toee_materials"] = ['art/meshes/' + 'x' * 130 + '.mdf'] + list(mesh.data["toee_materials"])[1:]
+def long_mat(rig, mesh): mesh.data.materials[0]["toee_mdf_path"] = 'art/meshes/' + 'x' * 130 + '.mdf'  # the per-material SKM name
 def bad_mat_idx(rig, mesh): mesh.data.polygons[0].material_index = 7
 def no_uv(rig, mesh): mesh.data.uv_layers.remove(mesh.data.uv_layers[0])
 def moved(rig, mesh): mesh.location.x += 0.5
