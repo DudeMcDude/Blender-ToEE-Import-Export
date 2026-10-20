@@ -103,7 +103,7 @@ def main():
     args = ap.parse_args()
     models = find_models(args.data, args.filter, args.limit); os.makedirs(args.out, exist_ok=True)
     base = json.load(open(args.baseline)) if args.baseline and os.path.exists(args.baseline) else None
-    known = (base or {}).get('known', {})
+    known = (base or {}).get('known') or json.load(open(os.path.join(HERE, 'known.json')))
     print('%d models, %d workers, timeout %ds' % (len(models), args.j, args.timeout), flush=True)
     rows = {}; t0 = time.time()
     with cf.ThreadPoolExecutor(args.j) as ex:
