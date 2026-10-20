@@ -26,3 +26,9 @@ as scale F-Curves (bones use `inherit_scale = NONE`, as in the engine). See `doc
 Exports are checked first against the engine's limits (6 weights per vertex, triangles, 32767 vertices,
 1023 bones, name lengths, ...). Errors block the export. Warnings are listed in the operator report and in the
 *ToEE Export Report* text. *Auto-fix* triangulates and limits weights in a temporary copy. See `docs/export_validation.md`.
+
+
+## Materials
+MDF files are imported as node materials (stages, blend modes, colour, animated UVs) and the body placeholders
+HEAD/GLOVES/CHEST/BOOTS as named placeholder materials; both export unchanged. See [docs/materials.md](docs/materials.md),
+which also covers how equipment works on PCs vs monsters.

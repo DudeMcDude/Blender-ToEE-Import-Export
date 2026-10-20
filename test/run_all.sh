@@ -32,6 +32,12 @@ if [ -n "${SCALE_DATA:-}" ]; then
   "$B" -b --factory-startup --python $D/blender_export.py -- "$R" $SCALE_DATA/art/meshes/$P.SKA $O/phy_rt.ska > $O/phy_rt.log 2>&1
   python3 $D/ska_diff.py $SCALE_DATA/art/meshes/$P.SKM $SCALE_DATA/art/meshes/$P.SKA $O/phy_rt.ska | grep -E "MAX|events|False" | head -6
 fi
+if [ -n "${SCALE_DATA:-}" ]; then
+  S=$SCALE_DATA/art/meshes
+  echo "=== materials (MDF node materials, placeholders, byte-identical SKM, missing MDFs, write_mdf)"
+  "$B" -b --factory-startup --python $D/materials_test.py -- "$R" $O/mat $S/Monsters/Demon/Demon.SKA $S/Monsters/Demon-Vrock/Vrock.SKA $S/Monsters/Fire_Snake/fire_Snake.SKA \
+    $S/PCs/PC_Human_Male/PC_Human_Male.ska $S/PCs/PC_Human_Female/PC_Human_Female.SKA $S/PCs/PC_Dwarf_Male/PC_Dwarf_Male.SKA $S/PCs/PC_Halforc_Female/PC_halforc_female.ska 2>&1 | grep -E "^MAT|Traceback" | cut -c1-160
+fi
 echo "=== export validation (stock clean, broken fixtures)"
 VS=$M/Monsters/Icelizard/icelizard.ska; VS="$VS $M/PCs/PC_Human_Male/PC_Human_Male.ska"
 [ -n "${SCALE_DATA:-}" ] && VS="$VS $SCALE_DATA/art/meshes/Monsters/Fungus/Phycomid/Phycomid.SKA $SCALE_DATA/art/meshes/PCs/PC_Dwarf_Male/PC_Dwarf_Male.SKA"
