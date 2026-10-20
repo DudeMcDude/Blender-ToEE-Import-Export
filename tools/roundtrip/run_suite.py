@@ -61,7 +61,8 @@ def run_one(args, rel, ska, skm):
     res = os.path.join(d, 'result.json')
     if os.path.exists(res) and not args.rerun:
         R = json.load(open(res))
-        if not (args.rerun_stale and R.get('addon_rev') != REV):
+        if not (args.rerun_stale and R.get('addon_rev') != REV) and not (args.rerun_crashed and R.get('status') == 'crash'
+                                                                            and not any('no SKM' in x for x in R.get('problems', []))):
             return rel, R, True
     os.makedirs(d, exist_ok=True)
     for f in os.listdir(d): os.remove(os.path.join(d, f))
@@ -93,8 +94,9 @@ def run_one(args, rel, ska, skm):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--blender', required=True); ap.add_argument('--data', required=True); ap.add_argument('--out', required=True)
-    ap.add_argument('-j', type=int, default=max(1, (os.cpu_count() or 2) - 2)); ap.add_argument('--timeout', type=int, default=900)
+    ap.add_argument('-j', type=int, default=max(1, (os.cpu_count() or 2) - 2)); ap.add_argument('--timeout', type=int, default=2700)
     ap.add_argument('--filter'); ap.add_argument('--limit', type=int); ap.add_argument('--rerun', action='store_true')
+    ap.add_argument('--rerun-crashed', action='store_true', help='rerun crashed/timed-out models (e.g. with a longer --timeout)')
     ap.add_argument('--rerun-stale', action='store_true', help='rerun models whose result came from another add-on commit')
     ap.add_argument('--keep', action='store_true', help='keep exported files'); ap.add_argument('--baseline')
     ap.add_argument('--write-baseline', action='store_true')
