@@ -116,8 +116,11 @@ getattr(bpy.ops, 'import').ska_file(filepath=ska)
 rig2 = bpy.data.objects['ToEE Rig']; mesh2 = bpy.data.objects['ToEE Model']
 rig2.animation_data.action = bpy.data.actions['unarmed_unarmed_walk']
 B2, V2 = sample(rig2, mesh2, names)
-print('ROUNDTRIP world error vs original: bone head/tail max %.5f m, vertex max %.5f m (%.4f / %.4f ToEE units)' % (
+print('ROUNDTRIP(info) world error incl. display tails: bone head/tail max %.5f m, vertex max %.5f m (%.4f / %.4f ToEE units)' % (
     np.abs(B2 - B0).max(), np.abs(V2 - V0).max(), np.abs(B2 - B0).max() / 0.0254, np.abs(V2 - V0).max() / 0.0254))
+_h = np.abs(B2[..., :3] - B0[..., :3]).max(axis=(0, 2)); _t = np.abs(B2[..., 3:] - B0[..., 3:]).max(axis=(0, 2))
+print('ROUNDTRIP bone heads (joints) max %.5f m [%s]; tails max %.5f m (not stored in SKM/SKA, rebuilt on import); worst tail: %s' % (_h.max(), 'PASS' if _h.max() < 1e-3 else 'FAIL', _t.max(),
+      sorted(zip(_t, names), reverse=True)[:3]))
 # orientation in ToEE data and in Blender
 import SKA_Export.ska as S
 skm = S.SkmFile(); skm.read(open(os.path.join(out_dir, 'testrig.skm'), 'rb'))
