@@ -855,8 +855,9 @@ class SkaFile:
                     found = True
                     break
             if not found and skm_bd.parent_id >= 0:
-                print('ho there!')
-                ska_to_skm_bone_mapping[ska_idx]
+                # SKM bone the SKA doesn't animate (e.g. EarthElemental): it stays at rest. The old bare
+                # lookup here raised KeyError and aborted the import.
+                print("SKM bone %r has no SKA bone" % str(skm_bd.name))
 
 
         for ska_idx, ska_bd in enumerate(ska_data.bone_data):
