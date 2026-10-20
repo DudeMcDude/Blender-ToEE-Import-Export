@@ -141,7 +141,7 @@ def parse(text, strict=False):
 
 
 def _fmt(x):
-    return ("%d" % x) if float(x).is_integer() else ("%g" % x)
+    return ("%d" % x) if float(x).is_integer() else repr(float(x))
 
 
 def write(m):
