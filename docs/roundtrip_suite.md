@@ -34,3 +34,15 @@ being byte-identical. `known` in the baseline lists accepted failures with a rea
   reader now warns and imports no animations instead of raising. `PC_shield_buckler.SKA` (438 bytes) has no SKM either.
 - prepare-rig test "1.373 m": bone display tails (`Bip01 R Thigh`) - tails aren't stored in SKM/SKA and are rebuilt on import;
   joint heads round-trip within 0.08 mm. The test now checks heads.
+
+## Results (stock data, 877 SKAs)
+Blender 5.2.2: 870 pass, 5 known issues, 1 fail (medusa, normals; fixed by a later commit, rerun pending), 0 crash, 1 skipped
+(PC_shield_buckler has no SKM). SKM byte-identical 875/876, materials preserved 876/876, events byte-identical 873 (the
+other 3 are the legacy-header files), no validation errors. Worst SKA error in a passing model: 0.16 units (the snakes' long spine chain).
+Blender 4.2.3: pending.
+
+Bugs found by the suite and fixed: SKA-only bones keyed the last SKM bone (fire_Snake), rotation segments near 180 deg in
+export and import baking direction (giantrat/fireToad/firebat/kritch turns, up to 260 units), duplicate faces dropped,
+zero/odd normals, loose-vertex UVs written short (corrupt SKM), import KeyError (EarthElemental), case-sensitive SKM lookup.
+
+Big humanoid rigs (goblins, ogres, ~470 animations) take 20-50 min each under load; default timeout 2700 s.
