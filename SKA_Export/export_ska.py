@@ -242,7 +242,7 @@ def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False, mdf_data_dir
         skm_mat = material_to_skm_mat(None, material_name)
         if slot_idx < len(stored) and slot_idx < len(raws) and raws[slot_idx] and stored[slot_idx] == material_name:
             skm_mat.id.raw = bytes.fromhex(raws[slot_idx])  # original bytes (padding) while the name is unchanged
-        if WRITE_MDF and mm is not None and material_name.lower().endswith('.mdf') and not mm.get("toee_mdf") \
+        if WRITE_MDF and mm is not None and material_name.lower().endswith('.mdf') and not mm.get("toee_mdf_path") \
                 and not mm.get("toee_placeholder") and MDF_DATA_DIR:
             # new material made in Blender: write a Textured MDF unless the file already exists
             target = os.path.join(MDF_DATA_DIR, *material_name.replace("\\", "/").split("/"))

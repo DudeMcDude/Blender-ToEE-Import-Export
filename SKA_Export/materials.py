@@ -203,15 +203,18 @@ def material_for_slot(name, data_dir, report=print):
 
 def skm_material_names(me):
     """SKM material names for the mesh's slots: the material's ToEE path/placeholder (survives slot
-    reordering and Blender's 63-char name limit), else the list stored at import, else the name."""
+    reordering and Blender's 63-char name limit); materials without them (made in Blender) use their name,
+    or the stored import list when that name is its (63-char truncated) prefix."""
     stored = list(me.get("toee_materials", []))
     out = []
     for i, m in enumerate(me.materials):
         n = ""
         if m is not None:
             n = m.get("toee_mdf_path") or m.get("toee_placeholder") or ""
-        if not n:
-            n = stored[i] if i < len(stored) else (m.name if m else "")
+        if not n and m is not None:  # material made in Blender, or imported by an older add-on version
+            n = stored[i] if i < len(stored) and stored[i].startswith(m.name) else m.name
+        elif not n:
+            n = stored[i] if i < len(stored) else ""
         out.append(n)
     return out
 
