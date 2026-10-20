@@ -193,6 +193,9 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         attr = bmesh.attributes.new("toee_skm_normal", 'FLOAT_VECTOR', 'POINT')
         attr.data.foreach_set("vector", [t for vtx in skm_data.vertex_data for t in vtx.normal[0:3]])
         # marks imported vertices, so stored zero-length normals (51 of 76 in PC_AsianHat) export as zero too
+        # UVs of vertices no face uses (WallTest, MM-Window-04) have no loop to live on
+        uva = bmesh.attributes.new("toee_skm_uv", 'FLOAT2', 'POINT')
+        uva.data.foreach_set("vector", [t for vtx in skm_data.vertex_data for t in vtx.uv[0:2]])
         flag = bmesh.attributes.new("toee_skm_normal_set", 'BOOLEAN', 'POINT')
         flag.data.foreach_set("value", [True] * len(skm_data.vertex_data))
 

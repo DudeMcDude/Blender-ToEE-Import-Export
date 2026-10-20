@@ -130,12 +130,15 @@ def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False, mdf_data_dir
                 # (a non-unit custom normal comes from zero normals next to it in the original: not an edit)
                 if vnorm[i] is None or abs(vnorm[i].length - 1.0) > 1e-3 or v.normalized().dot(vnorm[i].normalized()) > 0.995:  # within ~6 deg: Blender re-encodes custom normals (medusa: 1.9 deg)
                     vnorm[i] = v.copy()  # unchanged since import -> exact original value
+        _uva = bmesh.attributes.get("toee_skm_uv")
+        loose_uv = [d.vector[:] for d in _uva.data] if _uva is not None and _uva.domain == 'POINT' and _uva.data_type == 'FLOAT2' else None
         # Create vertices
         for vtx in bmesh.vertices:
             skm_vtx = SkmVertex()
             skm_vtx.pos = vtx.co.to_tuple() + (0.0,)
             n = vnorm[vtx.index] if vnorm[vtx.index] is not None else vtx.normal
             skm_vtx.normal = tuple(n) + (0.0,)
+            skm_vtx.uv = tuple(loose_uv[vtx.index]) if loose_uv is not None else (0.0, 0.0)  # faces overwrite it
             skm_data.vertex_data.append(skm_vtx)
         assert len(skm_data.vertex_data) == vertex_count
 
