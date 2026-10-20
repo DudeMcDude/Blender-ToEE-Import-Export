@@ -119,11 +119,16 @@ def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False, mdf_data_dir
                     vnorm[l.vertex_index] = cn[li].copy()
         raw = bmesh.attributes.get("toee_skm_normal")
         if raw is not None and raw.domain == 'POINT' and raw.data_type == 'FLOAT_VECTOR':
+            flag = bmesh.attributes.get("toee_skm_normal_set")
+            flags = [d.value for d in flag.data] if flag is not None and flag.domain == 'POINT' else None
             for i, d in enumerate(raw.data):
                 v = d.vector
                 if v.length < 1e-8:
+                    if flags is not None and flags[i]:
+                        vnorm[i] = v.copy()  # zero normal stored in the original SKM
                     continue  # no stored normal (vertex added after import, e.g. joined geometry)
-                if vnorm[i] is None or v.normalized().dot(vnorm[i].normalized()) > 0.9995:
+                # (a non-unit custom normal comes from zero normals next to it in the original: not an edit)
+                if vnorm[i] is None or abs(vnorm[i].length - 1.0) > 1e-3 or v.normalized().dot(vnorm[i].normalized()) > 0.9995:
                     vnorm[i] = v.copy()  # unchanged since import -> exact original value
         # Create vertices
         for vtx in bmesh.vertices:

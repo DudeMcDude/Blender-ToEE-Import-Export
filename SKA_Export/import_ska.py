@@ -192,6 +192,9 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         # custom normal still matches, i.e. the normal was not edited
         attr = bmesh.attributes.new("toee_skm_normal", 'FLOAT_VECTOR', 'POINT')
         attr.data.foreach_set("vector", [t for vtx in skm_data.vertex_data for t in vtx.normal[0:3]])
+        # marks imported vertices, so stored zero-length normals (51 of 76 in PC_AsianHat) export as zero too
+        flag = bmesh.attributes.new("toee_skm_normal_set", 'BOOLEAN', 'POINT')
+        flag.data.foreach_set("value", [True] * len(skm_data.vertex_data))
 
         # Create new object from mesh
         ob = bpy.data.objects.new(contextObName, bmesh)
