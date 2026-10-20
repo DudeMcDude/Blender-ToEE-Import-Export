@@ -171,6 +171,6 @@ def write(m):
     if m.blend != "alpha": L.append("MaterialBlendType %s" % m.blend.capitalize())
     for k, n in (("double", "Double"), ("linear_filtering", "LinearFiltering"), ("recalculate_normals", "RecalculateNormals"),
                  ("zfill_only", "ZFillOnly"), ("colorfill_only", "ColorFillOnly"), ("not_lit", "notlit"),
-                 ("disable_z", "DisableZ")):
+                 ("disable_z", "DisableZ"), ("clamp", "Clamp")):
         if getattr(m, k): L.append(n)
     return "\n".join(L) + "\n"
