@@ -1,0 +1,7 @@
+{
+ "Particle/test.ska": "older compact animation-header layout; reader keeps 0 animations",
+ "player/walker.ska": "older compact animation-header layout; reader keeps 0 animations",
+ "Scenery/Foliage/tree1.ska": "older compact animation-header layout; reader keeps 0 animations",
+ "Particle/shard-breaking.SKA": "stock quaternions are not unit length (engine applies them unnormalized); the add-on normalizes",
+ "Scenery/Portals/14_343_curtain01.SKA": "non-unit stock quaternions on unweighted Dummy helper bones; the add-on normalizes"
+}

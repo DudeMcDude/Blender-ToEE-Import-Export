@@ -32,3 +32,6 @@ Exports are checked first against the engine's limits (6 weights per vertex, tri
 MDF files are imported as node materials (stages, blend modes, colour, animated UVs) and the body placeholders
 HEAD/GLOVES/CHEST/BOOTS as named placeholder materials; both export unchanged. See [docs/materials.md](docs/materials.md),
 which also covers how equipment works on PCs vs monsters.
+
+## Stock round-trip suite
+Import/export every stock model headless and compare with the originals (CSV/markdown report, baseline for CI): see [docs/roundtrip_suite.md](docs/roundtrip_suite.md).

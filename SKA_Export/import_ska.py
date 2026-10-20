@@ -8,7 +8,7 @@ from . import materials, ska_events
 import mathutils
 from mathutils import Vector, Quaternion
 
-from .ska import SkaAnimStream
+from .ska import SkaAnimStream, _q_slerp
 from .ska import SkmFile, SkaFile, MdfFile
 from bpy_extras.wm_utils.progress_report import ProgressReport
 from bpy_extras import node_shader_utils
@@ -172,7 +172,13 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
                 uvl[pl.loop_start + 2].uv = skm_data.vertex_data[v3].uv
 
         # Finish up
+        n_before = len(bmesh.polygons)
         bmesh.validate()
+        if len(bmesh.polygons) != n_before:
+            # Blender drops duplicate faces (stock double-sided parts repeat a triangle with the same vertices);
+            # keep the original face list so an unchanged mesh exports the same faces
+            bmesh["toee_faces"] = [x for fa in skm_data.face_data for x in (*fa.vertex_ids, fa.material_id)]
+            print("note: %d duplicate face(s) merged by Blender; kept for export" % (n_before - len(bmesh.polygons)))
         bmesh.update()
         # preserve the SKM vertex normals instead of letting Blender/exporter recompute them
         try:
@@ -186,6 +192,12 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         # custom normal still matches, i.e. the normal was not edited
         attr = bmesh.attributes.new("toee_skm_normal", 'FLOAT_VECTOR', 'POINT')
         attr.data.foreach_set("vector", [t for vtx in skm_data.vertex_data for t in vtx.normal[0:3]])
+        # marks imported vertices, so stored zero-length normals (51 of 76 in PC_AsianHat) export as zero too
+        # UVs of vertices no face uses (WallTest, MM-Window-04) have no loop to live on
+        uva = bmesh.attributes.new("toee_skm_uv", 'FLOAT2', 'POINT')
+        uva.data.foreach_set("vector", [t for vtx in skm_data.vertex_data for t in vtx.uv[0:2]])
+        flag = bmesh.attributes.new("toee_skm_normal_set", 'BOOLEAN', 'POINT')
+        flag.data.foreach_set("value", [True] * len(skm_data.vertex_data))
 
         # Create new object from mesh
         ob = bpy.data.objects.new(contextObName, bmesh)
@@ -500,6 +512,8 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
             
             for bone_idx, keyframes in stream.rotation_channels.items():
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+                if skm_bone_idx < 0:  # SKA-only bone (e.g. fire_Snake 'IK Chain01'): -1 would index the last SKM bone
+                    continue
                 skm_bone = skm_data.bone_data[skm_bone_idx]
                 # print("Skm bone idx: %d" % skm_bone_idx)
                 # rest_pose = bone_rest_state[skm_bone_idx]
@@ -517,8 +531,8 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 for frame, rotation in keyframes:
                     # Transform rotation to be relative to rest pose
                     # if skm_bone.parent_id != -1:
-                    rotation = Quaternion(rotation)
-                    rotation = rest_pose.get_rel_rot(rotation)
+                    raw_rot = Quaternion(rotation)  # engine space, as stored
+                    rotation = rest_pose.get_rel_rot(raw_rot)
                     # Keep consecutive keys on the same hemisphere (engine slerp takes the shortest arc;
                     # flipping on w<0 made Blender's component-wise lerp swing through ~180 deg)
                     if prev_rot is not None and prev_rot.dot(rotation) < 0:
@@ -529,11 +543,15 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                     if prev_rot is not None and prev_frame is not None and frame - prev_frame > 1 \
                             and prev_rot.rotation_difference(rotation).angle > SLERP_BAKE_ANGLE:
                         for _f in range(prev_frame + 1, frame):
-                            _q = prev_rot.slerp(rotation, (_f - prev_frame) / (frame - prev_frame))
+                            # the engine's slerp on the stored values decides the direction (matters when the
+                            # keys are ~180 deg apart, e.g. firebat rturn 'Root')
+                            _q = rest_pose.get_rel_rot(Quaternion(_q_slerp(tuple(prev_raw), tuple(raw_rot),
+                                                                            (_f - prev_frame) / (frame - prev_frame))).normalized())
                             if _q.dot(prev_rot) < 0: _q = -_q
                             for _c, _v in ((curve_w, _q.w), (curve_x, _q.x), (curve_y, _q.y), (curve_z, _q.z)):
                                 _c.keyframe_points.insert(1 + _f, _v, options={'FAST'}).interpolation = 'LINEAR'
                     prev_rot = rotation
+                    prev_raw = raw_rot
                     prev_frame = frame
 
                     kf = curve_w.keyframe_points.insert(1 + frame, rotation.w, options={'FAST'})
@@ -552,6 +570,8 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
 
             for bone_idx, keyframes in stream.location_channels.items():
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
+                if skm_bone_idx < 0:  # SKA-only bone (e.g. fire_Snake 'IK Chain01'): -1 would index the last SKM bone
+                    continue
                 skm_bone = skm_data.bone_data[skm_bone_idx]
                 # rest_pose = bone_rest_state[skm_bone_idx]
                 rest_pose = bone_rest_state[bone_idx]

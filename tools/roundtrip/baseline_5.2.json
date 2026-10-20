@@ -1,0 +1,5279 @@
+{
+ "known": {
+  "Particle/shard-breaking.SKA": "stock quaternions are not unit length (engine applies them unnormalized); the add-on normalizes",
+  "Particle/test.ska": "older compact animation-header layout; reader keeps 0 animations",
+  "Scenery/Foliage/tree1.ska": "older compact animation-header layout; reader keeps 0 animations",
+  "Scenery/Portals/14_343_curtain01.SKA": "non-unit stock quaternions on unweighted Dummy helper bones; the add-on normalizes",
+  "player/walker.ska": "older compact animation-header layout; reader keeps 0 animations"
+ },
+ "models": {
+  "Armor/Banded/banded_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Bone/bone_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Bone/bone_helm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Breastplate/Temple_breastplate_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Breastplate/breastplate_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Elvin_chain/Elfchain_blue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Elvin_chain/Elfchain_green_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Elvin_chain/Elfchain_purple_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/FullplateII/Fullplate2_boots_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/FullplateII/Fullplate2_gloves_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/FullplateII/fullplate2_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Halfplate/halfplate_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/HedrackArmor/Hedrack_warhammer_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/HedrackArmor/hedrack_boots_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/HedrackArmor/hedrack_fullplate_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/HedrackArmor/hedrack_gloves_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/HedrackArmor/hedrack_helmet_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/HedrackArmor/hedrack_shield_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Chain_Boots_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Chain_gloves_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Fullplate_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Fullplate_boots_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Fullplate_gloves_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Padded_Gloves_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Padded_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Padded_armor_red_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_Padded_boots_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_barbarian_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_brigand_Boots_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_brigand_Gloves_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_brigand_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_chain_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_chainshirt_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_leather_armor_ground.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_leather_boots_ground.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_leather_gloves_ground.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_scale_armor_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_scale_armor_ground_B.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/PC_studdedleather_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Sorcerer/sorcerer_blue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Sorcerer/sorcerer_green_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Sorcerer/sorcerer_red_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Splintmail/splintmail_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/farmergarb_black_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/farmergarb_blue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/farmergarb_brown_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/farmergarb_green_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/farmergarb_grey_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/noblegarb_purple_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/noblegarb_red_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/villager_blue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/villager_green_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/villager_ochre_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/Villagers/villager_red_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/boots_monk_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/cloak_eyeoflareth.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/druidic_hide/druidhelm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/druidic_hide/hide_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Armor/pc_cloth_ground.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Bardic_Instruments/Bardic-Drum.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Bardic_Instruments/Bardic-Flute.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Bardic_Instruments/Bardic-Horn.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Bardic_Instruments/Bardic-Mandolin.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/Gnoll_Helm1.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/Gnoll_Helm2.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/Gnoll_Helm_Seargent.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_AsianHat.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_AsianHat_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Barbarian_helm.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Barbarian_helm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Chain_helm.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Chain_helm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_CircletNice.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_CircletNice_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_CircletSimple.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_CircletSimple_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_CrownJeweled.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_CrownJeweled_Ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Crown_basic.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Crown_basic_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Eyeglasses.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Eyeglasses_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Generic_helm.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Generic_helm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Great_helm.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Great_helm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Plumed_helm.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Plumed_helm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Sorcerer_helm.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Sorcerer_helm_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Straw_cap.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Straw_cap_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Wizard_Hat.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_Wizard_Hat_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_leather_Helm_ground.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_leather_cap.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/PC_leather_cap_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/bandana_blue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/bandana_red_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/jaunty_Hat_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Helms/pirate_Hat_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Ale_stien.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Aquamarine_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Blackpearl_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Chimes_of_opening_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Golden_orb_of_death_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/HolyWater.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Power_gem_blue_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Power_gem_grey_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Power_gem_orange_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/Power_gem_red_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/backpack_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/blue_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/book_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/bracers_of_Archery_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/bracers_of_Armor_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/clear_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/coins_copper.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/coins_gold.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/coins_platinum.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/coins_silver.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/emerald.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/food.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/fungus_figurine_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/giantgar_head.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/hay_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/hemlock_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/jaers_ball_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/key_gold.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/key_rustyiron.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/lamia_toy.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/necklace_red_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/note_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/potion_blue.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/potion_bronzeflask.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/potion_clayjar.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/potion_green.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/potion_purple.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/potion_red.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/potion_yellow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/pouch_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/red_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/rope.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_darkblue.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_deeppurple.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_green.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_grey.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_lightblue.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_orange.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_red.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_white.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/scroll_yellow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/thievestools.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/whitepearl_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Items/yellow_gem.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Air_Elemental/Air_Elemental.SKA": {
+   "bone_err": 0.00787,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00076
+  },
+  "Monsters/Basilisk/Basilisk.SKA": {
+   "bone_err": 0.00825,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00847
+  },
+  "Monsters/Bears/BlackBear/blackbear.ska": {
+   "bone_err": 0.00674,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00684
+  },
+  "Monsters/Bears/GrizzlyBear/grizzlybear.ska": {
+   "bone_err": 0.00674,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00684
+  },
+  "Monsters/Bears/pandaBear/pandabear.ska": {
+   "bone_err": 0.00674,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00684
+  },
+  "Monsters/Bears/polarBear/polarbear.ska": {
+   "bone_err": 0.00674,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00684
+  },
+  "Monsters/BlackWidow/BlackWidow.SKA": {
+   "bone_err": 0.01179,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00743
+  },
+  "Monsters/Bodak/Bodak.SKA": {
+   "bone_err": 0.00538,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0054
+  },
+  "Monsters/Bodak/shadow.SKA": {
+   "bone_err": 0.00538,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0054
+  },
+  "Monsters/Bugbears/Air/Air-Chain/bugbear-Air-chain.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Air/Air-Hvy_leather/bugbear-Air-Hvy_leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Air/Air-Scale/bugbear-Air-scale.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Air/Air-leather/bugbear-Air-leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Earth/Earth-Chain/bugbear-Earth-chain.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Earth/Earth-Hvy_leather/bugbear-Earth-Hvy_leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Earth/Earth-Scale/bugbear-Earth-scale.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Earth/Earth-leather/bugbear-Earth-leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Female-bugbear/Fem-bugbear_1/fem-bugbear_1.SKA": {
+   "bone_err": 0.0053,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0054
+  },
+  "Monsters/Bugbears/Female-bugbear/Fem-bugbear_2/fem-bugbear_2.SKA": {
+   "bone_err": 0.0053,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0054
+  },
+  "Monsters/Bugbears/Female-bugbear/Fem-bugbear_3/fem-bugbear_3.SKA": {
+   "bone_err": 0.0053,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0054
+  },
+  "Monsters/Bugbears/Female-bugbear/Fem-bugbear_4/fem-bugbear_4.SKA": {
+   "bone_err": 0.0053,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0054
+  },
+  "Monsters/Bugbears/Fire/Fire-Chain/bugbear-Fire-chain.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Fire/Fire-Hvy_leather/bugbear-Fire-Hvy_leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Fire/Fire-Leather/bugbear-Fire-leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Fire/Fire-Scale/bugbear-Fire-scale.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Non_Affiliated/Non_Affiliated-Chain/bugbear-non_affiliated-chain.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Non_Affiliated/Non_Affiliated-Hvy_leather/bugbear-non_affiliated-Hvy_leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Non_Affiliated/Non_Affiliated-Scale/bugbear-non_affiliated-scale.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Non_Affiliated/Non_Affiliated-leather/bugbear-non_affiliated-leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Shields/BgbrGnollShld.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Shields/BgbrNotchShldAir.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrNotchShldEarth.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrNotchShldFire.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrNotchShldTemple.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrNotchShldWater.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrRndShldAir.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Shields/BgbrRndShldEarth.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Shields/BgbrRndShldFire.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Shields/BgbrRndShldWater.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Shields/BgbrRndShldZug.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Shields/BgbrShldLuz.SKA": {
+   "bone_err": 0.00079,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00137
+  },
+  "Monsters/Bugbears/Shields/BgbrSpkdShldAir.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrSpkdShldEarth.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrSpkdShldFire.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrSpkdShldTemple.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Shields/BgbrSpkdShldWater.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Bugbears/Temple/Temple-Chain/bugbear-Temple-chain.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Temple/Temple-Hvy_leather/bugbear-Temple-Hvy_leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Temple/Temple-Scale/bugbear-Temple-scale.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Temple/Temple-leather/bugbear-Temple-leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Water/Water-Chain/bugbear-Water-chain.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Water/Water-Hvy_leather/bugbear-Water-Hvy_leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Water/Water-Scale/bugbear-Water-scale.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Water/Water-leather/bugbear-Water-leather.SKA": {
+   "bone_err": 0.008,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00824
+  },
+  "Monsters/Bugbears/Weapons/Longbow/bugbear-Longbow.SKA": {
+   "bone_err": 0.00722,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00739
+  },
+  "Monsters/Bugbears/Weapons/bugbear-Arrow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Weapons/bugbear-Bardiche.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Weapons/bugbear-Spear.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Weapons/bugbear-Sword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Weapons/bugbear-doubleAxe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Weapons/bugbear-greatClub.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Weapons/bugbear-greatSword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Bugbears/Weapons/bugbear-morningStar.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Carrion_Crawler/carrionCrawler.SKA": {
+   "bone_err": 0.0156,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01564
+  },
+  "Monsters/Chickens/Chicken-Brown/Chicken-Brown.SKA": {
+   "bone_err": 0.00064,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00064
+  },
+  "Monsters/Chickens/Chicken-Rooster/Chicken-Rooster.SKA": {
+   "bone_err": 0.00064,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00064
+  },
+  "Monsters/Chickens/Chicken-White/Chicken-White.SKA": {
+   "bone_err": 0.00064,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00064
+  },
+  "Monsters/Crayfish/Crayfish.SKA": {
+   "bone_err": 0.00768,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0077
+  },
+  "Monsters/Crone/Crone.SKA": {
+   "bone_err": 0.00536,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00494
+  },
+  "Monsters/Demon-Glabrezu/Glabrezu.SKA": {
+   "bone_err": 0.01781,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01877
+  },
+  "Monsters/Demon-Hezrou/Hezrou.SKA": {
+   "bone_err": 0.01237,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01183
+  },
+  "Monsters/Demon-Vrock/Vrock.SKA": {
+   "bone_err": 0.01623,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01612
+  },
+  "Monsters/Demon/Demon.SKA": {
+   "bone_err": 0.02193,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.02166
+  },
+  "Monsters/Demon/demon_balor_sword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Dogs/AttackDog/attackdog.ska": {
+   "bone_err": 0.0041,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00445
+  },
+  "Monsters/Dogs/Jackal/jackal.ska": {
+   "bone_err": 0.00385,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.004
+  },
+  "Monsters/Dogs/RegularPooch/pooch.ska": {
+   "bone_err": 0.00274,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00302
+  },
+  "Monsters/Dogs/Wolf/wolf.ska": {
+   "bone_err": 0.00385,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.004
+  },
+  "Monsters/Drelb_guardian/drelb_guardian.SKA": {
+   "bone_err": 0.00805,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00436
+  },
+  "Monsters/Earth_Elemental/EarthElemental.SKA": {
+   "bone_err": 0.01802,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01864
+  },
+  "Monsters/Efreet/Efreet.SKA": {
+   "bone_err": 0.00851,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00742
+  },
+  "Monsters/Ettin/ettin.SKA": {
+   "bone_err": 0.01383,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01417
+  },
+  "Monsters/EyeOfTheDeep/eyeOfTheDeep.SKA": {
+   "bone_err": 0.01281,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01229
+  },
+  "Monsters/Familiars/Toad/ToadFamiliar.SKA": {
+   "bone_err": 0.00086,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00087
+  },
+  "Monsters/FireToad/fireToad.SKA": {
+   "bone_err": 0.00744,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00763
+  },
+  "Monsters/Fire_Elemental/Fire_Elemental.SKA": {
+   "bone_err": 0.01056,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01048
+  },
+  "Monsters/Fire_Snake/fire_Snake.SKA": {
+   "bone_err": 0.16015,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.15971
+  },
+  "Monsters/Firebat/firebat.SKA": {
+   "bone_err": 0.00477,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00477
+  },
+  "Monsters/Fungus/Ascomid/ascomid.SKA": {
+   "bone_err": 0.00109,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00109
+  },
+  "Monsters/Fungus/Basidirond/Basidirond.SKA": {
+   "bone_err": 0.00296,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00381
+  },
+  "Monsters/Fungus/Hooting_Fungi/hooting_fungi.SKA": {
+   "bone_err": 0.00235,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00257
+  },
+  "Monsters/Fungus/Phycomid/Phycomid.SKA": {
+   "bone_err": 0.0015,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00183
+  },
+  "Monsters/Fungus/Shrieker/shrieker.SKA": {
+   "bone_err": 0.00114,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00128
+  },
+  "Monsters/Fungus/Ustilagor/Ustilagor.SKA": {
+   "bone_err": 0.00406,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00388
+  },
+  "Monsters/Fungus/Violet_Fungi/violet_fungi.SKA": {
+   "bone_err": 0.01072,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01042
+  },
+  "Monsters/Fungus/YellowMold/yellowMold.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/GalebDuhr/GalebDuhr.SKA": {
+   "bone_err": 0.00602,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00625
+  },
+  "Monsters/Gargoyle/Gargoyle.SKA": {
+   "bone_err": 0.00749,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00741
+  },
+  "Monsters/Gargoyle_Aqua/Gargoyle_Aqua.SKA": {
+   "bone_err": 0.00749,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00741
+  },
+  "Monsters/Gelatinous_cube/Gelatinous_Cube.SKA": {
+   "bone_err": 0.0022,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0022
+  },
+  "Monsters/Ghasts/Ghast_1/Ghast_1.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Ghasts/Ghast_2/Ghast_2.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Ghasts/Ghast_3/Ghast_3.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Ghouls/Ghoul_1/Ghoul_1.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Ghouls/Ghoul_2/Ghoul_2.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Ghouls/Ghoul_3/Ghoul_3.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/GiantFrog/giantfrog.ska": {
+   "bone_err": 0.00992,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01036
+  },
+  "Monsters/GiantGarFish/GiantGarFish.SKA": {
+   "bone_err": 0.00398,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00396
+  },
+  "Monsters/GiantRat/giantrat.ska": {
+   "bone_err": 0.00596,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00588
+  },
+  "Monsters/Giants/Hill_Giants/Hill_Giant_1/hill_giant_1.SKA": {
+   "bone_err": 0.00859,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00861
+  },
+  "Monsters/Giants/Hill_Giants/Hill_Giant_2/hill_giant_2.SKA": {
+   "bone_err": 0.00859,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0086
+  },
+  "Monsters/Giants/Hill_Giants/Hill_Giant_3/hill_giant_3.SKA": {
+   "bone_err": 0.00859,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00857
+  },
+  "Monsters/Giants/Hill_Giants/Hill_Giant_Scorrp/hill_giant_scorrp.SKA": {
+   "bone_err": 0.00859,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00861
+  },
+  "Monsters/Giants/Hill_Giants/Hill_Giant_Wild/hill_giant_wild.SKA": {
+   "bone_err": 0.00859,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00858
+  },
+  "Monsters/Giants/Hill_Giants/Weapons/Hill_Giant-club.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Giants/Hill_Giants/Weapons/Hill_Giant-club2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Giants/Hill_Giants/Weapons/Hill_Giant-clubSpiked.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Giants/Hill_Giants/Weapons/Hill_Giant-maul.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Giants/Hill_Giants/Weapons/Hill_Giant-rock.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Giants/Hill_Giants/Weapons/Hill_Giant-tetsubo.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Gnolls/Gnoll_Seargent/Gnoll_Seargent.ska": {
+   "bone_err": 0.00547,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00552
+  },
+  "Monsters/Gnolls/gnoll-1/Gnoll_1.ska": {
+   "bone_err": 0.00547,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00552
+  },
+  "Monsters/Gnolls/gnoll-2/Gnoll_2.ska": {
+   "bone_err": 0.00547,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00552
+  },
+  "Monsters/Gnolls/gnoll-3/Gnoll_3.ska": {
+   "bone_err": 0.00547,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00552
+  },
+  "Monsters/Gnolls/gnoll-4/Gnoll_4.ska": {
+   "bone_err": 0.00547,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00552
+  },
+  "Monsters/Gnolls/gnoll-skeleton-rags/Gnoll_skeleton_rags.ska": {
+   "bone_err": 0.00547,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00542
+  },
+  "Monsters/Gnolls/gnoll-skeleton/Gnoll_skeleton.ska": {
+   "bone_err": 0.00547,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00542
+  },
+  "Monsters/Goblins/Goblin_1/goblin_1.SKA": {
+   "bone_err": 0.00406,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00411
+  },
+  "Monsters/Goblins/Goblin_2/goblin_2.SKA": {
+   "bone_err": 0.00406,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00411
+  },
+  "Monsters/Goblins/Goblin_3/goblin_3.SKA": {
+   "bone_err": 0.00406,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00411
+  },
+  "Monsters/Goblins/Goblin_4/goblin_4.SKA": {
+   "bone_err": 0.00406,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00411
+  },
+  "Monsters/Goblins/Goblin_leader/goblin_leader.SKA": {
+   "bone_err": 0.00406,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00411
+  },
+  "Monsters/Goblins/Weapons/Longbow/goblin-Longbow.SKA": {
+   "bone_err": 0.00108,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00095
+  },
+  "Monsters/Goblins/Weapons/goblin-arrow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Goblins/Weapons/goblin-mace.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Goblins/Weapons/goblin-morningStar.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Gorgon/Gorgon.SKA": {
+   "bone_err": 0.00921,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01284
+  },
+  "Monsters/Groaning_Spirit/groaning_spirit.SKA": {
+   "bone_err": 0.00889,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00901
+  },
+  "Monsters/Grues/Chaggrin/grue_Chaggrin.SKA": {
+   "bone_err": 0.00245,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00246
+  },
+  "Monsters/Grues/Ildriss/grue_Ildriss.SKA": {
+   "bone_err": 0.00282,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00244
+  },
+  "Monsters/Harpy/Harpy.SKA": {
+   "bone_err": 0.01884,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01884
+  },
+  "Monsters/Hobgoblins/Hobgoblin_1/hobgoblin_1.SKA": {
+   "bone_err": 0.00467,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00465
+  },
+  "Monsters/Hobgoblins/Hobgoblin_2/hobgoblin_2.SKA": {
+   "bone_err": 0.00467,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00465
+  },
+  "Monsters/Hydra/Hydra.SKA": {
+   "bone_err": 0.01679,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01635
+  },
+  "Monsters/Icelizard/icelizard.ska": {
+   "bone_err": 0.03602,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.03602
+  },
+  "Monsters/Jackalwere/Jackalwere.SKA": {
+   "bone_err": 0.00642,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00644
+  },
+  "Monsters/Juggernaut/Juggernaut.SKA": {
+   "bone_err": 0.00652,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00654
+  },
+  "Monsters/Juggernaut/Juggernaut_Statue/Juggernaut_statue.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Komodo/komodo.ska": {
+   "bone_err": 0.00415,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00427
+  },
+  "Monsters/Kritch/kritch.ska": {
+   "bone_err": 0.02771,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.02753
+  },
+  "Monsters/Lacedons/Lacedon_1/Lacedon_1.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Lacedons/Lacedon_2/Lacedon_2.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Lacedons/Lacedon_3/Lacedon_3.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Lamia/Lamia.SKA": {
+   "bone_err": 0.00559,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00568
+  },
+  "Monsters/Lamia_T/Lamia_T.SKA": {
+   "bone_err": 0.00559,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00568
+  },
+  "Monsters/Lamia_T/lamia_toy.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Leucrotta/Leucrotta.SKA": {
+   "bone_err": 0.01057,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01047
+  },
+  "Monsters/Lizardman/Lizardman_Large-armor/Lizardman_Large-armor.SKA": {
+   "bone_err": 0.00612,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00617
+  },
+  "Monsters/Lizardman/Lizardman_Large/Lizardman_Large.SKA": {
+   "bone_err": 0.00612,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00617
+  },
+  "Monsters/Lizardman/Lizardman_Small-armor/Lizardman_Small-armor.SKA": {
+   "bone_err": 0.00612,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00615
+  },
+  "Monsters/Lizardman/Lizardman_Small/Lizardman_Small.SKA": {
+   "bone_err": 0.00612,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00615
+  },
+  "Monsters/Lubash/lubash.ska": {
+   "bone_err": 0.01231,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01564
+  },
+  "Monsters/Merrow/merrow.ska": {
+   "bone_err": 0.01231,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01564
+  },
+  "Monsters/Minotaur/Minotaur.SKA": {
+   "bone_err": 0.00993,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01009
+  },
+  "Monsters/Minotaur/Minotaur_Stone/Minotaur_stone.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Ogre_Revised/Ogre_Chieftan/Ogre_Chieftan.SKA": {
+   "bone_err": 0.01269,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01269
+  },
+  "Monsters/Ogre_Revised/Ogre_Grunt/Ogre_Grunt.SKA": {
+   "bone_err": 0.01269,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01269
+  },
+  "Monsters/Ogre_Revised/Ogre_Shaman/Ogre_Shaman.SKA": {
+   "bone_err": 0.01269,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01269
+  },
+  "Monsters/Ogre_Revised/Ogre_Water/Ogre_Water.SKA": {
+   "bone_err": 0.01269,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01269
+  },
+  "Monsters/OwlBear/owlbear.ska": {
+   "bone_err": 0.0112,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01157
+  },
+  "Monsters/Pigs/Pig-Brown/Pig-Brown.SKA": {
+   "bone_err": 0.00302,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00365
+  },
+  "Monsters/Pigs/Pig-Pink/Pig-Pink.SKA": {
+   "bone_err": 0.00302,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00365
+  },
+  "Monsters/Salamander/salamander.ska": {
+   "bone_err": 0.02034,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01876
+  },
+  "Monsters/SeaHag/seaHag.SKA": {
+   "bone_err": 0.007,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00717
+  },
+  "Monsters/Sheep/Sheep-Black/Sheep-Black.SKA": {
+   "bone_err": 0.00346,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00354
+  },
+  "Monsters/Sheep/Sheep-White/Sheep-White.SKA": {
+   "bone_err": 0.00346,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00354
+  },
+  "Monsters/Skeleton/skeleton.ska": {
+   "bone_err": 0.00945,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00606
+  },
+  "Monsters/Slimes/BlackPudding/blackPudding.SKA": {
+   "bone_err": 0.00173,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Slimes/CrystalOoze/crystalOoze.SKA": {
+   "bone_err": 0.00173,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Slimes/GrayOoze/grayOoze.SKA": {
+   "bone_err": 0.00173,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Slimes/GreenSlime/slime.SKA": {
+   "bone_err": 0.00173,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Slimes/OchreJelly/OchreJelly.SKA": {
+   "bone_err": 0.00173,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Monsters/Stirge/stirge.SKA": {
+   "bone_err": 0.00477,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00477
+  },
+  "Monsters/Troll/Troll.SKA": {
+   "bone_err": 0.01054,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01073
+  },
+  "Monsters/UmberHulk_Revised/Umberhulk_revised.SKA": {
+   "bone_err": 0.01327,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01337
+  },
+  "Monsters/Umberhulk/Umberhulk.SKA": {
+   "bone_err": 0.02095,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.02096
+  },
+  "Monsters/Vodyani/Vodyani.SKA": {
+   "bone_err": 0.02095,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.02096
+  },
+  "Monsters/Vodyani_revised/Vodyani_revised.SKA": {
+   "bone_err": 0.01408,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01407
+  },
+  "Monsters/Vortex/Vortex.SKA": {
+   "bone_err": 0.00787,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00107
+  },
+  "Monsters/Water_Elemental/Water_Elemental.SKA": {
+   "bone_err": 0.011,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Monsters/Water_Snake/water_Snake.SKA": {
+   "bone_err": 0.16015,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.15971
+  },
+  "Monsters/WilloWisp/WilloWisp.SKA": {
+   "bone_err": 0.00162,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00162
+  },
+  "Monsters/Zombies/Zombie_1/Zombie_1.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Zombies/Zombie_2/Zombie_2.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Zombies/Zombie_3/Zombie_3.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Zombies/Zombie_4/Zombie_4.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Zombies/Zombie_5/Zombie_5.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Zombies/Zombie_6/Zombie_6.SKA": {
+   "bone_err": 0.00472,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00475
+  },
+  "Monsters/Zuggtmoy/zuggtmoy.SKA": {
+   "bone_err": 0.04981,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.05062
+  },
+  "Monsters/giantSnake/giantSnake.SKA": {
+   "bone_err": 0.16015,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.15971
+  },
+  "Monsters/hugeSpider/hugeSpider.ska": {
+   "bone_err": 0.01179,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00749
+  },
+  "Monsters/vaporRat/vaporrat.ska": {
+   "bone_err": 0.00596,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00588
+  },
+  "NPCs/Brother_Smith/NPC_Brother_Smith.SKA": {
+   "bone_err": 0.00655,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00659
+  },
+  "NPCs/Elmo/NPC_Elmo.SKA": {
+   "bone_err": 0.00945,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00594
+  },
+  "PCs/PC_Dwarf_Female/pc_Dwarf_female.ska": {
+   "bone_err": 0.00441,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00445
+  },
+  "PCs/PC_Dwarf_Male/PC_Dwarf_Male.SKA": {
+   "bone_err": 0.00491,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00528
+  },
+  "PCs/PC_Halforc_Female/PC_halforc_female.ska": {
+   "bone_err": 0.00879,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0055
+  },
+  "PCs/PC_Halforc_Male/pc_halforc_male.ska": {
+   "bone_err": 0.00956,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00599
+  },
+  "PCs/PC_Human_Female/PC_Human_Female.SKA": {
+   "bone_err": 0.00879,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00529
+  },
+  "PCs/PC_Human_Male/PC_Human_Male.ska": {
+   "bone_err": 0.00934,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00584
+  },
+  "PCs/ViewerReadyPC's/Dwarf_Female/pc_Dwarf_female.ska": {
+   "bone_err": 0.0062,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00626
+  },
+  "PCs/ViewerReadyPC's/Dwarf_Male/PC_Dwarf_Male.SKA": {
+   "bone_err": 0.00443,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00421
+  },
+  "PCs/ViewerReadyPC's/HalfOrc_Female/PC_halforc_female.ska": {
+   "bone_err": 0.00879,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00537
+  },
+  "PCs/ViewerReadyPC's/HalfOrc_Male/pc_halforc_male.ska": {
+   "bone_err": 0.00956,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00599
+  },
+  "PCs/ViewerReadyPC's/Human_Female/PC_Human_Female.SKA": {
+   "bone_err": 0.00879,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00529
+  },
+  "PCs/ViewerReadyPC's/Human_Male/PC_Human_Male.ska": {
+   "bone_err": 0.00945,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00594
+  },
+  "Particle/AcidArrow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00025
+  },
+  "Particle/Chaos-Hammer.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/DungeonBug.SKA": {
+   "bone_err": 2e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 2e-05
+  },
+  "Particle/Golden_orb_of_death_item.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/GrassBlowin.SKA": {
+   "bone_err": 0.0019,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00209
+  },
+  "Particle/MM-Candle-02.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/MM-Candle-03.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/MM-Candle-04.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/MM-Candle-05.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/MM-Candle.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/MinorGlobe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/Shard.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00052
+  },
+  "Particle/WeedBlowin.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/bullstrength.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/butterfly.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Particle/oakleaf.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/rock_large.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/rock_medium.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/rock_small.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/rock_tiny.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Particle/shard-breaking.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "known",
+   "vert_err": 2.89784
+  },
+  "Particle/test.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "known",
+   "vert_err": 0.0
+  },
+  "Particle/tree.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Rings/ring_gnome.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Containers/Earth_Temple_Altar.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Containers/Ivory_Chest.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00158
+  },
+  "Scenery/Containers/Lareths_dresser.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Containers/Small_gold.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00153
+  },
+  "Scenery/Containers/TreasureChest.ska": {
+   "bone_err": 0.00108,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00124
+  },
+  "Scenery/Containers/anvil.SKA": {
+   "bone_err": 0.0006,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0006
+  },
+  "Scenery/Containers/barrel.SKA": {
+   "bone_err": 0.0017,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00165
+  },
+  "Scenery/Containers/book.SKA": {
+   "bone_err": 0.00198,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00198
+  },
+  "Scenery/Containers/crappy_footlocker.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0021
+  },
+  "Scenery/Containers/generic.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00206
+  },
+  "Scenery/Containers/giant.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00325
+  },
+  "Scenery/Containers/nice.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Containers/rainbow_rock.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Scenery/Containers/well.SKA": {
+   "bone_err": 0.00013,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00672
+  },
+  "Scenery/Foliage/Bush1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/Bush2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/Cypress_tree.SKA": {
+   "bone_err": 0.00226,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00226
+  },
+  "Scenery/Foliage/Fern.SKA": {
+   "bone_err": 0.00166,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00166
+  },
+  "Scenery/Foliage/Grass1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/RTweed.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/SmallTree1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/SwampTree-1.ska": {
+   "bone_err": 0.02106,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.02106
+  },
+  "Scenery/Foliage/Temple-Bush1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/ToEE_HommletTree_02.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/ToEE_HommletTree_03.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/cabbage.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/corn.SKA": {
+   "bone_err": 0.00613,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00639
+  },
+  "Scenery/Foliage/corn_a.SKA": {
+   "bone_err": 0.00576,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00705
+  },
+  "Scenery/Foliage/corn_patch.SKA": {
+   "bone_err": 0.0067,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00745
+  },
+  "Scenery/Foliage/corn_patch_a.SKA": {
+   "bone_err": 0.00655,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00796
+  },
+  "Scenery/Foliage/deklo_tree.SKA": {
+   "bone_err": 0.0029,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0029
+  },
+  "Scenery/Foliage/deklobush.SKA": {
+   "bone_err": 0.00411,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00419
+  },
+  "Scenery/Foliage/deklograss.SKA": {
+   "bone_err": 0.00355,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00368
+  },
+  "Scenery/Foliage/hommlet_tree.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/jaroos_tree.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/nulb_bush.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/nulbtree.SKA": {
+   "bone_err": 0.00226,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00226
+  },
+  "Scenery/Foliage/oaktree-1.ska": {
+   "bone_err": 0.01943,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01943
+  },
+  "Scenery/Foliage/pumpkin.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/temple_small_bush.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/templebush.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/templebush01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/tree1.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "known",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/usk_tree.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Foliage/usk_tree01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Colosseum_cheer1.SKA": {
+   "bone_err": 0.00205,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00204
+  },
+  "Scenery/Misc/Colosseum_cheer2.SKA": {
+   "bone_err": 0.00206,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00214
+  },
+  "Scenery/Misc/Colosseum_cheer3.SKA": {
+   "bone_err": 0.0038,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00378
+  },
+  "Scenery/Misc/Colosseum_cheer4.SKA": {
+   "bone_err": 0.0016,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00162
+  },
+  "Scenery/Misc/Floor_Dropping.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Fog.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/GuestBook.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Main Menu/Gargoyle-Climb2Dive.SKA": {
+   "bone_err": 0.04236,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.04237
+  },
+  "Scenery/Misc/Main Menu/Gargoyle-Climb2Fly.SKA": {
+   "bone_err": 0.03906,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.03906
+  },
+  "Scenery/Misc/Main Menu/Gargoyle-ClimbFromBottom.SKA": {
+   "bone_err": 0.01152,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01209
+  },
+  "Scenery/Misc/Main Menu/Gargoyle-ClimbFromTop.SKA": {
+   "bone_err": 0.05162,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0516
+  },
+  "Scenery/Misc/Main Menu/MM-TestPiece.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Main Menu/MM-Window-01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Main Menu/MM-Window-02.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Main Menu/MM-Window-03.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Main Menu/MM-Window-04.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Main Menu/MM-Window-05.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Main Menu/MM-Window-06.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Mill_Wheel.ska": {
+   "bone_err": 0.00038,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.02098
+  },
+  "Scenery/Misc/Minotaur_stone.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Platinum_Pillar/Platinum_Pillar.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Real_Time_Sign#13.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/SIGN_#14.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/TI_throne.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Zugg_throne.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/Zugg_throne_encrusted.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/beholder.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/dragon.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/dwarf_male_dead.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/female_dead.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node02.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node03.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node04.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node04a.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node05.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node05a.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node06.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node07.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node07a.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node07b.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node08.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node09.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node10.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node11.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node12.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node12a.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node13.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node14.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node15.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node16.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node16a.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node17.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node18.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node19.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node20.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node21.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node22.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node23.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/fire_node24.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/firegiant.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/goblin_01_dead.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/goblin_02_dead.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/goblin_03_dead.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/male_dead.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/manticore.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/medusa.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": false,
+   "status": "fail",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/mirror.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/mummy.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/rakshasa.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/sign_#10.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0026
+  },
+  "Scenery/Misc/sign_#15.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/sign_#16.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/sign_#28.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/sign_#7.SKA": {
+   "bone_err": 0.00589,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01071
+  },
+  "Scenery/Misc/sign_#8.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/sign_#9.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Misc/wight.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/11_int06.SKA": {
+   "bone_err": 0.00085,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00091
+  },
+  "Scenery/Portals/11_int06a.SKA": {
+   "bone_err": 0.00084,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00091
+  },
+  "Scenery/Portals/11_int09.SKA": {
+   "bone_err": 0.00103,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0011
+  },
+  "Scenery/Portals/12_104.SKA": {
+   "bone_err": 0.00057,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0006
+  },
+  "Scenery/Portals/12_104a.SKA": {
+   "bone_err": 0.00059,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00061
+  },
+  "Scenery/Portals/12_106.SKA": {
+   "bone_err": 0.00119,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00123
+  },
+  "Scenery/Portals/12_107s.SKA": {
+   "bone_err": 0.00117,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00057
+  },
+  "Scenery/Portals/12_115.SKA": {
+   "bone_err": 0.00092,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.001
+  },
+  "Scenery/Portals/12_123s.SKA": {
+   "bone_err": 0.00446,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00446
+  },
+  "Scenery/Portals/12_126.SKA": {
+   "bone_err": 0.00086,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00089
+  },
+  "Scenery/Portals/12_126a.SKA": {
+   "bone_err": 0.00084,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00087
+  },
+  "Scenery/Portals/12_128.SKA": {
+   "bone_err": 0.00125,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0013
+  },
+  "Scenery/Portals/12_132s.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Scenery/Portals/12_139.SKA": {
+   "bone_err": 0.00117,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00121
+  },
+  "Scenery/Portals/12_147.SKA": {
+   "bone_err": 0.00101,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00104
+  },
+  "Scenery/Portals/12_149.SKA": {
+   "bone_err": 0.00101,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00104
+  },
+  "Scenery/Portals/12_150.SKA": {
+   "bone_err": 0.00101,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00105
+  },
+  "Scenery/Portals/12_152.SKA": {
+   "bone_err": 0.00096,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.001
+  },
+  "Scenery/Portals/13_201.SKA": {
+   "bone_err": 3e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 3e-05
+  },
+  "Scenery/Portals/13_203.SKA": {
+   "bone_err": 0.0009,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00093
+  },
+  "Scenery/Portals/13_204.SKA": {
+   "bone_err": 0.00099,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00105
+  },
+  "Scenery/Portals/13_204a.SKA": {
+   "bone_err": 0.00099,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00105
+  },
+  "Scenery/Portals/13_205.SKA": {
+   "bone_err": 0.0009,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00094
+  },
+  "Scenery/Portals/13_206.SKA": {
+   "bone_err": 0.00097,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00102
+  },
+  "Scenery/Portals/13_207.SKA": {
+   "bone_err": 0.00343,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00343
+  },
+  "Scenery/Portals/13_207a.SKA": {
+   "bone_err": 0.00309,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00309
+  },
+  "Scenery/Portals/13_208s.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/13_209.SKA": {
+   "bone_err": 0.00116,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00123
+  },
+  "Scenery/Portals/13_209a.SKA": {
+   "bone_err": 0.00216,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00216
+  },
+  "Scenery/Portals/13_209a_s.SKA": {
+   "bone_err": 0.00358,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00358
+  },
+  "Scenery/Portals/13_210.SKA": {
+   "bone_err": 0.00249,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00249
+  },
+  "Scenery/Portals/13_210a.SKA": {
+   "bone_err": 0.00249,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00249
+  },
+  "Scenery/Portals/13_210b.SKA": {
+   "bone_err": 0.00249,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00249
+  },
+  "Scenery/Portals/13_210c.SKA": {
+   "bone_err": 0.00249,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00249
+  },
+  "Scenery/Portals/13_210s.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/13_210s_a.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/13_212.SKA": {
+   "bone_err": 0.00101,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00107
+  },
+  "Scenery/Portals/13_212a.SKA": {
+   "bone_err": 0.00098,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00105
+  },
+  "Scenery/Portals/13_213.SKA": {
+   "bone_err": 0.00295,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00295
+  },
+  "Scenery/Portals/13_213a.SKA": {
+   "bone_err": 0.00295,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00295
+  },
+  "Scenery/Portals/13_215.SKA": {
+   "bone_err": 0.00088,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00116
+  },
+  "Scenery/Portals/13_215a.SKA": {
+   "bone_err": 0.00047,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00065
+  },
+  "Scenery/Portals/13_216.SKA": {
+   "bone_err": 0.00129,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00134
+  },
+  "Scenery/Portals/13_216a.SKA": {
+   "bone_err": 0.0023,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0023
+  },
+  "Scenery/Portals/13_220.SKA": {
+   "bone_err": 0.00312,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00312
+  },
+  "Scenery/Portals/13_222.SKA": {
+   "bone_err": 0.00105,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00111
+  },
+  "Scenery/Portals/13_222a.SKA": {
+   "bone_err": 0.00102,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00108
+  },
+  "Scenery/Portals/13_223.SKA": {
+   "bone_err": 0.00096,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00104
+  },
+  "Scenery/Portals/13_223_hallway.SKA": {
+   "bone_err": 0.00464,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00464
+  },
+  "Scenery/Portals/13_223s.SKA": {
+   "bone_err": 0.00103,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00108
+  },
+  "Scenery/Portals/13_223s_01.SKA": {
+   "bone_err": 0.00103,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00108
+  },
+  "Scenery/Portals/13_224.SKA": {
+   "bone_err": 0.00172,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00172
+  },
+  "Scenery/Portals/13_225.SKA": {
+   "bone_err": 0.00362,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00371
+  },
+  "Scenery/Portals/13_225s.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/13_243s.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Scenery/Portals/13_244.SKA": {
+   "bone_err": 0.00088,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00092
+  },
+  "Scenery/Portals/13_245.SKA": {
+   "bone_err": 0.00095,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00099
+  },
+  "Scenery/Portals/13_245s.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Scenery/Portals/14_301.SKA": {
+   "bone_err": 0.00103,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00108
+  },
+  "Scenery/Portals/14_304.SKA": {
+   "bone_err": 0.00127,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00133
+  },
+  "Scenery/Portals/14_306.SKA": {
+   "bone_err": 0.00183,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00183
+  },
+  "Scenery/Portals/14_308s.SKA": {
+   "bone_err": 0.00152,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00152
+  },
+  "Scenery/Portals/14_312.SKA": {
+   "bone_err": 0.0015,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00156
+  },
+  "Scenery/Portals/14_312a.SKA": {
+   "bone_err": 0.00101,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00105
+  },
+  "Scenery/Portals/14_313.SKA": {
+   "bone_err": 2e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 2e-05
+  },
+  "Scenery/Portals/14_318.SKA": {
+   "bone_err": 0.00286,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00286
+  },
+  "Scenery/Portals/14_319.SKA": {
+   "bone_err": 0.00105,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00111
+  },
+  "Scenery/Portals/14_319s.SKA": {
+   "bone_err": 0.00104,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00108
+  },
+  "Scenery/Portals/14_325.SKA": {
+   "bone_err": 0.00101,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00105
+  },
+  "Scenery/Portals/14_328a.SKA": {
+   "bone_err": 0.00097,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00102
+  },
+  "Scenery/Portals/14_328s.SKA": {
+   "bone_err": 0.00097,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00102
+  },
+  "Scenery/Portals/14_334.SKA": {
+   "bone_err": 2e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 2e-05
+  },
+  "Scenery/Portals/14_334s.SKA": {
+   "bone_err": 0.00165,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00168
+  },
+  "Scenery/Portals/14_336.SKA": {
+   "bone_err": 0.00105,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0011
+  },
+  "Scenery/Portals/14_337.SKA": {
+   "bone_err": 0.01028,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.01028
+  },
+  "Scenery/Portals/14_338s.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/14_340s.SKA": {
+   "bone_err": 3e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 3e-05
+  },
+  "Scenery/Portals/14_343_curtain01.SKA": {
+   "bone_err": 64.61149,
+   "skm_identical": true,
+   "status": "known",
+   "vert_err": 0.00501
+  },
+  "Scenery/Portals/14_347.SKA": {
+   "bone_err": 0.00104,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00108
+  },
+  "Scenery/Portals/14_348a.SKA": {
+   "bone_err": 0.00093,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00097
+  },
+  "Scenery/Portals/14_348s.SKA": {
+   "bone_err": 5e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 5e-05
+  },
+  "Scenery/Portals/14_351s.SKA": {
+   "bone_err": 0.00257,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00267
+  },
+  "Scenery/Portals/14_stairs.SKA": {
+   "bone_err": 0.00088,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00094
+  },
+  "Scenery/Portals/14_stairs01.SKA": {
+   "bone_err": 0.00088,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00094
+  },
+  "Scenery/Portals/15_402s.SKA": {
+   "bone_err": 1e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 1e-05
+  },
+  "Scenery/Portals/15_403c.SKA": {
+   "bone_err": 0.00298,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00298
+  },
+  "Scenery/Portals/15_403s.SKA": {
+   "bone_err": 0.00147,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00153
+  },
+  "Scenery/Portals/15_405.SKA": {
+   "bone_err": 0.00183,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00197
+  },
+  "Scenery/Portals/15_412s.SKA": {
+   "bone_err": 2e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 2e-05
+  },
+  "Scenery/Portals/15_413.SKA": {
+   "bone_err": 0.00183,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00197
+  },
+  "Scenery/Portals/15_416s.SKA": {
+   "bone_err": 2e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 2e-05
+  },
+  "Scenery/Portals/15_417.SKA": {
+   "bone_err": 0.00145,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00145
+  },
+  "Scenery/Portals/15_417a.SKA": {
+   "bone_err": 0.00145,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00145
+  },
+  "Scenery/Portals/8_24s.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/8_31s.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/Door-Test.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/Enter-Door.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/Ladder-Down.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/Ladder-Up.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/Stairs-Down.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/Stairs-Up.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/cn_large.SKA": {
+   "bone_err": 0.0013,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00136
+  },
+  "Scenery/Portals/cn_small.SKA": {
+   "bone_err": 0.0027,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00271
+  },
+  "Scenery/Portals/first_door.SKA": {
+   "bone_err": 0.00237,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00275
+  },
+  "Scenery/Portals/moathouse01.SKA": {
+   "bone_err": 0.0006,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00073
+  },
+  "Scenery/Portals/moathouse02.SKA": {
+   "bone_err": 0.00058,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00066
+  },
+  "Scenery/Portals/moathouse03.SKA": {
+   "bone_err": 0.0005,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0006
+  },
+  "Scenery/Portals/moathouse04.SKA": {
+   "bone_err": 0.00063,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.002
+  },
+  "Scenery/Portals/moathouse05.SKA": {
+   "bone_err": 0.00055,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00059
+  },
+  "Scenery/Portals/moathouse06.SKA": {
+   "bone_err": 0.00265,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00265
+  },
+  "Scenery/Portals/moathouse07.SKA": {
+   "bone_err": 0.00151,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00157
+  },
+  "Scenery/Portals/moathouse08.SKA": {
+   "bone_err": 0.00087,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00092
+  },
+  "Scenery/Portals/moathouse_secret.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Portals/ruins01.SKA": {
+   "bone_err": 0.00075,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00078
+  },
+  "Scenery/Portals/ruins02.SKA": {
+   "bone_err": 0.00171,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0017
+  },
+  "Scenery/Portals/ruins03.SKA": {
+   "bone_err": 0.00171,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0017
+  },
+  "Scenery/Portals/ruins04.SKA": {
+   "bone_err": 0.00087,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00092
+  },
+  "Scenery/Portals/tutorial.SKA": {
+   "bone_err": 0.00313,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00315
+  },
+  "Scenery/Secret_Doors/SecretDoor.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Secret_Doors/SparklesTest.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Secret_Doors/WallTest.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Cistern_Chamber.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Hommlet_River_01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Hommlet_River_02.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Hommlet_River_03.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Hommlet_River_04.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Lava.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/MD_water.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Moathouse-Ext-pool2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Moathouse-Ext-pool3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Moathouse-Ext-pool4.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/Moathouse_swamp_water.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/NulbWater.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/air_node.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/imreydis_run_water.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/moat.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/moathouse-ext-pool1.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/riverside.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/swamp_water.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Scenery/Water/water_node.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/Gnoll_Shield1.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/Gnoll_Shield2.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/Gnoll_Shield3.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/Gnoll_Shield4.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/Gnoll_Shield_Battered.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/PC_shield_buckler.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": false,
+   "status": "skip",
+   "vert_err": 0.0
+  },
+  "Shields/Shield_SM_Squire1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/Shield_Tower_metal1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/Shield_Tower_metal2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/lizardman_shield.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_RND_metal1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_RND_metal2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_RND_wood1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_RND_wood2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_RND_wood3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_knight1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_knight2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_knight3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_knight4.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_norman1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_norman2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_orcish_metal.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_LG_orcish_wood.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_SM_RND_metal1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_SM_RND_metal2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_SM_RND_wood1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_buckler1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_sm_elven1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Shields/shield_tower_wood.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Spiritual_Weapon_Man/Spiritual_Weapon_Man.SKA": {
+   "bone_err": 0.00655,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00188
+  },
+  "TempMan/TempMan.ska": {
+   "bone_err": 0.00934,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00584
+  },
+  "Weapons/Arrow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Bastard_sword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Club.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/CrossBow_Heavy.SKA": {
+   "bone_err": 8e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00012
+  },
+  "Weapons/CrossBow_Light.SKA": {
+   "bone_err": 8e-05,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 8e-05
+  },
+  "Weapons/Dagger1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Dagger1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Dagger_Fancy.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Dagger_Nice.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Dagger_Throwing.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/DoubleAxe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/DoubleAxe_magic.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/DwarvenWarAxe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Flail_Heavy.SKA": {
+   "bone_err": 0.00544,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00555
+  },
+  "Weapons/GreatAxe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/GreatAxe2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/GreatClub.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Greathammer1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Greathammer2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Greatsword_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/HeavyMace.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/HeavyPick.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Lamia_sword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Long_sword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Longbow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Maul.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Morningstar.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Nimbus.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Ogre_Shaman_Club.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/PC_GreatAxe2_Flaming.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Quarrel_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Quiver_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Scythe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Shuriken.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Singleaxe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sling.SKA": {
+   "bone_err": 0.00094,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.00093
+  },
+  "Weapons/Spiked_Chain.SKA": {
+   "bone_err": 0.02328,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.02033
+  },
+  "Weapons/Spiritual_weapons/Spirit_Greatsword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_Longbow.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_Morningstar.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_Scythe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_Warhammer.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_battleaxe_blue.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_battleaxe_red.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_dagger.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_heavymace.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_longsword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_rapier.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_shortsword.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_spear.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Spiritual_weapons/Spirit_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword4.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword5.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/SwordTest.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_2-Handed1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_2-Handed1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_2-Handed2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_2-Handed3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Barbarian1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Barbarian1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Bastard1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Bastard2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Bastard3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Celtic1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Celtic1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Cutlass1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Cutlass1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Egyptian1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Egyptian1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Excalibur1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Falchion1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Falchion1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Fantasy1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Fantasy1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Fantasy2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Fantasy2_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Fantasy3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Fantasy4.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Katana1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Katana2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Longsword1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Longsword1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Longsword2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Longsword2_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Longsword3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Longsword3_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Rapier1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Rapier1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Roman1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Roman1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Scimitar1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Scimitar1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Scimitar2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Scimitar3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Short1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Sword_Short1_rusty.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Troll-MilitaryFork.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Warhammer1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Warhammer_gnome_01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Warhammer_light_01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Warhammer_nice_01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Warhammer_nice_02.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Warhammer_nice_03.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/Warhammer_rusty_01.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/cleaver.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/darkblade.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/dart.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/flametongue.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/fragarach.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/frosttongue.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/glaive_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/gnoll_axe_double.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/gnoll_axe_single.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/gnoll_heavy_mace.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/gnoll_morningstar.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/gnoll_sword_short.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/guisarme_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/halberd_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/halfspear_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/handaxe.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/javelin_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/lizardman_bigclub.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/lizardman_club.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/longspear_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/mace.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/quiver-arrows.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/quiver-bolts.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/ranseur_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/scather.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/shortspear_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/spear_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/spear_2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/spear_3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/spear_4.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/staff_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/staff_2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/staff_3.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/staff_4.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/staff_5.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/staff_6.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/sword_short.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/trident_1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "Weapons/warhammer2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "cloaks/PC_black_cloak_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "cloaks/PC_blue_cloak_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "cloaks/PC_eye_cloak_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "cloaks/PC_green_cloak_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "cloaks/PC_red_cloak_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "cloaks/PC_white_cloak_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "player/walker.ska": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "known",
+   "vert_err": 0.0
+  },
+  "robes/Air_temple/robe_ivory_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/Earth_temple/robe_earth_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/Fire_temple/robe_fire_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/Greater_temple/robe_greater_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/Water_temple/robe_water_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/Wizard_blue/robe_wizardblue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_blue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_monk_black_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_monk_blue_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_monk_brown_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_monk_orange_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_monk_red_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_monk_white_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "robes/robe_senshock_ground.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/blue_crystal_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/blue_gem_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/gnarly_dark_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/gnarly_light_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/green_gem_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/lightning_wand.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/might_rod.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/missle_wand.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/orb_wand_blue.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/orb_wand_green.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/orb_wand_red.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/red_crystal_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/red_gem_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/rod1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/skull_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/twig_wand.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/viper_rod.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/wand1.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/wand2.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  },
+  "wands/white_staff.SKA": {
+   "bone_err": 0.0,
+   "skm_identical": true,
+   "status": "pass",
+   "vert_err": 0.0
+  }
+ },
+ "thresholds": {
+  "bone_err": 0.25,
+  "skm_vert": 1e-05,
+  "skm_wi": 1e-05,
+  "vert_err": 0.25
+ }
+}
