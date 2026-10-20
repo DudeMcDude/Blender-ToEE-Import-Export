@@ -49,6 +49,12 @@ class SkaExport(bpy.types.Operator, ExportHelper):
                         "is dropped; data is written in rig-local ToEE space)",
             default=True,
             )
+    write_mdf: BoolProperty(
+            name="Write MDFs for new materials",
+            description="For slots whose material was made in Blender (not imported from an MDF) and whose "
+                        ".mdf file does not exist yet under the data dir, write a Textured MDF from its first image texture",
+            default=False,
+            )
     auto_fix: BoolProperty(
             name="Auto-fix (temporary copy)",
             description="Triangulate non-triangle faces and limit weights to 6 per vertex (dropping zero weights, "
@@ -108,6 +114,12 @@ class SkmExport(bpy.types.Operator, ExportHelper):
             )
     
     filepath: bpy.props.StringProperty(subtype="FILE_PATH")
+    write_mdf: BoolProperty(
+            name="Write MDFs for new materials",
+            description="For slots whose material was made in Blender (not imported from an MDF) and whose "
+                        ".mdf file does not exist yet under the data dir, write a Textured MDF from its first image texture",
+            default=False,
+            )
     auto_fix: BoolProperty(
             name="Auto-fix (temporary copy)",
             description="Triangulate non-triangle faces and limit weights to 6 per vertex (dropping zero weights, "

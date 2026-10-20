@@ -129,10 +129,8 @@ def check_skm(mesh_obj, rig, auto_fix=False):
         r.error('NO_UV', "mesh '%s' has no UV map" % me.name)
 
     # materials
-    stored = list(me.get("toee_materials", []))
-    names = []
-    for i, m in enumerate(me.materials):
-        names.append(stored[i] if i < len(stored) else (m.name if m else ""))
+    from .materials import skm_material_names
+    names = skm_material_names(me)
     if not names:
         r.error('NO_MATERIAL', "mesh has no material slots (SKM needs at least one MDF material)")
     for i, n in enumerate(names):
@@ -140,7 +138,7 @@ def check_skm(mesh_obj, rig, auto_fix=False):
             r.error('EMPTY_MATERIAL_SLOT', "material slot %d is empty" % i)
         elif _nbytes(n) > MATERIAL_NAME:
             r.error('MATERIAL_NAME_LONG', "material %d name is %d bytes, max %d (MeshMaterial.id char[128])" % (i, _nbytes(n), MATERIAL_NAME))
-        elif not n.lower().endswith('.mdf') and n.upper() not in PLACEHOLDER_MATERIALS:
+        elif not n.lower().endswith('.mdf') and n not in PLACEHOLDER_MATERIALS:
             r.warn('MATERIAL_NOT_MDF', "material %d '%s' is neither an .mdf path nor a body placeholder (%s)" % (
                 i, n, "/".join(sorted(PLACEHOLDER_MATERIALS))))
     if names:

@@ -3,7 +3,8 @@ import os
 import time
 
 import bpy
-from . import anim_compat, ska_events
+from . import anim_compat
+from . import materials, ska_events
 import mathutils
 from mathutils import Vector, Quaternion
 
@@ -302,16 +303,12 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
         mdf_path = mm.id.name  # path relative to data_dir (that's how ToEE rolls)
         material_name = mdf_path
 
-        contextMaterial = bpy.data.materials.new(material_name) # material_name.rstrip()
-        anim_compat.enable_material_nodes(contextMaterial)
-
-        context_mat_wrap = node_shader_utils.PrincipledBSDFWrapper(contextMaterial, is_readonly=False)
-
+        if material_name in MATDICT:
+            continue
+        # MDF -> node material (stages, blend, color, UV anim), HEAD/CHEST/... -> placeholder
+        contextMaterial = materials.material_for_slot(material_name, ToEE_data_dir)
         print("Registering material: %s" % material_name)
         MATDICT[material_name] = contextMaterial
-        WRAPDICT[contextMaterial] = context_mat_wrap
-        
-        mdf_resolve(mdf_path)
 
     # Create Mesh object
     progress.step("Creating Mesh...")

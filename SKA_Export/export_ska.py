@@ -1,7 +1,8 @@
 import struct
 import os
 import bpy
-from . import anim_compat, ska_events, validate
+from . import anim_compat
+from . import materials, ska_events, validate
 import mathutils    
 from bpy_extras import io_utils, node_shader_utils
 import time
@@ -72,7 +73,8 @@ def mat_to_mdf_file(mat_wrap, mdf_file_path):
     
 
 
-def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False):
+def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False, mdf_data_dir=None):
+    MDF_DATA_DIR = mdf_data_dir
     """me: mesh data to write instead of mesh.data (e.g. a temporary triangulated copy);
     weight_fix: drop zero weights, keep the 6 largest, renormalize (validate.fix_weights)."""
     me_src = me if me is not None else mesh.data
@@ -235,15 +237,20 @@ def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False):
     # BOOTS, HEAD, GLOVES), falling back to the Blender material name.
     me = me_src
     stored = list(me.get("toee_materials", []))
-    for slot_idx, mm in enumerate(me.materials):
-        material_name = stored[slot_idx] if slot_idx < len(stored) else (mm.name if mm else "")
+    raws = list(me.get("toee_materials_raw", []))
+    for slot_idx, (mm, material_name) in enumerate(zip(me.materials, materials.skm_material_names(me))):
         skm_mat = material_to_skm_mat(None, material_name)
-        raws = list(me.get("toee_materials_raw", []))
-        if slot_idx < len(stored) and slot_idx < len(raws) and raws[slot_idx]:
-            skm_mat.id.raw = bytes.fromhex(raws[slot_idx])  # used only while the name is unchanged
-        if WRITE_MDF and mm is not None and material_name.lower().endswith('.mdf') and anim_compat.material_uses_nodes(mm):
-            mat_wrap = node_shader_utils.PrincipledBSDFWrapper(mm, is_readonly=False)
-            mat_to_mdf_file(mat_wrap, skm_mat.id)
+        if slot_idx < len(stored) and slot_idx < len(raws) and raws[slot_idx] and stored[slot_idx] == material_name:
+            skm_mat.id.raw = bytes.fromhex(raws[slot_idx])  # original bytes (padding) while the name is unchanged
+        if WRITE_MDF and mm is not None and material_name.lower().endswith('.mdf') and not mm.get("toee_mdf") \
+                and not mm.get("toee_placeholder") and MDF_DATA_DIR:
+            # new material made in Blender: write a Textured MDF unless the file already exists
+            target = os.path.join(MDF_DATA_DIR, *material_name.replace("\\", "/").split("/"))
+            if not os.path.exists(target):
+                os.makedirs(os.path.dirname(target), exist_ok=True)
+                with open(target, "w", newline="\r\n") as f:
+                    f.write(materials.mdf_from_material(mm, MDF_DATA_DIR))
+                print("wrote MDF %s" % target)
         print("SKM material %d: %s" % (slot_idx, material_name))
         skm_data.material_data.append(skm_mat)
 
@@ -299,7 +306,7 @@ def _write_skm(context, filepath,
     tmp = validate.triangulated_copy(mesh.data) if plan['triangulate'] else None
     try:
         with ProgressReport(context.window_manager) as progress:
-            skm_data = blender_to_skm(mesh, rig, WRITE_MDF, me=tmp, weight_fix=plan['fix_weights'])
+            skm_data = blender_to_skm(mesh, rig, WRITE_MDF, me=tmp, weight_fix=plan["fix_weights"], mdf_data_dir=_data_dir(filepath))
             skm_filepath = os.path.splitext(filepath)[0] + '.skm'
             with open(skm_filepath, 'wb') as skm_file:
                 skm_data.write(skm_file)
@@ -496,9 +503,9 @@ def _find_rig(context):
 
 
 def save(operator, context, filepath="", write_skm=False, only_active_action=False, toee_axis_conversion=True,
-         auto_fix=True, **_):
+         auto_fix=True, write_mdf=False, **_):
     try:
-        _write_ska(context, filepath, WRITE_SKM=write_skm, ONLY_ACTIVE_ACTION=only_active_action,
+        _write_ska(context, filepath, WRITE_SKM=write_skm, WRITE_MDF=write_mdf, ONLY_ACTIVE_ACTION=only_active_action,
                    AXIS_CONVERSION=toee_axis_conversion, operator=operator, auto_fix=auto_fix)
     except ExportBlocked:
         return {'CANCELLED'}
@@ -509,9 +516,17 @@ def blender_save_ska(operator, context, filepath="", use_selection=True, global_
     return save(operator, context, filepath=filepath, auto_fix=auto_fix)
 
 
-def blender_save_skm(operator, context, filepath="", use_selection=True, global_matrix=None, auto_fix=True, **_):
+def blender_save_skm(operator, context, filepath="", use_selection=True, global_matrix=None, auto_fix=True, write_mdf=False, **_):
     try:
-        _write_skm(context, filepath, operator=operator, auto_fix=auto_fix)
+        _write_skm(context, filepath, WRITE_MDF=write_mdf, operator=operator, auto_fix=auto_fix)
     except ExportBlocked:
         return {'CANCELLED'}
     return {'FINISHED'}
+
+
+def _data_dir(filepath):
+    """<data dir> for a file under <data dir>/art/... (MDF paths are relative to it)."""
+    import re
+    d = os.path.dirname(os.path.abspath(filepath)).replace("\\", "/")
+    parts = re.split("/art(?:/|$)", d, flags=re.IGNORECASE)
+    return parts[0] if len(parts) > 1 else None
