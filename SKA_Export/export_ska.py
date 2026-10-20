@@ -128,7 +128,7 @@ def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False, mdf_data_dir
                         vnorm[i] = v.copy()  # zero normal stored in the original SKM
                     continue  # no stored normal (vertex added after import, e.g. joined geometry)
                 # (a non-unit custom normal comes from zero normals next to it in the original: not an edit)
-                if vnorm[i] is None or abs(vnorm[i].length - 1.0) > 1e-3 or v.normalized().dot(vnorm[i].normalized()) > 0.9995:
+                if vnorm[i] is None or abs(vnorm[i].length - 1.0) > 1e-3 or v.normalized().dot(vnorm[i].normalized()) > 0.995:  # within ~6 deg: Blender re-encodes custom normals (medusa: 1.9 deg)
                     vnorm[i] = v.copy()  # unchanged since import -> exact original value
         # Create vertices
         for vtx in bmesh.vertices:
