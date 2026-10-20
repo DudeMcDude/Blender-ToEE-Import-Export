@@ -8,7 +8,7 @@ from . import materials, ska_events
 import mathutils
 from mathutils import Vector, Quaternion
 
-from .ska import SkaAnimStream
+from .ska import SkaAnimStream, _q_slerp
 from .ska import SkmFile, SkaFile, MdfFile
 from bpy_extras.wm_utils.progress_report import ProgressReport
 from bpy_extras import node_shader_utils
@@ -528,8 +528,8 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 for frame, rotation in keyframes:
                     # Transform rotation to be relative to rest pose
                     # if skm_bone.parent_id != -1:
-                    rotation = Quaternion(rotation)
-                    rotation = rest_pose.get_rel_rot(rotation)
+                    raw_rot = Quaternion(rotation)  # engine space, as stored
+                    rotation = rest_pose.get_rel_rot(raw_rot)
                     # Keep consecutive keys on the same hemisphere (engine slerp takes the shortest arc;
                     # flipping on w<0 made Blender's component-wise lerp swing through ~180 deg)
                     if prev_rot is not None and prev_rot.dot(rotation) < 0:
@@ -540,11 +540,15 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                     if prev_rot is not None and prev_frame is not None and frame - prev_frame > 1 \
                             and prev_rot.rotation_difference(rotation).angle > SLERP_BAKE_ANGLE:
                         for _f in range(prev_frame + 1, frame):
-                            _q = prev_rot.slerp(rotation, (_f - prev_frame) / (frame - prev_frame))
+                            # the engine's slerp on the stored values decides the direction (matters when the
+                            # keys are ~180 deg apart, e.g. firebat rturn 'Root')
+                            _q = rest_pose.get_rel_rot(Quaternion(_q_slerp(tuple(prev_raw), tuple(raw_rot),
+                                                                            (_f - prev_frame) / (frame - prev_frame))).normalized())
                             if _q.dot(prev_rot) < 0: _q = -_q
                             for _c, _v in ((curve_w, _q.w), (curve_x, _q.x), (curve_y, _q.y), (curve_z, _q.z)):
                                 _c.keyframe_points.insert(1 + _f, _v, options={'FAST'}).interpolation = 'LINEAR'
                     prev_rot = rotation
+                    prev_raw = raw_rot
                     prev_frame = frame
 
                     kf = curve_w.keyframe_points.insert(1 + frame, rotation.w, options={'FAST'})
