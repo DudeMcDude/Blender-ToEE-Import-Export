@@ -74,6 +74,10 @@ def main(oska, oskm, out):
     # SKA: engine math on the original vs exported file, both skinned with the original SKM
     m1 = quiet(E.Model, oskm, oska); m2 = quiet(E.Model, oskm, nska)
     R['anims'] = len(m1.anims); R['missing_anims'] = [n for n in m1.anims if n not in m2.anims][:10]
+    # bones the engine actually uses: SKA bones some SKM bone maps to by name (AnimatedModel binds by name);
+    # e.g. polarbear.SKM's root 'polarbear' vs the shared SKA's 'Grizzlybear', which never drives anything
+    used = sorted(set(i for i in m1.skm2ska if i >= 0))
+    R['ska_bones_unused'] = len(m1.ska.bone_data) - len(used)
     worst = []; ve = be = 0.0
     for n, x in m1.anims.items():
         y = m2.anims.get(n)
@@ -84,7 +88,7 @@ def main(oska, oskm, out):
         for f in fr:
             W1 = m1.bone_mats(m1.bone_state(x, f)); W2 = m2.bone_mats(m2.bone_state(y, f))
             av = max(av, float(np.abs(m1.skin(W1) - m2.skin(W2)).max()) if len(m1.verts) else 0.0)
-            ab = max(ab, max((float(np.abs(p[:3, 3] - q[:3, 3]).max()) for p, q in zip(W1, W2)), default=0.0))
+            ab = max(ab, max((float(np.abs(W1[i][:3, 3] - W2[i][:3, 3]).max()) for i in used), default=0.0))
         worst.append((av, ab, n)); ve = max(ve, av); be = max(be, ab)
     R['vert_err'] = ve; R['bone_err'] = be
     R['worst_anims'] = [dict(anim=n, vert=v, bone=b) for v, b, n in sorted(worst, reverse=True)[:3]]

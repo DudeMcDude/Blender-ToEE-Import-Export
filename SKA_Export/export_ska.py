@@ -258,6 +258,7 @@ def blender_to_skm(mesh, rig, WRITE_MDF, me=None, weight_fix=False, mdf_data_dir
     # Convert Mesh object
     progress.step("Processing Mesh...")
     mesh_to_skm_mesh(skm_data)
+    _restore_dropped_faces(me, skm_data)
 
     # Create Rig
     progress.step("Processing Rig...")
@@ -530,3 +531,33 @@ def _data_dir(filepath):
     d = os.path.dirname(os.path.abspath(filepath)).replace("\\", "/")
     parts = re.split("/art(?:/|$)", d, flags=re.IGNORECASE)
     return parts[0] if len(parts) > 1 else None
+
+
+def _restore_dropped_faces(me, skm_data):
+    """Re-insert faces Blender merged at import (duplicates of a kept face), if the mesh's faces are still the
+    original list minus those duplicates. Only face_data[:len(polygons)] keeps lining up with the polygons."""
+    orig = list(me.get("toee_faces", []))
+    if not orig:
+        return
+    O = [tuple(orig[i:i + 4]) for i in range(0, len(orig), 4)]
+    K = [(*f.vertex_ids, f.material_id) for f in skm_data.face_data]
+    if len(O) <= len(K):
+        return
+    keys = set(tuple(sorted(k[:3])) for k in K); j = 0; out = []
+    for o in O:
+        if j < len(K) and o == K[j]:
+            out.append(j); j += 1
+        elif tuple(sorted(o[:3])) in keys:
+            out.append(None)  # dropped duplicate
+        else:
+            return  # mesh was edited: export what is there
+    if j != len(K):
+        return
+    faces = []
+    for o, idx in zip(O, out):
+        if idx is None:
+            f = SkmFace(); f.vertex_ids = o[:3]; f.material_id = o[3]; faces.append(f)
+        else:
+            faces.append(skm_data.face_data[idx])
+    skm_data.face_data = faces
+    print("restored %d duplicate face(s) merged at import" % (len(O) - len(K)))

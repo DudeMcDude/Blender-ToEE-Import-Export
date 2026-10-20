@@ -172,7 +172,13 @@ def skm_to_blender(skm_data, importedObjects, IMAGE_SEARCH):
                 uvl[pl.loop_start + 2].uv = skm_data.vertex_data[v3].uv
 
         # Finish up
+        n_before = len(bmesh.polygons)
         bmesh.validate()
+        if len(bmesh.polygons) != n_before:
+            # Blender drops duplicate faces (stock double-sided parts repeat a triangle with the same vertices);
+            # keep the original face list so an unchanged mesh exports the same faces
+            bmesh["toee_faces"] = [x for fa in skm_data.face_data for x in (*fa.vertex_ids, fa.material_id)]
+            print("note: %d duplicate face(s) merged by Blender; kept for export" % (n_before - len(bmesh.polygons)))
         bmesh.update()
         # preserve the SKM vertex normals instead of letting Blender/exporter recompute them
         try:
