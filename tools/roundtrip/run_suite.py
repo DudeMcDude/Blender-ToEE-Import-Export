@@ -14,6 +14,13 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ADDON = os.path.abspath(os.pa
 # accumulates along long chains (fire_Snake spine: 0.16); SKM field tolerances when not byte-identical
 TH = dict(vert_err=0.25, bone_err=0.25, skm_vert=1e-5, skm_wi=1e-5)
 
+def _rev():
+    try:
+        return subprocess.run(['git', '-C', ADDON, 'rev-parse', '--short', 'HEAD'], capture_output=True, text=True).stdout.strip()
+    except OSError:
+        return ''
+REV = _rev()
+
 def find_models(data, rx, limit):
     root = os.path.join(data, 'art', 'meshes'); out = []
     for dp, _, fs in os.walk(root):
@@ -53,7 +60,9 @@ def run_one(args, rel, ska, skm):
     d = os.path.join(args.out, 'models', rel.replace('/', '__'))
     res = os.path.join(d, 'result.json')
     if os.path.exists(res) and not args.rerun:
-        return rel, json.load(open(res)), True
+        R = json.load(open(res))
+        if not (args.rerun_stale and R.get('addon_rev') != REV):
+            return rel, R, True
     os.makedirs(d, exist_ok=True)
     for f in os.listdir(d): os.remove(os.path.join(d, f))
     if skm is None:
@@ -75,7 +84,7 @@ def run_one(args, rel, ska, skm):
     R = json.load(open(res)) if os.path.exists(res) else dict(model=ska, status='crash', problems=['compare timed out'])
     if 'RT_TIMEOUT' in open(os.path.join(d, 'blender.log'), errors='replace').read():
         R['status'] = 'crash'; R['problems'] = ['timeout after %ds' % args.timeout]
-    R['t_blender'] = round(tb, 1)
+    R['t_blender'] = round(tb, 1); R['addon_rev'] = REV
     for f in ('out.ska', 'out.skm', 'out.SKM'):  # keep results small; regenerate with --rerun
         if os.path.exists(os.path.join(d, f)) and not args.keep: os.remove(os.path.join(d, f))
     json.dump(R, open(res, 'w'), indent=1, default=str)
@@ -86,6 +95,7 @@ def main():
     ap.add_argument('--blender', required=True); ap.add_argument('--data', required=True); ap.add_argument('--out', required=True)
     ap.add_argument('-j', type=int, default=max(1, (os.cpu_count() or 2) - 2)); ap.add_argument('--timeout', type=int, default=900)
     ap.add_argument('--filter'); ap.add_argument('--limit', type=int); ap.add_argument('--rerun', action='store_true')
+    ap.add_argument('--rerun-stale', action='store_true', help='rerun models whose result came from another add-on commit')
     ap.add_argument('--keep', action='store_true', help='keep exported files'); ap.add_argument('--baseline')
     ap.add_argument('--write-baseline', action='store_true')
     args = ap.parse_args()
