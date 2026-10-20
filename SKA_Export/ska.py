@@ -1062,7 +1062,7 @@ def _vdist(a, b):
     return max(abs(x - y) for x, y in zip(a, b))
 
 
-def reduce_keys(samples, interp, err, tol):
+def reduce_keys(samples, interp, err, tol, seg_ok=None):
     """Greedy key reduction on per-integer-frame samples. Returns the kept frame indices
     (always includes 0 and the last frame). The engine interpolates linearly (slerp for
     rotations) between consecutive keys of a channel, so a key is dropped when that
@@ -1074,8 +1074,8 @@ def reduce_keys(samples, interp, err, tol):
     i = 0
     j = i + 2
     while j < n:
-        ok = True
-        for k in range(i + 1, j):
+        ok = seg_ok is None or seg_ok(samples[i], samples[j])
+        for k in (range(i + 1, j) if ok else ()):
             v = interp(samples[i], samples[j], (k - i) / (j - i))
             if err(v, samples[k]) > tol:
                 ok = False
@@ -1133,7 +1133,9 @@ def encode_stream(name, bone_samples, rot_tol=1e-4, loc_tol=None, scale_tol=1e-4
                 q = tuple(-c for c in q)
             rs2.append(q)
         sk = reduce_keys(ss, _lerp, _vdist, scale_tol)
-        rk = reduce_keys(rs2, _q_slerp, _q_angle, rot_tol)
+        # a segment near 180 deg is ambiguous for the engine's shortest-arc slerp (after quantization its dot
+        # can flip sign and the bone turns the other way, e.g. giantrat rturn 'origin'): keep it under ~150 deg
+        rk = reduce_keys(rs2, _q_slerp, _q_angle, rot_tol, seg_ok=lambda a, b: _q_dot(a, b) > 0.26)
         tk = reduce_keys(ts, _lerp, _vdist, loc_tol)
         frame0.bone_data[b] = SkaAnimFileKeyframeBoneData(-1, qv(ss[0], sf), -1, qr(rs2[0]), -1, qv(ts[0], lf), -1)
         for slot, keys, vals, quant in ((0, sk, ss, lambda v: qv(v, sf)), (2, rk, rs2, qr), (4, tk, ts, lambda v: qv(v, lf))):
