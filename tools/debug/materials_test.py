@@ -31,10 +31,10 @@ for ska in a[2:]:
         nodes = m.node_tree.nodes
         texs = [x for x in nodes if x.type == 'TEX_IMAGE']
         info = "%s %s: type=%s tex=%d loaded=%d" % (n, m.get("toee_mdf_path"), m.get("toee_mdf_type"), len(texs),
-                                                   sum(1 for t in texs if t.image and t.image.has_data))
+                                                   sum(1 for t in texs if t.image and t.image.size[0] > 0))
         if m.get("toee_mdf"):
             x = M.parse(m["toee_mdf"])
-            check(len(texs) == len(x.textures) and all(t.image and t.image.has_data for t in texs), info)
+            check(len(texs) == len(x.textures) and all(t.image and t.image.size[0] > 0 for t in texs), info)
             drift = [s for _, s in x.textures if s.uv == 'drift' and (s.speed_u or s.speed_v)]
             drv = [d for d in (m.node_tree.animation_data.drivers if m.node_tree.animation_data else [])]
             if drift: check(len(drv) >= 1, "%s drift UV -> %d drivers" % (n, len(drv)))

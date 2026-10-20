@@ -54,6 +54,11 @@ class ActionWriter:
         return groups.get(name) or groups.new(name)
 
     def fcurve(self, data_path, index, group_name=""):
+        # some stock SKMs repeat a bone name (e.g. fire_Snake 'origin'): reuse the curve instead of failing
+        fcs = self.cb.fcurves if self.cb is not None else self.action.fcurves
+        old = fcs.find(data_path, index=index)
+        if old is not None:
+            return old
         if self.cb is not None:
             return self.cb.fcurves.new(data_path, index=index, group_name=group_name)
         return self.action.fcurves.new(data_path, index=index, action_group=group_name)

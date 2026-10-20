@@ -623,7 +623,12 @@ def get_skm_filepath(ska_filepath):
     for ext in ('.SKM', '.skm', '.Skm'):
         if os.path.exists(base + ext):
             return base + ext
-    return base + '.SKM'
+    d, stem = os.path.split(base)  # case-insensitive file systems aside: demon.SKM next to Demon.SKA
+    try:
+        hit = next((n for n in os.listdir(d or '.') if n.lower() == stem.lower() + '.skm'), None)
+    except OSError:
+        hit = None
+    return os.path.join(d, hit) if hit else base + '.SKM'
 
 
 def load_skm(filepath, context, IMAGE_SEARCH=True):
