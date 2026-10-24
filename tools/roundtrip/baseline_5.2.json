@@ -1,11 +1,5 @@
 {
- "known": {
-  "Particle/shard-breaking.SKA": "stock quaternions are not unit length (engine applies them unnormalized); the add-on normalizes",
-  "Particle/test.ska": "older compact animation-header layout; reader keeps 0 animations",
-  "Scenery/Foliage/tree1.ska": "older compact animation-header layout; reader keeps 0 animations",
-  "Scenery/Portals/14_343_curtain01.SKA": "non-unit stock quaternions on unweighted Dummy helper bones; the add-on normalizes",
-  "player/walker.ska": "older compact animation-header layout; reader keeps 0 animations"
- },
+ "known": {},
  "models": {
   "Armor/Banded/banded_ground.SKA": {
    "bone_err": 0.0,
@@ -2356,14 +2350,14 @@
   "Particle/shard-breaking.SKA": {
    "bone_err": 0.0,
    "skm_identical": true,
-   "status": "known",
-   "vert_err": 2.89784
+   "status": "pass",
+   "vert_err": 0.0
   },
   "Particle/test.ska": {
-   "bone_err": 0.0,
+   "bone_err": 0.00567,
    "skm_identical": true,
-   "status": "known",
-   "vert_err": 0.0
+   "status": "pass",
+   "vert_err": 0.00579
   },
   "Particle/tree.ska": {
    "bone_err": 0.0,
@@ -2630,10 +2624,10 @@
    "vert_err": 0.0
   },
   "Scenery/Foliage/tree1.ska": {
-   "bone_err": 0.0,
+   "bone_err": 0.04814,
    "skm_identical": true,
-   "status": "known",
-   "vert_err": 0.0
+   "status": "pass",
+   "vert_err": 0.05203
   },
   "Scenery/Foliage/usk_tree.SKA": {
    "bone_err": 0.0,
@@ -3578,9 +3572,9 @@
    "vert_err": 3e-05
   },
   "Scenery/Portals/14_343_curtain01.SKA": {
-   "bone_err": 64.61149,
+   "bone_err": 0.0098,
    "skm_identical": true,
-   "status": "known",
+   "status": "pass",
    "vert_err": 0.00501
   },
   "Scenery/Portals/14_347.SKA": {
@@ -5060,10 +5054,10 @@
    "vert_err": 0.0
   },
   "player/walker.ska": {
-   "bone_err": 0.0,
+   "bone_err": 0.00539,
    "skm_identical": true,
-   "status": "known",
-   "vert_err": 0.0
+   "status": "pass",
+   "vert_err": 0.00541
   },
   "robes/Air_temple/robe_ivory_ground.SKA": {
    "bone_err": 0.0,

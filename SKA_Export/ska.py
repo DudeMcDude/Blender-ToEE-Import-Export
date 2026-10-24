@@ -614,6 +614,21 @@ class SkaAnimHeader(object):
             new_stream_header.from_raw_data(rawdata[offset:offset + DATUM_SIZE])
             if i < self.stream_count:
                 self.stream_headers.append(new_stream_header)
+    def from_legacy_raw_data(self, rawdata, stride):
+        """older compact layouts (a few stock files, e.g. player/walker.ska, Scenery/Foliage/tree1.ska):
+        76 bytes: name[64] drive:b loop:b frames:H frame_rate:f data_offset:i (no events)
+        84 bytes: name[64] drive:b loop:b frames:H frame_rate:f event_count:i event_offset:i data_offset:i
+        one stream each; offsets relative to the header start, like the current layout."""
+        self.name.from_raw_data(rawdata[0:64])
+        self.drive_type, self.loopable, frames, rate = struct.unpack('<bbHf', rawdata[64:72])
+        if stride == 84:
+            self.event_count, self.event_offset, data_offset = struct.unpack('<3i', rawdata[72:84])
+        else:
+            self.event_count, self.event_offset, data_offset = 0, 0, struct.unpack('<i', rawdata[72:76])[0]
+        sh = SkaAnimStreamHeader()
+        sh.frame_count, sh.variation_id, sh.frame_rate, sh.dps, sh.data_offset = frames, -1, rate, 0.0, data_offset
+        self.stream_count = 1; self.stream_headers = [sh]
+
     def write(self, file):
         self.name.write(file) # 64
         write_byte(file, self.drive_type) #65
@@ -702,9 +717,13 @@ class SkaFile:
         EVENT_SIZE = SkaEvent.get_size()
         data_start = offset
         self.read_errors = []
+        self.legacy_stride = stride = self._legacy_anim_stride(count, offset)
+        if stride:
+            print("SKA uses the older compact %d-byte animation header layout" % stride)
+            HEADER_SIZE = stride
         for i in range(0, count):
             try:
-                self._read_one_anim(i, data_start, HEADER_SIZE, EVENT_SIZE, streams_by_start)
+                self._read_one_anim(i, data_start, HEADER_SIZE, EVENT_SIZE, streams_by_start, stride)
             except (struct.error, IndexError, ValueError) as e:
                 # a few stock files are truncated or corrupt after some animation (e.g. PC_shield_buckler.SKA
                 # is 438 bytes but claims 2 animations): keep the animations read so far
@@ -714,11 +733,35 @@ class SkaFile:
             data_start += HEADER_SIZE
         self.streams = streams_by_start.values()
 
-    def _read_one_anim(self, i, data_start, HEADER_SIZE, EVENT_SIZE, streams_by_start):
+    def _legacy_anim_stride(self, count, offset):
+        """0 for the current 236-byte animation header; 76 or 84 for the older compact layouts."""
+        raw = self._fileraw; n = len(raw)
+        def ok_name(b):
+            b = b.split(b'\0')[0]
+            return len(b) > 0 and all(32 < c < 127 for c in b)
+        if count <= 0: return 0
+        def fits(stride, doff):  # every header has a name and a stream offset past the header block
+            end = offset + count * stride
+            if end > n: return False
+            for i in range(count):
+                a = offset + i * stride; hd = raw[a:a + stride]
+                if stride == 236 and not 1 <= struct.unpack('<h', hd[72:74])[0] <= 10: return False
+                d = struct.unpack('<i', hd[doff:doff + 4])[0]
+                if not ok_name(hd[:64]) or not (end <= a + d < n): return False
+            return True
+        if fits(236, 76 + 12): return 0
+        for stride in (84, 76):
+            if fits(stride, stride - 4): return stride
+        return 0
+
+    def _read_one_anim(self, i, data_start, HEADER_SIZE, EVENT_SIZE, streams_by_start, legacy_stride=0):
         if True:
             newDatum = SkaAnim()
             newDatum.header = SkaAnimHeader()
-            newDatum.header.from_raw_data(self._fileraw[data_start:data_start + HEADER_SIZE])
+            if legacy_stride:
+                newDatum.header.from_legacy_raw_data(self._fileraw[data_start:data_start + HEADER_SIZE], legacy_stride)
+            else:
+                newDatum.header.from_raw_data(self._fileraw[data_start:data_start + HEADER_SIZE])
 
             # events
             event_offset = data_start + newDatum.header.event_offset
@@ -1090,7 +1133,8 @@ def reduce_keys(samples, interp, err, tol, seg_ok=None):
         keys.append(n - 1)
     # A trailing run of identical values does not need its end key
     while len(keys) > 1 and err(samples[keys[-1]], samples[keys[-2]]) <= tol \
-            and all(err(samples[k], samples[keys[-2]]) <= tol for k in range(keys[-2], n)):
+            and all(err(samples[k], samples[keys[-2]]) <= tol for k in range(keys[-2], n)) \
+            and err(interp(samples[keys[-2]], samples[keys[-2]], 0.5), samples[keys[-2]]) <= tol:  # not for non-unit quaternions (engine slerp inflates them)
         keys.pop()
     return keys
 
@@ -1126,7 +1170,7 @@ def encode_stream(name, bone_samples, rot_tol=1e-4, loc_tol=None, scale_tol=1e-4
         # keep rotations on one hemisphere (engine slerp takes the short arc anyway)
         rs2 = []
         for q in rs:
-            q = _q_norm(q)
+            # no renormalization: stock non-unit keys are kept as the engine applies them (toee_qnorm)
             if rs2 and _q_dot(rs2[-1], q) < 0:
                 q = tuple(-c for c in q)
             elif not rs2 and q[3] < 0:
@@ -1135,7 +1179,9 @@ def encode_stream(name, bone_samples, rot_tol=1e-4, loc_tol=None, scale_tol=1e-4
         sk = reduce_keys(ss, _lerp, _vdist, scale_tol)
         # a segment near 180 deg is ambiguous for the engine's shortest-arc slerp (after quantization its dot
         # can flip sign and the bone turns the other way, e.g. giantrat rturn 'origin'): keep it under ~150 deg
-        rk = reduce_keys(rs2, _q_slerp, _q_angle, rot_tol, seg_ok=lambda a, b: _q_dot(a, b) > 0.26)
+        # the norm term only matters for stock non-unit keys: the engine's slerp between equal non-unit keys
+        # inflates them (curtain helper bones keyed every frame), so such runs must keep their keys
+        rk = reduce_keys(rs2, _q_slerp, lambda a, b: max(_q_angle(a, b), abs(_math.sqrt(_q_dot(a, a)) - _math.sqrt(_q_dot(b, b)))), rot_tol, seg_ok=lambda a, b: _q_dot(a, b) > 0.26)
         tk = reduce_keys(ts, _lerp, _vdist, loc_tol)
         frame0.bone_data[b] = SkaAnimFileKeyframeBoneData(-1, qv(ss[0], sf), -1, qr(rs2[0]), -1, qv(ts[0], lf), -1)
         for slot, keys, vals, quant in ((0, sk, ss, lambda v: qv(v, sf)), (2, rk, rs2, qr), (4, tk, ts, lambda v: qv(v, lf))):

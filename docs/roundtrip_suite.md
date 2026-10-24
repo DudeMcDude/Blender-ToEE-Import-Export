@@ -29,9 +29,12 @@ Regressions vs baseline: a model's status got worse, its vertex/bone error grew 
 being byte-identical. `known` in the baseline lists accepted failures with a reason.
 
 ## Known issues
-- `Particle/test.ska`, `player/walker.ska`, `Scenery/Foliage/tree1.ska`, `Shields/PC_shield_buckler.SKA`: an older compact
-  animation-header layout (frame count and 30.0 fps right after the name, no event block), unreadable by the add-on; the
-  reader now warns and imports no animations instead of raising. `PC_shield_buckler.SKA` (438 bytes) has no SKM either.
+- Fixed (fix/roundtrip-known-issues): the older compact animation headers (`player/walker.ska`: 76 bytes, no events;
+  `Particle/test.ska`, `Scenery/Foliage/tree1.ska`: 84 bytes with event count/offset) are now detected and read, and
+  export writes the current layout. `PC_shield_buckler.SKA` is truncated and has no SKM (skipped).
+- Fixed: non-unit stock quaternions (`Particle/shard-breaking.SKA`, `Scenery/Portals/14_343_curtain01.SKA` helper bones).
+  The engine uses them unnormalized; its slerp even inflates them between equal keys. Import stores the key norms in
+  the action (`toee_qnorm`), export reapplies them and keeps such keys/bones instead of reducing them away.
 - prepare-rig test "1.373 m": bone display tails (`Bip01 R Thigh`) - tails aren't stored in SKM/SKA and are rebuilt on import;
   joint heads round-trip within 0.08 mm. The test now checks heads.
 
@@ -39,6 +42,7 @@ being byte-identical. `known` in the baseline lists accepted failures with a rea
 Blender 5.2.2: 870 pass, 5 known issues, 1 fail (medusa, normals; fixed by a later commit, rerun pending), 0 crash, 1 skipped
 (PC_shield_buckler has no SKM). SKM byte-identical 875/876, materials preserved 876/876, events byte-identical 873 (the
 other 3 are the legacy-header files), no validation errors. Worst SKA error in a passing model: 0.16 units (the snakes' long spine chain).
+After the fix the 5 former known issues pass (rerun of those 5 only; full rerun pending).
 Blender 4.2.3: pending.
 
 Bugs found by the suite and fixed: SKA-only bones keyed the last SKM bone (fire_Snake), rotation segments near 180 deg in

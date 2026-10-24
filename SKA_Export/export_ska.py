@@ -373,6 +373,14 @@ def _sample_action(rig, action, ska_bones, frame_start, frame_count):
         curves.setdefault(bname, dict())[(prop, fc.array_index)] = fc
     by_name = {str(b.name).lower(): i for i, b in enumerate(ska_bones)}
     out = dict()
+    import json
+    qnorm = json.loads(action.get("toee_qnorm", "{}"))  # importer: stock non-unit quaternion norms
+
+    def norm_at(keys, f):
+        if f <= keys[0][0]: return keys[0][1]
+        for (f0, n0), (f1, n1) in zip(keys, keys[1:]):
+            if f <= f1: return n0 + (n1 - n0) * (f - f0) / (f1 - f0) if f1 > f0 else n1
+        return keys[-1][1]
     for bname, cv in curves.items():
         bi = by_name.get(bname.lower())
         if bi is None or bname not in rig.pose.bones:
@@ -395,6 +403,8 @@ def _sample_action(rig, action, ska_bones, frame_start, frame_count):
             loc = mathutils.Vector([ev('location', k, 0.0) for k in range(3)])
             sca = [ev('scale', k, ska_bones[bi].scale[k]) for k in range(3)]
             qe = rest_rot @ q
+            if bname in qnorm:
+                qe = qe * norm_at(qnorm[bname], f)
             te = rest_rot @ loc + rest_loc
             ss.append(tuple(sca)); rs.append((qe.x, qe.y, qe.z, qe.w)); ts.append(tuple(te))
         out[bi] = (ss, rs, ts)
@@ -416,13 +426,15 @@ def blender_to_ska(rig, actions, rot_tol=1e-4):
         samples = _sample_action(rig, action, ska_data.bone_data, start, frame_count)
         # Bones that never leave the skeleton's initial state need no stream entry (the importer
         # adds constant keys for them, so drop those again).
+        keep = set(n.lower() for n in json.loads(action.get("toee_qnorm", "{}")))  # stock non-unit keys: engine slerp differs from the default
         for bi in list(samples):
             sk = ska_data.bone_data[bi]
+            if str(sk.name).lower() in keep: continue
             ss, rs, ts = samples[bi]
             q0 = mathutils.Quaternion((sk.rotation[3], sk.rotation[0], sk.rotation[1], sk.rotation[2])).normalized()  # some Nub defaults are not unit (0,0,0,0.707)
             if all(max(abs(a - b) for a, b in zip(s, sk.scale)) < 1e-4 and
                    max(abs(a - b) for a, b in zip(t, sk.translation)) < 1e-3 and
-                   q0.rotation_difference(mathutils.Quaternion((r[3], r[0], r[1], r[2]))).angle < 1e-4
+                   q0.rotation_difference(mathutils.Quaternion((r[3], r[0], r[1], r[2])).normalized()).angle < 1e-4
                    for s, r, t in zip(ss, rs, ts)):
                 del samples[bi]
         stream = encode_stream(action.name, samples, rot_tol=rot_tol)
