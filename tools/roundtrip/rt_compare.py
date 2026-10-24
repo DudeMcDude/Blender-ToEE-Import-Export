@@ -38,10 +38,13 @@ def skm_fields(a, b):
 
 def event_bytes(raw):
     n, off = struct.unpack('<2i', raw[16:24]); out = {}
+    f = ska.SkaFile(); f._fileraw = raw; st = f._legacy_anim_stride(n, off)  # older compact headers
+    size = st or 236
     for i in range(n):
-        h = off + i * 236
-        if h + 236 > len(raw): break
-        name = raw[h:h + 64].split(b'\0')[0].decode('latin1'); cnt, eo = struct.unpack('<hi', raw[h + 66:h + 72])
+        h = off + i * size
+        if h + size > len(raw): break
+        name = raw[h:h + 64].split(b'\0')[0].decode('latin1')
+        cnt, eo = struct.unpack('<2i', raw[h + 72:h + 80]) if st == 84 else (0, 0) if st else struct.unpack('<hi', raw[h + 66:h + 72])
         out[name] = raw[h + eo:h + eo + cnt * 178] if cnt > 0 else b''
     return out
 

@@ -509,7 +509,11 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 stream.rotation_channels.setdefault(_bi, [(0, list(_bd.rotation_quaternion))])
                 stream.location_channels.setdefault(_bi, [(0, list(_bd.translation))])
             raw_frames = stream.raw_frames
-            
+            # Some stock keys/defaults are not unit quaternions and the engine uses them as stored
+            # (e.g. Particle/shard-breaking, curtain helper bones). Blender normalizes on evaluation,
+            # so keep each such bone's key norms for the exporter to reapply.
+            qnorm = dict()
+
             for bone_idx, keyframes in stream.rotation_channels.items():
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
                 if skm_bone_idx < 0:  # SKA-only bone (e.g. fire_Snake 'IK Chain01'): -1 would index the last SKM bone
@@ -532,6 +536,7 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                     # Transform rotation to be relative to rest pose
                     # if skm_bone.parent_id != -1:
                     raw_rot = Quaternion(rotation)  # engine space, as stored
+                    qnorm.setdefault(str(posebone.name), []).append((frame, raw_rot.magnitude))
                     rotation = rest_pose.get_rel_rot(raw_rot)
                     # Keep consecutive keys on the same hemisphere (engine slerp takes the shortest arc;
                     # flipping on w<0 made Blender's component-wise lerp swing through ~180 deg)
@@ -567,6 +572,11 @@ def ska_to_blender(ska_data, skm_data, importedObjects, USE_INHERIT_ROTATION, US
                 curve_x.update()
                 curve_y.update()
                 curve_z.update()
+
+            qnorm = {k: v for k, v in qnorm.items() if any(abs(n - 1.0) > 1e-4 for _, n in v)}
+            if qnorm:
+                import json as _json
+                action["toee_qnorm"] = _json.dumps(qnorm)
 
             for bone_idx, keyframes in stream.location_channels.items():
                 skm_bone_idx = ska_to_skm_bone_mapping[bone_idx]
